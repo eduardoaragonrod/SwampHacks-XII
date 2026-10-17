@@ -312,6 +312,7 @@ MonoBehaviour:
   _MaxOrbs: 6
   AuraLight: {fileID: 5766067180084769719}
   DefaultElement: 0
+  Animator: {fileID: 5423623463533910720}
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +350,7 @@ Animator:
   m_GameObject: {fileID: 8465574187205225181}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7234d7a31a4b9704391d569b30184696, type: 2}
+  m_Controller: {fileID: 9100000, guid: 44d7e67b7368d0d4b843543bc958e2dd, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
