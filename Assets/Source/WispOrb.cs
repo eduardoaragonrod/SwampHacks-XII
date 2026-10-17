@@ -51,7 +51,7 @@ public class WispOrb : MonoBehaviour
         float step = _pullSpeed * Time.deltaTime;
         _distancePulled += Mathf.Min(step, distance);
 
-        transform.position += (Vector3)(dir * step);
+        transform.position += ((Vector3)(dir * step) * 3) / 2;
 
         if (distance <= _CatchRadius)
         {
