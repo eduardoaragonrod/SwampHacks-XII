@@ -439,6 +439,17 @@ MonoBehaviour:
   LightningDashDamageRadius: 0.5
   LightningDashDamage: 5
   LightningDashKnockback: 10
+  criticalSpeedBonusThreshold: 3.5
+  maxExpectedSpeed: 22
+  dashTrailSpawnRate: 64
+  minSuperSpeedTrailRate: 60
+  maxTrailSpawnRate: 260
+  criticalRamDamage: 12
+  criticalRamKnockback: 16
+  ramHitCooldownPerEnemy: 0.25
+  FloatingOrbPrefab: {fileID: 61981970272011745, guid: 1055bdcfcff7b2742aaf2222c32224a5, type: 3}
+  FloatingOrbCatchupRate: 20
+  FloatingOrbDistance: 2
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0

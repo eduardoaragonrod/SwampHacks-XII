@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private VisualEffect TrailVFX;
 
 	[Space]
+
 	[SerializeField] private float LightningDashDamageRadius = 0.5f;
 	[SerializeField] private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
 
@@ -35,6 +37,18 @@ public class Player : MonoBehaviour
 	[SerializeField] private float criticalRamDamage = 12f;
 	[SerializeField] private float criticalRamKnockback = 16f;
 	[SerializeField] private float ramHitCooldownPerEnemy = 0.25f;
+
+
+	[Space]
+
+	[SerializeField]
+	private GameObject FloatingOrbPrefab;
+	[SerializeField]
+	private float FloatingOrbCatchupRate = 0.1f;
+	[SerializeField]
+	private float FloatingOrbRotationRate = 0.5f;
+	[SerializeField]
+	private float FloatingOrbDistance = 0.5f;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -56,6 +70,8 @@ public class Player : MonoBehaviour
 	private Vector2 _lastFixedPosition;
 	private float _baseAuraLightIntensity = 1f;
 	private readonly Dictionary<GameObject, float> _recentlyRammedEnemies = new();
+
+	private readonly List<Transform> _floatingOrbs = new();
 
 	private void Awake()
 	{
@@ -80,6 +96,13 @@ public class Player : MonoBehaviour
 
 		_hitbox = GetComponent<BoxCollider2D>();
 		_lastFixedPosition = transform.position;
+
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
 	}
 
 	private void OnEnable() => _input.Enable();
@@ -154,6 +177,22 @@ public class Player : MonoBehaviour
 			float targetIntensity = (IsCriticalSpeed || _isDashing) ? _baseAuraLightIntensity * 2.2f : _baseAuraLightIntensity;
 			AuraLight.intensity = Mathf.Lerp(AuraLight.intensity, targetIntensity, Time.deltaTime * 12f);
 		}
+
+		UpdateFloatingOrbs();
+	}
+
+	private void OnDestroy()
+	{
+		ElementManager.OnChanged -= OnElementChanged;
+		Instance = null;
+
+		foreach (var orb in _floatingOrbs)
+		{
+			if (orb != null)
+			{
+				Destroy(orb.gameObject);
+			}
+		}
 	}
 
 	private void CheckCriticalSpeedRamming(float criticalThreshold)
@@ -186,12 +225,6 @@ public class Player : MonoBehaviour
 				));
 			}
 		}
-	}
-
-	private void OnDestroy()
-	{
-		ElementManager.OnChanged -= OnElementChanged;
-		Instance = null;
 	}
 
 	private void OnElementChanged(Element element)
@@ -323,5 +356,17 @@ public class Player : MonoBehaviour
 		_isDashing = false;
 		Animator.SetTrigger(HitHash);
 		_movement.StopDash();
+	}
+
+	private void UpdateFloatingOrbs()
+	{
+		for (int i = 0; i < _floatingOrbs.Count; i++)
+		{
+			float angle = Mathf.PI * 2f / _floatingOrbs.Count * i + (Time.time * FloatingOrbRotationRate);
+			var dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle));
+
+			var desired = transform.position + (dir * FloatingOrbDistance);
+			_floatingOrbs[i].position = Vector3.Lerp(_floatingOrbs[i].position, desired, Time.deltaTime * FloatingOrbCatchupRate);
+		}
 	}
 }
