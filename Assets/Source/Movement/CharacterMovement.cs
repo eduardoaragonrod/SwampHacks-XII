@@ -6,7 +6,7 @@ public class CharacterMovement : Movement
     [field: SerializeField]
     public float WalkSpeed { get; set; } = 5f;
 
-    [SerializeField, Tooltip("Rate at which current knockback velocity approaches 0.")]
+    [SerializeField]
     private float KnockbacDecayRate = 64f;
     [SerializeField]
     private float BounceScale = 0.8f;
@@ -14,12 +14,13 @@ public class CharacterMovement : Movement
     public bool IsDashing { get; private set; }
     public event System.Action OnDashEnd;
 
-    private Vector2 _knockback;
 
     private float _dashEndTime;
     private Vector2 _dashDir;
 	private float _dashSpeed;
 	private float _dashDistance;
+    private Vector2 _knockback;
+    public float CurrentKnockbackSpeed => _knockback.magnitude;
 
 	protected override void Awake()
     {

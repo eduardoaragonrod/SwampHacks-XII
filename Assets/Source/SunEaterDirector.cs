@@ -14,6 +14,12 @@ public class SunEaterDirector : MonoBehaviour
     [SerializeField] private Color devourHaloColor = new Color(2.5f, 1.6f, 0.3f, 1f);
     [SerializeField] private float vacuumDuration = 1.35f;
 
+    [Header("Post-Inbound Growth Settings")]
+    [SerializeField] private float growthDuration = 2.5f;
+    [SerializeField] private float targetPupilRadius = 0.23f;
+    [SerializeField] private float targetScaleMultiplier = 1.35f;
+    [SerializeField] private float awakenedRotationSpeed = 1.5f;
+
     private Material _eyeMat;
 
     private static readonly int BlinkProp = Shader.PropertyToID("_BlinkAmount");
@@ -106,16 +112,21 @@ public class SunEaterDirector : MonoBehaviour
             yield return null;
         }
 
-        // Destroy consumed enemies & flash the light as the Eye feeds
+        // Destroy consumed enemies & smoothly fade the feeding flash instead of snapping
         foreach (var enemy in enemies)
         {
             if (enemy != null) Destroy(enemy);
         }
 
-        if (eyeLight != null) eyeLight.intensity = 4.0f;
-        yield return new WaitForSeconds(0.15f);
-        if (eyeLight != null) eyeLight.intensity = 1.4f;
-        _eyeMat.SetFloat(SpeedProp, 0.75f);
+        t = 0f;
+        while (t < 0.35f)
+        {
+            t += Time.deltaTime;
+            float p = t / 0.35f;
+            if (eyeLight != null) eyeLight.intensity = Mathf.Lerp(4.0f, 1.4f, p);
+            _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(4.5f, 0.75f, p));
+            yield return null;
+        }
 
         // 4. The Reveal: Heavy Double-Blink (The player realizes it's an Eye)
         yield return new WaitForSeconds(0.3f);
@@ -123,8 +134,32 @@ public class SunEaterDirector : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         yield return PerformBlink(0.20f, 0.35f, 0.45f); // Slow, menacing second blink
 
-        // Dilate pupil slightly to lock onto the player
-        _eyeMat.SetFloat(PupilProp, 0.21f);
+        // 5. Slow, Menacing Awakening Growth (Replaces the instant snap!)
+        float startPupil = _eyeMat.GetFloat(PupilProp);
+        float startSpeed = _eyeMat.GetFloat(SpeedProp);
+        Vector3 startScale = transform.localScale;
+        Vector3 endScale = startScale * targetScaleMultiplier;
+        float startLight = eyeLight != null ? eyeLight.intensity : 1.4f;
+
+        t = 0f;
+        while (t < growthDuration)
+        {
+            t += Time.deltaTime;
+            float p = t / growthDuration;
+            // Smoothstep easing so it starts slow, swells smoothly, and settles gently
+            float smooth = p * p * (3f - 2f * p);
+
+            _eyeMat.SetFloat(PupilProp, Mathf.Lerp(startPupil, targetPupilRadius, smooth));
+            _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(startSpeed, awakenedRotationSpeed, smooth));
+            transform.localScale = Vector3.Lerp(startScale, endScale, smooth);
+
+            if (eyeLight != null)
+            {
+                eyeLight.intensity = Mathf.Lerp(startLight, startLight * 1.6f, smooth);
+            }
+
+            yield return null;
+        }
     }
 
     private IEnumerator PlayerDeathRoutine()
@@ -139,6 +174,7 @@ public class SunEaterDirector : MonoBehaviour
         Vector3 playerStartPos = playerTransform != null ? playerTransform.position : Vector3.zero;
         Vector3 playerStartScale = playerTransform != null ? playerTransform.localScale : Vector3.one;
         Vector3 eyeStartScale = transform.localScale;
+        float startPupil = _eyeMat.GetFloat(PupilProp);
 
         // Phase 1: Gravitational Pull & Abyssal Dilation (Eye expands to swallow the arena)
         float duration = 1.2f;
@@ -151,8 +187,8 @@ public class SunEaterDirector : MonoBehaviour
             float p = t / duration;
             float easeIn = p * p * p;
 
-            // Expand pupil and scale the Eye quad to cover the screen
-            _eyeMat.SetFloat(PupilProp, Mathf.Lerp(0.165f, 0.44f, easeIn));
+            // Expand pupil from its current size and scale the Eye quad to cover the screen
+            _eyeMat.SetFloat(PupilProp, Mathf.Lerp(startPupil, 0.44f, easeIn));
             transform.localScale = Vector3.Lerp(eyeStartScale, eyeStartScale * 2.5f, easeIn);
 
             if (eyeLight != null)

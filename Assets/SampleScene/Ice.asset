@@ -30,7 +30,7 @@ MonoBehaviour:
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.8235294, b: 0.5019608, a: 1}
+    m_Value: {r: 0, g: 0.9086844, b: 1, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Edi
+  m_Name: Ice
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.VolumeProfile
   components:
   - {fileID: -3457697064125808919}
@@ -68,6 +68,7 @@ MonoBehaviour:
   - {fileID: 5588288393525220240}
   - {fileID: 2046745937516486464}
   - {fileID: 2685523511496325349}
+  - {fileID: 8598006609937003276}
 --- !u!114 &1433545566283461190
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -177,3 +178,31 @@ MonoBehaviour:
   intensity:
     m_OverrideState: 1
     m_Value: 0.12
+--- !u!114 &8598006609937003276
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ColorAdjustments
+  active: 1
+  postExposure:
+    m_OverrideState: 0
+    m_Value: 0
+  contrast:
+    m_OverrideState: 0
+    m_Value: -10
+  colorFilter:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0.039378304, b: 0.8584906, a: 1}
+  hueShift:
+    m_OverrideState: 0
+    m_Value: 0
+  saturation:
+    m_OverrideState: 0
+    m_Value: -73

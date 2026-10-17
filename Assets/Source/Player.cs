@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.VFX;
+
 [RequireComponent(typeof(CharacterMovement))]
-
 [RequireComponent(typeof(Health))]
-
 [RequireComponent(typeof(BoxCollider2D))]
 public class Player : MonoBehaviour
 {
@@ -24,11 +23,21 @@ public class Player : MonoBehaviour
 	[SerializeField] private VisualEffect TrailVFX;
 
 	[Space]
+	[SerializeField] private float LightningDashDamageRadius = 0.5f;
+	[SerializeField] private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
 
-	[SerializeField]
-	private float LightningDashDamageRadius = 0.5f;
-	[SerializeField]
-	private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
+	[Header("Critical Speed & GPU Trail Manager")]
+	[SerializeField] private float criticalSpeedBonusThreshold = 3.5f;
+	[SerializeField] private float maxExpectedSpeed = 22f;
+	[SerializeField] private float dashTrailSpawnRate = 64f;
+	[SerializeField] private float minSuperSpeedTrailRate = 60f;
+	[SerializeField] private float maxTrailSpawnRate = 260f;
+	[SerializeField] private float criticalRamDamage = 12f;
+	[SerializeField] private float criticalRamKnockback = 16f;
+	[SerializeField] private float ramHitCooldownPerEnemy = 0.25f;
+
+	public bool IsCriticalSpeed { get; private set; }
+	public float CurrentSpeed { get; private set; }
 
 	private PlayerInputMap _input;
 	private CharacterMovement _movement;
@@ -39,10 +48,14 @@ public class Player : MonoBehaviour
 	private BoxCollider2D _hitbox;
 
 	private float _nextAllowedDashTime;
+	private bool _isDashing;
 	private Vector2 _lastMoveDir = Vector2.up;
 	private readonly object _dashDamageImmunityBlocker = new();
 
 	private Vector2 _fallbackAimDir = Vector2.down;
+	private Vector2 _lastFixedPosition;
+	private float _baseAuraLightIntensity = 1f;
+	private readonly Dictionary<GameObject, float> _recentlyRammedEnemies = new();
 
 	private void Awake()
 	{
@@ -51,6 +64,7 @@ public class Player : MonoBehaviour
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
 		_baseWalkSpeed = _movement.WalkSpeed;
+		if (AuraLight != null) _baseAuraLightIntensity = AuraLight.intensity;
 
 		_input.Player.Shoot.performed += OnShoot;
 		_input.Player.Pull.performed += OnPull;
@@ -65,6 +79,7 @@ public class Player : MonoBehaviour
 		_movement.OnDashEnd += OnDashEnd;
 
 		_hitbox = GetComponent<BoxCollider2D>();
+		_lastFixedPosition = transform.position;
 	}
 
 	private void OnEnable() => _input.Enable();
@@ -72,8 +87,6 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
-		TrailVFX.SetFloat("SpawnRate", 64f);
-
 		var dir = _input.Player.Move.ReadValue<Vector2>();
 		_movement.Walk(dir);
 		if (dir.sqrMagnitude > 0f)
@@ -94,19 +107,90 @@ public class Player : MonoBehaviour
 		{
 			ElementManager.SetElement(Element.Ice);
 		}
-		else if (Keyboard.current.digit4Key.wasPressedThisFrame)
-		{
-			ElementManager.SetElement(Element.Blood);
-		}
-		else if (Keyboard.current.digit5Key.wasPressedThisFrame)
-		{
-			ElementManager.SetElement(Element.Poison);
-		}
 #endif
+	}
+
+	private void FixedUpdate()
+	{
+		Vector2 currentPos = _movement.Rigidbody != null ? _movement.Rigidbody.position : (Vector2)transform.position;
+		float displacementSpeed = Vector2.Distance(currentPos, _lastFixedPosition) / Mathf.Max(0.0001f, Time.fixedDeltaTime);
+		_lastFixedPosition = currentPos;
+
+		float rbSpeed = _movement.Rigidbody != null ? _movement.Rigidbody.linearVelocity.magnitude : 0f;
+		CurrentSpeed = Mathf.Max(displacementSpeed, rbSpeed);
+
+		float criticalThreshold = _movement.WalkSpeed + criticalSpeedBonusThreshold;
+		IsCriticalSpeed = CurrentSpeed >= criticalThreshold;
+
+		if (IsCriticalSpeed)
+		{
+			CheckCriticalSpeedRamming(criticalThreshold);
+		}
+	}
+
+	private void LateUpdate()
+	{
+		if (TrailVFX != null)
+		{
+			float criticalThreshold = _movement.WalkSpeed + criticalSpeedBonusThreshold;
+			float spawnRate = 0f;
+
+			// Emit particles when either in Critical Speed OR actively Dashing
+			if (IsCriticalSpeed)
+			{
+				float speedRatio = Mathf.InverseLerp(criticalThreshold, maxExpectedSpeed, CurrentSpeed);
+				spawnRate = Mathf.Lerp(minSuperSpeedTrailRate, maxTrailSpawnRate, speedRatio);
+			}
+			else if (_isDashing)
+			{
+				spawnRate = dashTrailSpawnRate;
+			}
+
+			TrailVFX.SetFloat("SpawnRate", spawnRate);
+		}
+
+		if (AuraLight != null)
+		{
+			float targetIntensity = (IsCriticalSpeed || _isDashing) ? _baseAuraLightIntensity * 2.2f : _baseAuraLightIntensity;
+			AuraLight.intensity = Mathf.Lerp(AuraLight.intensity, targetIntensity, Time.deltaTime * 12f);
+		}
+	}
+
+	private void CheckCriticalSpeedRamming(float criticalThreshold)
+	{
+		Vector2 boxSize = _hitbox.bounds.size * 1.25f;
+		Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(_hitbox.bounds.center, boxSize, 0f, Layers.EnemyMask);
+
+		foreach (var enemy in hitEnemies)
+		{
+			GameObject enemyObj = enemy.gameObject;
+			if (_recentlyRammedEnemies.TryGetValue(enemyObj, out float lastHitTime) && Time.time - lastHitTime < ramHitCooldownPerEnemy)
+			{
+				continue;
+			}
+
+			if (enemy.TryGetComponent(out IDamageable dmg))
+			{
+				_recentlyRammedEnemies[enemyObj] = Time.time;
+
+				Vector2 hitDir = ((Vector2)(enemy.transform.position - transform.position)).normalized;
+				if (hitDir.sqrMagnitude == 0f) hitDir = _lastMoveDir;
+
+				float speedMultiplier = CurrentSpeed / Mathf.Max(1f, criticalThreshold);
+
+				dmg.TryTakeDamage(new DamageInfo(
+					criticalRamDamage * speedMultiplier,
+					Team.Friendly,
+					hitDir,
+					criticalRamKnockback * speedMultiplier
+				));
+			}
+		}
 	}
 
 	private void OnDestroy()
 	{
+		ElementManager.OnChanged -= OnElementChanged;
 		Instance = null;
 	}
 
@@ -192,7 +276,7 @@ public class Player : MonoBehaviour
 				}
 				default:
 				{
-					_health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
+					_isDashing = true;
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}
@@ -202,6 +286,7 @@ public class Player : MonoBehaviour
 
 	private void OnDashEnd()
 	{
+		_isDashing = false;
 		_health.UnregisterDamageBlocker(_dashDamageImmunityBlocker);
 	}
 
@@ -213,7 +298,6 @@ public class Player : MonoBehaviour
 
 	private Vector2 GetAimDirection()
 	{
-		// HACK: This would ideally use the aim input for mouse or gamepad.
 		if (Gamepad.current != null)
 		{
 			var gamepadAim = _input.Player.Aim.ReadValue<Vector2>();
@@ -236,6 +320,7 @@ public class Player : MonoBehaviour
 
 	private void OnDamaged(DamageInfo info)
 	{
+		_isDashing = false;
 		Animator.SetTrigger(HitHash);
 		_movement.StopDash();
 	}
