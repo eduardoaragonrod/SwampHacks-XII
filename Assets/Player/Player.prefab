@@ -312,6 +312,7 @@ MonoBehaviour:
   _MaxOrbs: 6
   AuraLight: {fileID: 5766067180084769719}
   DefaultElement: 0
+  Animator: {fileID: 5423623463533910720}
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0
