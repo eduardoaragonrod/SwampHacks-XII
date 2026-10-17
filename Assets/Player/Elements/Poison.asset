@@ -44,11 +44,11 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   EnergyFrame: {fileID: 7777990972904417457, guid: 7875d747960158944b87f97e6474d738, type: 3}
-  Damage: 6.92
-  MoveSpeedMultiplier: 2.3
-  LaunchSpeed: 20
-  PullAcceleration: 70
-  KnockbackScale: 1.5
+  Damage: 4
+  MoveSpeedMultiplier: 1.2
+  LaunchSpeed: 6
+  PullAcceleration: 20
+  KnockbackScale: 0.05
   DashSound: {fileID: 6418180475301049370, guid: 93d0d941415e2e845bacaabdb9cc6b9e, type: 2}
   DashSpeed: 15
   DashDistance: 7
