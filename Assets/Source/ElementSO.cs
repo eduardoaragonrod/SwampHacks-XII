@@ -11,5 +11,11 @@ public class ElementSO : ScriptableObject
     public float LaunchSpeed = 18f;
     public float PullAcceleration = 45f;
     public float KnockbackScale = 1.5f;
+
+    [Header("Dashing")]
+
     public AudioResource DashSound;
+    public float DashSpeed = 15f;
+    public float DashDistance = 4.5f;
+    public float DashCooldown = 0.5f;
 }

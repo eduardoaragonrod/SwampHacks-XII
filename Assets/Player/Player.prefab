@@ -194,7 +194,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 36089085
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3131772922192851117, guid: 2d58ebc925c93a440bcda5580ffcbdfe, type: 3}
@@ -296,8 +296,6 @@ MonoBehaviour:
   <WalkSpeed>k__BackingField: 5
   KnockbacDecayRate: 32
   BounceScale: 0.8
-  DashSpeed: 20
-  DashDistance: 4.5
 --- !u!114 &1182568196129405191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +313,8 @@ MonoBehaviour:
   AuraLight: {fileID: 5766067180084769719}
   DefaultElement: 0
   Animator: {fileID: 5423623463533910720}
-  DashCooldown: 0.5
+  LightningPrefab: {fileID: 8914635547808661033, guid: 284fb2585908c2547acc31e08c5c4598, type: 3}
+  LightningBetweenVFXPrefab: {fileID: 9049131253606132741, guid: 71fededd72a61e54f9a61961de625349, type: 3}
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,21 +11,17 @@ public class CharacterMovement : Movement
     [SerializeField]
     private float BounceScale = 0.8f;
 
-    [Space]
-
-    [SerializeField]
-    private float DashSpeed = 10f;
-    [SerializeField]
-    private float DashDistance = 3f;
-
     public bool IsDashing { get; private set; }
     public event System.Action OnDashEnd;
 
     private Vector2 _knockback;
+
     private float _dashEndTime;
     private Vector2 _dashDir;
+	private float _dashSpeed;
+	private float _dashDistance;
 
-    protected override void Awake()
+	protected override void Awake()
     {
         base.Awake();
         GetComponent<Health>().OnDamaged += OnDamaged;
@@ -37,7 +33,7 @@ public class CharacterMovement : Movement
         {
             if (Time.time < _dashEndTime)
             {
-                SetVelocity(_dashDir * DashSpeed);
+                SetVelocity(_dashDir * _dashSpeed);
             }
             else
             {
@@ -75,11 +71,13 @@ public class CharacterMovement : Movement
         AddVelocity(direction.normalized * WalkSpeed);
     }
 
-    public void Dash(Vector2 direction)
+    public void Dash(Vector2 direction, float speed, float distance)
     {
         IsDashing = true;
-        _dashEndTime = Time.time + (DashDistance / DashSpeed);
+        _dashEndTime = Time.time + (_dashDistance / _dashSpeed);
         _dashDir = direction.normalized;
+        _dashDistance = distance;
+        _dashSpeed = speed;
     }
 
     public void StopDash()

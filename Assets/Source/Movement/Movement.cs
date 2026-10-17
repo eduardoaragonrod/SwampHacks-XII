@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
-    protected Rigidbody2D Rigidbody { get; private set; }
+    public Rigidbody2D Rigidbody { get; private set; }
 
     private Vector2? _overrideVelocity;
     private Vector2 _cumulativeVelocity;

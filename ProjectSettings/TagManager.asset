@@ -48,11 +48,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: FrontVFX
-    uniqueID: 3870823477
-    locked: 0
   - name: Player
     uniqueID: 36089085
+    locked: 0
+  - name: FrontVFX
+    uniqueID: 3870823477
     locked: 0
   m_RenderingLayers:
   - Default
