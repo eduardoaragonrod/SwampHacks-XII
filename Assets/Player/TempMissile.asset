@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: TempMissile
   m_EditorClassIdentifier: Assembly-CSharp::MissileSO
   BaseSpeed: 30
-  Acceleration: 7
-  MinSpeed: 2
+  Acceleration: -90
+  MinSpeed: 5
   MaxSpeed: Infinity
-  Team: 0
-  Damage:
+  DamageInfo:
     Damage: 0
     TargetTeam: 0
+    Direction: {x: 0, y: 0}
+    Knockback: 0
   CollisionRadius: 0.2
-  Sprite: {fileID: 0}
+  Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   AttachedPrefab: {fileID: 0}
   DetachPrefabOnDeath: 0
   TimeToExpireAfterDetach: 3
+  LightIntensity: 2
+  LightRadius: 2
+  LightColor: {r: 1, g: 1, b: 1, a: 1}
+  LightFadeOnDeathDuration: 0.5
