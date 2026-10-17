@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterMovement))]
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
+
     [SerializeField] private WispOrb _OrbPrefab;
     [SerializeField] private ElementSO _CurrentElement;
     [SerializeField] private int _MaxOrbs = 6;
@@ -16,6 +18,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         _input = new();
         _movement = GetComponent<CharacterMovement>();
         _baseWalkSpeed = _movement.WalkSpeed;
@@ -35,6 +39,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         _movement.Walk(_input.Player.Move.ReadValue<Vector2>());
+    }
+
+    private void OnDestroy()
+    {
+        Instance = null;
     }
 
     public void SetElement(ElementSO element)
