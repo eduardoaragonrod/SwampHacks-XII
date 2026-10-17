@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int _MaxOrbs = 6;
     [SerializeField] private Light2D AuraLight;
     [SerializeField] private Element DefaultElement = Element.Fire;
+    [SerializeField] Animator Animator;
 
     private PlayerInputMap _input;
     private CharacterMovement _movement;
@@ -68,6 +69,7 @@ public class Player : MonoBehaviour
         _currentElement = data;
         _movement.WalkSpeed = _baseWalkSpeed * data.MoveSpeedMultiplier;
         AuraLight.color = data.Color;
+        Animator.SetTrigger(element.ToString());
     }
 
     private void OnShoot(InputAction.CallbackContext context)
