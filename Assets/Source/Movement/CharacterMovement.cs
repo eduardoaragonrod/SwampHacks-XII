@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class CharacterMovement : Movement
 {
     [field: SerializeField]
@@ -8,6 +10,11 @@ public class CharacterMovement : Movement
     private float KnockbacDecayRate = 64f;
 
     private Vector2 _knockback;
+
+    private void Awake()
+    {
+        GetComponent<Health>().OnDamaged += OnDamaged;
+    }
 
     protected override void LateUpdate()
     {
@@ -27,4 +34,10 @@ public class CharacterMovement : Movement
     {
         _knockback = velocity;
     }
+
+    private void OnDamaged(DamageInfo info)
+    {
+        ApplyKnockback(info.Direction.normalized * info.Knockback);
+    }
+
 }
