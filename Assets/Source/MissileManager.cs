@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Usage: MissileManager.Spawn();
@@ -10,8 +9,6 @@ public partial class MissileManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject MissilePrefab;
-    [SerializeField]
-    private MissileSO Temp;
 
     private static MissileManager _instance;
 
@@ -28,11 +25,6 @@ public partial class MissileManager : MonoBehaviour
         for (int i = _missiles.Count - 1; i >= 0; i--)
         {
             _missiles[i].Tick();
-        }
-
-        if (Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            Spawn(Temp, default, Random.onUnitCircle.normalized, Random.Range(1, 32), MissilePattern.OmniExplosion);
         }
     }
 
@@ -51,7 +43,7 @@ public partial class MissileManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            Vector2 dir = Quaternion.AngleAxis(deltaAngle * i, Vector3.forward) * direction;
+            Vector2 dir = Quaternion.AngleAxis(deltaAngle * i - (spawnPattern.SpreadAngle / 2f), Vector3.forward) * direction;
             Spawn(missileData, origin, dir);
         }
     }
