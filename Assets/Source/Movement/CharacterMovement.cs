@@ -11,7 +11,6 @@ public class CharacterMovement : Movement
 
     protected override void LateUpdate()
     {
-        // Apply knockback for this frame and then reduce knockback speed by decay rate.
         AddVelocity(_knockback);
         _knockback = Vector2.MoveTowards(_knockback, Vector2.zero, KnockbacDecayRate * Time.deltaTime);
 
@@ -25,6 +24,6 @@ public class CharacterMovement : Movement
 
     public void ApplyKnockback(Vector2 velocity)
     {
-        _knockback = velocity;
+        _knockback += velocity;
     }
 }
