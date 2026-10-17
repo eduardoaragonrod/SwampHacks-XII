@@ -20,13 +20,27 @@ public partial class MissileManager : MonoBehaviour
         _instance = this;
     }
 
+    private void Update()
+    {
+        for (int i = _missiles.Count - 1; i >= 0; i--)
+        {
+            _missiles[i].Tick();
+        }
+    }
+
     public static void Spawn(MissileSO misileData, Vector2 origin, Vector2 directon)
     {
         var instance = Instantiate(_instance.MissilePrefab, origin, Quaternion.identity, _instance.transform);
         var missile = instance.GetComponent<Missile>();
 
+        _missiles.Add(missile);
         missile.Init(misileData, directon);
     }
 
     // TODO: Spawner method with options for patterns.
+
+    public static void Kill(Missile missile)
+    {
+        _missiles.Remove(missile);
+    }
 }
