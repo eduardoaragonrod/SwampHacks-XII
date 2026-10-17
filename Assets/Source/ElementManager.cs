@@ -13,6 +13,18 @@ public partial class ElementManager : MonoBehaviour
 
     [AutoStaticsCleanup]
     public static Element? Current { get; private set; }
+    public static ElementSO CurrentData
+    {
+        get
+        {
+            if (Current.HasValue)
+            {
+                return GetData(Current.Value);
+            }
+
+            throw new System.NotImplementedException("Invalid current element type! Not implemented yet?");
+        }
+    }
 
     private void Awake()
     {
