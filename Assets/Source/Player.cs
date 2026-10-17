@@ -3,14 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.VFX;
+
 [RequireComponent(typeof(CharacterMovement))]
-
 [RequireComponent(typeof(Health))]
-
 [RequireComponent(typeof(BoxCollider2D))]
 public class Player : MonoBehaviour
 {
 	private static readonly int HitHash = Animator.StringToHash("Hit");
+	private static readonly int SpawnRateProp = Shader.PropertyToID("SpawnRate");
 
 	public static Player Instance { get; private set; }
 
@@ -24,11 +24,20 @@ public class Player : MonoBehaviour
 	[SerializeField] private VisualEffect TrailVFX;
 
 	[Space]
+	[SerializeField] private float LightningDashDamageRadius = 0.5f;
+	[SerializeField] private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
 
-	[SerializeField]
-	private float LightningDashDamageRadius = 0.5f;
-	[SerializeField]
-	private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
+	[Header("Critical Speed & Dynamic Trail Settings")]
+	[SerializeField] private float criticalSpeedThreshold = 11f;
+	[SerializeField] private float maxExpectedSpeed = 24f;
+	[SerializeField] private float minTrailSpawnRate = 0f;
+	[SerializeField] private float baseTrailSpawnRate = 32f;
+	[SerializeField] private float maxTrailSpawnRate = 250f;
+	[SerializeField] private float criticalRamDamage = 15f;
+	[SerializeField] private float criticalRamKnockback = 14f;
+
+	public bool IsCriticalSpeed { get; private set; }
+	public float CurrentSpeed { get; private set; }
 
 	private PlayerInputMap _input;
 	private CharacterMovement _movement;
@@ -72,7 +81,7 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
-		TrailVFX.SetFloat("SpawnRate", 64f);
+		UpdateSpeedAndTrail();
 
 		var dir = _input.Player.Move.ReadValue<Vector2>();
 		_movement.Walk(dir);
@@ -97,8 +106,68 @@ public class Player : MonoBehaviour
 #endif
 	}
 
+	private void UpdateSpeedAndTrail()
+	{
+		if (_movement != null && _movement.Rigidbody != null)
+		{
+			CurrentSpeed = _movement.Rigidbody.linearVelocity.magnitude;
+		}
+
+		IsCriticalSpeed = CurrentSpeed >= criticalSpeedThreshold;
+
+		if (TrailVFX != null)
+		{
+			float spawnRate;
+			if (IsCriticalSpeed)
+			{
+				float critT = Mathf.InverseLerp(criticalSpeedThreshold, maxExpectedSpeed, CurrentSpeed);
+				spawnRate = Mathf.Lerp(baseTrailSpawnRate, maxTrailSpawnRate, critT);
+			}
+			else
+			{
+				float walkT = Mathf.InverseLerp(0.1f, criticalSpeedThreshold, CurrentSpeed);
+				spawnRate = Mathf.Lerp(minTrailSpawnRate, baseTrailSpawnRate, walkT);
+			}
+
+			TrailVFX.SetFloat(SpawnRateProp, spawnRate);
+		}
+	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		TryRamEnemy(collision.gameObject);
+	}
+
+	private void OnTriggerEnter2D(Collider2D other)
+	{
+		TryRamEnemy(other.gameObject);
+	}
+
+	private void TryRamEnemy(GameObject target)
+	{
+		if (!IsCriticalSpeed) return;
+
+		if (((1 << target.layer) & Layers.EnemyMask) == 0) return;
+
+		if (target.TryGetComponent(out IDamageable dmg))
+		{
+			Vector2 hitDir = ((Vector2)(target.transform.position - transform.position)).normalized;
+			if (hitDir.sqrMagnitude == 0f) hitDir = _lastMoveDir;
+
+			float speedMultiplier = CurrentSpeed / Mathf.Max(1f, criticalSpeedThreshold);
+
+			dmg.TryTakeDamage(new DamageInfo(
+				criticalRamDamage * speedMultiplier,
+				Team.Friendly,
+				hitDir,
+				criticalRamKnockback * speedMultiplier
+			));
+		}
+	}
+
 	private void OnDestroy()
 	{
+		ElementManager.OnChanged -= OnElementChanged;
 		Instance = null;
 	}
 
@@ -205,7 +274,6 @@ public class Player : MonoBehaviour
 
 	private Vector2 GetAimDirection()
 	{
-		// HACK: This would ideally use the aim input for mouse or gamepad.
 		if (Gamepad.current != null)
 		{
 			var gamepadAim = _input.Player.Aim.ReadValue<Vector2>();
