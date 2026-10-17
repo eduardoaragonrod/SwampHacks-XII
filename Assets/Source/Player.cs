@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -29,6 +27,7 @@ public class Player : MonoBehaviour
 	private float _baseWalkSpeed;
 	private readonly List<WispOrb> _orbs = new();
 	private ElementSO _currentElement;
+	private BoxCollider2D _hitbox;
 
 	private float _nextAllowedDashTime;
 	private Vector2 _lastMoveDir = Vector2.up;
@@ -55,6 +54,8 @@ public class Player : MonoBehaviour
 		_health.OnDamaged += OnDamaged;
 
 		_movement.OnDashEnd += OnDashEnd;
+
+		_hitbox = GetComponent<BoxCollider2D>();
 	}
 
 	private void OnEnable() => _input.Enable();
@@ -138,6 +139,12 @@ public class Player : MonoBehaviour
 					vfx.SetVector2("Start", transform.position);
 
 					Vector3 newPos = _movement.Rigidbody.position + _lastMoveDir * data.DashDistance;
+
+					var hit = Physics2D.BoxCast(_hitbox.bounds.center, _hitbox.bounds.size, 0f, _lastMoveDir, data.DashDistance, Layers.ObstacleMask);
+					if (hit.collider != null)
+					{
+						newPos = hit.point;
+					}
 
 					vfx.SetVector2("End", newPos);
 
