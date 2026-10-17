@@ -38,7 +38,6 @@ public class Player : MonoBehaviour
 	[SerializeField] private float criticalRamKnockback = 16f;
 	[SerializeField] private float ramHitCooldownPerEnemy = 0.25f;
 
-
 	[Space]
 
 	[SerializeField]
@@ -97,12 +96,10 @@ public class Player : MonoBehaviour
 		_hitbox = GetComponent<BoxCollider2D>();
 		_lastFixedPosition = transform.position;
 
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
-		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		for (int i = 0; i < _MaxOrbs; i++)
+		{
+			_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
+		}
 	}
 
 	private void OnEnable() => _input.Enable();
@@ -242,7 +239,24 @@ public class Player : MonoBehaviour
 		if (_orbs.Count >= _MaxOrbs) return;
 
 		Vector2 aimDir = GetAimDirection();
-		WispOrb orb = Instantiate(_OrbPrefab, transform.position, Quaternion.identity);
+		Transform bestFloatingOrb = _floatingOrbs[Random.Range(0, _floatingOrbs.Count)];
+		float bestDotProduct = float.NegativeInfinity;
+
+		foreach (var floatingOrb in _floatingOrbs)
+		{
+			var dirToOrb = (floatingOrb.position - transform.position).normalized;
+			float dot = Vector2.Dot(dirToOrb, aimDir);
+
+			if (dot > bestDotProduct)
+			{
+				bestDotProduct = dot;
+				bestFloatingOrb = floatingOrb;
+			}
+		}
+
+		_floatingOrbs.Remove(bestFloatingOrb);
+		Destroy(bestFloatingOrb.gameObject);
+		WispOrb orb = Instantiate(_OrbPrefab, bestFloatingOrb.position, Quaternion.identity);
 		orb.Init(this, _currentElement, aimDir);
 		_orbs.Add(orb);
 	}
@@ -327,6 +341,7 @@ public class Player : MonoBehaviour
 	{
 		_orbs.Remove(orb);
 		_movement.ApplyKnockback(impactDir * knockbackForce);
+		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab, transform.position, Quaternion.identity).transform);
 	}
 
 	private Vector2 GetAimDirection()
