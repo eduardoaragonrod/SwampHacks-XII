@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f9b73444e40465846b70e78e8250fc57
+guid: 0e5b7189dd7b84346b0c40269dfcd62c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5254546302916577356
-    second: wisp_hit_0
+      213: 4017289307392591359
+    second: pixilart-sprite (8)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -102,7 +102,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wisp_hit_0
+      name: wisp_hit_anim_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,16 +115,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c484f21d506ebe840800000000000000
-      internalID: 5254546302916577356
+      spriteID: 1b054b45230607e4a807b873323c8f8f
+      internalID: 2141102806
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_1
+      name: wisp_hit_anim_1
       rect:
         serializedVersion: 2
         x: 32
@@ -139,14 +139,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06a3b0086313c004681f5b687f6b4c19
-      internalID: -1884195441
+      spriteID: 24cf92e1502c9944ba53132075268ea2
+      internalID: 416980175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_2
+      name: wisp_hit_anim_2
       rect:
         serializedVersion: 2
         x: 64
@@ -161,14 +161,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60ba58d771656e14ba02238c4c50e5b6
-      internalID: 1619789842
+      spriteID: 79df09e12a2e9504e891f005041c4ac1
+      internalID: -872743809
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_3
+      name: wisp_hit_anim_3
       rect:
         serializedVersion: 2
         x: 96
@@ -183,14 +183,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df5f8dfc15caa6e41b8efa566273826d
-      internalID: 759969443
+      spriteID: 8c003a56cfbcaa74a834fed937c18e5d
+      internalID: -1288507771
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_4
+      name: wisp_hit_anim_4
       rect:
         serializedVersion: 2
         x: 128
@@ -205,14 +205,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e75a86395457dfc4b923aed975f87801
-      internalID: 724389243
+      spriteID: 196487746b7068e43801a37f75f1d4a6
+      internalID: -820505045
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_5
+      name: wisp_hit_anim_5
       rect:
         serializedVersion: 2
         x: 160
@@ -227,14 +227,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1471a531d92890949a707f4da9e84fa6
-      internalID: 1420711551
+      spriteID: c0d9d8618eb40c74fb8da8a75a27f8de
+      internalID: -12923206
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wisp_hit_6
+      name: wisp_hit_anim_6
       rect:
         serializedVersion: 2
         x: 192
@@ -249,8 +249,162 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57c8c888d836ed745b6e3d25edcd5366
-      internalID: 1834444155
+      spriteID: f1f2f0c4abf8b404285f4663242518b9
+      internalID: -2132699287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51eccd87bb0c1cf4592fbddf316f167a
+      internalID: 135779032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0460fdba63d14ed4db2db3550e47fa84
+      internalID: -1335889145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10e5a4b48ed64e24fb118ff55d2970c5
+      internalID: -167804077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00626155ac9807c4b93719de82b8694c
+      internalID: -2120146771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_11
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41f8b52f60f315243a0b00fd83b6b883
+      internalID: 2066600413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_12
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 703d970139345e741bdb716266fe0f1d
+      internalID: -184343133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wisp_hit_anim_13
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 516614817d351e74489889ad37a68e26
+      internalID: -976133647
       vertices: []
       indices: 
       edges: []
@@ -259,7 +413,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5c65b162bafa4534a9be963623c0080a
+    spriteID: 057293f4387b81f4aa01b6b7efd58621
     internalID: 0
     vertices: []
     indices: 
@@ -271,13 +425,20 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      wisp_hit_0: 5254546302916577356
-      wisp_hit_1: -1884195441
-      wisp_hit_2: 1619789842
-      wisp_hit_3: 759969443
-      wisp_hit_4: 724389243
-      wisp_hit_5: 1420711551
-      wisp_hit_6: 1834444155
+      wisp_hit_anim_0: 2141102806
+      wisp_hit_anim_1: 416980175
+      wisp_hit_anim_10: -2120146771
+      wisp_hit_anim_11: 2066600413
+      wisp_hit_anim_12: -184343133
+      wisp_hit_anim_13: -976133647
+      wisp_hit_anim_2: -872743809
+      wisp_hit_anim_3: -1288507771
+      wisp_hit_anim_4: -820505045
+      wisp_hit_anim_5: -12923206
+      wisp_hit_anim_6: -2132699287
+      wisp_hit_anim_7: 135779032
+      wisp_hit_anim_8: -1335889145
+      wisp_hit_anim_9: -167804077
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
