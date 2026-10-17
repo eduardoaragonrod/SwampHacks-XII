@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -15,6 +16,8 @@ public class Health : MonoBehaviour, IDamageable
     public event System.Action<DamageInfo> OnDamaged;
     public event System.Action OnDeath;
 
+    private readonly HashSet<object> _dmgBlockers = new();
+
     private void Awake()
     {
         Current = Max = Default;
@@ -22,6 +25,8 @@ public class Health : MonoBehaviour, IDamageable
 
     public bool TryTakeDamage(DamageInfo info)
     {
+        if (_dmgBlockers.Count > 0) return false;
+
         // No friendly fire.
         if (info.TargetTeam == Team)
         {
@@ -43,5 +48,15 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         return true;
+    }
+
+    public void RegisterDamageBlocker(object key)
+    {
+        _dmgBlockers.Add(key);
+    }
+
+    public void UnregisterDamageBlocker(object key)
+    {
+        _dmgBlockers.Remove(key);
     }
 }

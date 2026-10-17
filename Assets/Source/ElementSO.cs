@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Wisp/Element")]
+[CreateAssetMenu(menuName = "Element")]
 public class ElementSO : ScriptableObject
 {
     public Color Color = Color.white;

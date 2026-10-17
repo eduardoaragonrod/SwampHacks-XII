@@ -296,6 +296,8 @@ MonoBehaviour:
   <WalkSpeed>k__BackingField: 5
   KnockbacDecayRate: 32
   BounceScale: 0.8
+  DashSpeed: 20
+  DashDistance: 4.5
 --- !u!114 &1182568196129405191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +315,7 @@ MonoBehaviour:
   AuraLight: {fileID: 5766067180084769719}
   DefaultElement: 0
   Animator: {fileID: 5423623463533910720}
+  DashCooldown: 0.5
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0

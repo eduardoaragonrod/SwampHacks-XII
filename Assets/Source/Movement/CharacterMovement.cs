@@ -8,16 +8,43 @@ public class CharacterMovement : Movement
 
     [SerializeField, Tooltip("Rate at which current knockback velocity approaches 0.")]
     private float KnockbacDecayRate = 64f;
-
     [SerializeField]
     private float BounceScale = 0.8f;
 
+    [Space]
+
+    [SerializeField]
+    private float DashSpeed = 10f;
+    [SerializeField]
+    private float DashDistance = 3f;
+
+    public bool IsDashing { get; private set; }
+    public event System.Action OnDashEnd;
+
     private Vector2 _knockback;
+    private float _dashEndTime;
+    private Vector2 _dashDir;
 
     protected override void Awake()
     {
         base.Awake();
         GetComponent<Health>().OnDamaged += OnDamaged;
+    }
+
+    private void Update()
+    {
+        if (IsDashing)
+        {
+            if (Time.time < _dashEndTime)
+            {
+                SetVelocity(_dashDir * DashSpeed);
+            }
+            else
+            {
+                IsDashing = false;
+                OnDashEnd?.Invoke();
+            }
+        }
     }
 
     protected override void LateUpdate()
@@ -46,6 +73,13 @@ public class CharacterMovement : Movement
     public void Walk(Vector2 direction)
     {
         AddVelocity(direction.normalized * WalkSpeed);
+    }
+
+    public void Dash(Vector2 direction)
+    {
+        IsDashing = true;
+        _dashEndTime = Time.time + (DashDistance / DashSpeed);
+        _dashDir = direction.normalized;
     }
 
     public void ApplyKnockback(Vector2 velocity)

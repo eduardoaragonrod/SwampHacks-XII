@@ -8,6 +8,8 @@ using UnityEngine.Rendering.Universal;
 [RequireComponent(typeof(Health))]
 public class Player : MonoBehaviour
 {
+    private static readonly int HitHash = Animator.StringToHash("Hit");
+
     public static Player Instance { get; private set; }
 
     [SerializeField] private WispOrb _OrbPrefab;
@@ -19,14 +21,17 @@ public class Player : MonoBehaviour
     [Space]
 
     [SerializeField] private float DashCooldown = 0.5f;
-    [SerializeField] private float DashDuration = 0.5f;
-    [SerializeField] private float DashDistance = 0.5f;
 
     private PlayerInputMap _input;
     private CharacterMovement _movement;
+    private Health _health;
     private float _baseWalkSpeed;
     private readonly List<WispOrb> _orbs = new();
     private ElementSO _currentElement;
+
+    private float _nextAllowedDashTime;
+    private Vector2 _lastMoveDir = Vector2.up;
+    private readonly object _dashDamageImmunityBlocker = new();
 
     private void Awake()
     {
@@ -43,7 +48,10 @@ public class Player : MonoBehaviour
         ElementManager.OnChanged += OnElementChanged;
         ElementManager.SetElement(DefaultElement);
 
-        GetComponent<Health>().OnDamaged += OnDamaged;
+        _health = GetComponent<Health>();
+        _health.OnDamaged += OnDamaged;
+
+        _movement.OnDashEnd += OnDashEnd;
     }
 
     private void OnEnable() => _input.Enable();
@@ -51,7 +59,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        _movement.Walk(_input.Player.Move.ReadValue<Vector2>());
+        var dir = _input.Player.Move.ReadValue<Vector2>();
+        _movement.Walk(dir);
+        if (dir.sqrMagnitude > 0f)
+        {
+            _lastMoveDir = dir.normalized;
+        }
 
 #if UNITY_EDITOR
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
@@ -67,8 +80,6 @@ public class Player : MonoBehaviour
             ElementManager.SetElement(Element.Ice);
         }
 #endif
-
-        
     }
 
     private void OnDestroy()
@@ -105,7 +116,17 @@ public class Player : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext context)
     {
-        
+        if (Time.time >= _nextAllowedDashTime)
+        {
+            _nextAllowedDashTime = Time.time + DashCooldown;
+            _movement.Dash(_lastMoveDir);
+            _health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
+        }
+    }
+
+    private void OnDashEnd()
+    {
+        _health.UnregisterDamageBlocker(_dashDamageImmunityBlocker);
     }
 
     public void CatchOrb(WispOrb orb, Vector2 impactDir, float knockbackForce)
@@ -128,6 +149,6 @@ public class Player : MonoBehaviour
 
     private void OnDamaged(DamageInfo info)
     {
-        Animator.SetTrigger("Hit");
+        Animator.SetTrigger(HitHash);
     }
 }

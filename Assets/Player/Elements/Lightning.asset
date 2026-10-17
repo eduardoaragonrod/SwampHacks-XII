@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Lightning
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
   Color: {r: 1, g: 0.87292755, b: 0, a: 1}
-  EnergyFrame: {fileID: 0}
-  Damage: 10
-  MoveSpeedMultiplier: 1
-  LaunchSpeed: 18
-  PullAcceleration: 45
+  EnergyFrame: {fileID: -4391686048232520986, guid: d29c18fe0c781b943a799ed76655c142, type: 3}
+  Damage: 7
+  MoveSpeedMultiplier: 2.3
+  LaunchSpeed: 20
+  PullAcceleration: 70
   KnockbackScale: 1.5
