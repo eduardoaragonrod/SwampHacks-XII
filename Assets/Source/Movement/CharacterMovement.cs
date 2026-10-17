@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -11,8 +10,9 @@ public class CharacterMovement : Movement
 
     private Vector2 _knockback;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GetComponent<Health>().OnDamaged += OnDamaged;
     }
 
@@ -38,5 +38,4 @@ public class CharacterMovement : Movement
     {
         ApplyKnockback(info.Direction.normalized * info.Knockback);
     }
-
 }

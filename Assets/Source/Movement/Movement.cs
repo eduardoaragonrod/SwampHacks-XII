@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     private Vector2? _overrideVelocity;
     private Vector2 _cumulativeVelocity;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
     }
