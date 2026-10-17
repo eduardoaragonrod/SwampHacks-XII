@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4431318352441007665}
   - component: {fileID: 163242903868776060}
   - component: {fileID: 4968576586033946811}
+  - component: {fileID: 3848369870650364910}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -110,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0ebabb12f726d42836a5c642b5da45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
+  ImmunityDurationAfterDamage: 0
   <Team>k__BackingField: 0
   <Default>k__BackingField: 100
 --- !u!61 &4861924702249231135
@@ -221,6 +223,23 @@ MonoBehaviour:
   HurtSound: {fileID: 0}
   HurtVFX: {fileID: 6907368275488073015}
   DeathVFX: {fileID: 0}
+--- !u!114 &3848369870650364910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478125061830999304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fa18ad1f07ee84f9535aaa36fe47fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageOnContact
+  DamageInfo:
+    Damage: 10
+    Team: 1
+    Direction: {x: 0, y: 0}
+    Knockback: 20
 --- !u!1 &2393928864620868036
 GameObject:
   m_ObjectHideFlags: 0
