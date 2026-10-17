@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
 public class SunEaterDirector : MonoBehaviour
@@ -8,6 +10,22 @@ public class SunEaterDirector : MonoBehaviour
     [SerializeField] private Renderer eyeRenderer;
     [SerializeField] private Light2D eyeLight;
     [SerializeField] private Transform playerTransform;
+
+    [Header("Boss Trigger Timer")]
+    [SerializeField] private bool startBossOnTimer = true;
+    [SerializeField] private float secondsUntilBoss = 60f;
+
+    [Header("Camera Zoom Out Settings")]
+    [Tooltip("Drag your CinemachineCamera here (or leave empty to use Camera.main)")]
+    [SerializeField] private CinemachineCamera cinemachineCam;
+    [SerializeField] private float targetCameraOrthoSize = 9.5f;
+    [SerializeField] private float cameraZoomDuration = 2.5f;
+
+    [Header("Boss Music Settings")]
+    [SerializeField] private AudioSource bossMusicSource;
+    [SerializeField] private AudioClip bossThemeClip;
+    [Tooltip("Optional: Drag stage music AudioSources here to fade them out when Boss starts")]
+    [SerializeField] private AudioSource[] stageMusicSourcesToMute;
 
     [Header("Enemy Consumption Settings")]
     [SerializeField] private string enemyTag = "Enemy";
@@ -20,7 +38,15 @@ public class SunEaterDirector : MonoBehaviour
     [SerializeField] private float targetScaleMultiplier = 1.35f;
     [SerializeField] private float awakenedRotationSpeed = 1.5f;
 
+    [Header("Boss Events (Disable Mob Spawner Here!)")]
+    [Tooltip("Fires immediately when the Boss sequence begins. Hook MobSpawner.SetActive(false) here!")]
+    public UnityEvent OnBossStarted;
+    [Tooltip("Fires after the Eye finishes blinking and growing, right when the Boss fight goes live!")]
+    public UnityEvent OnBossFightActive;
+
     private Material _eyeMat;
+    private bool _bossTriggered;
+    private float _timer;
 
     private static readonly int BlinkProp = Shader.PropertyToID("_BlinkAmount");
     private static readonly int PupilProp = Shader.PropertyToID("_PupilRadius");
@@ -35,15 +61,27 @@ public class SunEaterDirector : MonoBehaviour
             _eyeMat = eyeRenderer.material;
     }
 
-    // Call this from your Spawner/Wave Manager when the Boss wave begins!
+    private void Update()
+    {
+        if (!startBossOnTimer || _bossTriggered) return;
+
+        _timer += Time.deltaTime;
+        if (_timer >= secondsUntilBoss)
+        {
+            TriggerBossInboundCutscene();
+        }
+    }
+
     [ContextMenu("Test Boss Inbound Cutscene")]
     public void TriggerBossInboundCutscene()
     {
+        if (_bossTriggered) return;
+        _bossTriggered = true;
+
         StopAllCoroutines();
         StartCoroutine(BossInboundRoutine());
     }
 
-    // Hook this up to your Player's Health.OnDeath event!
     [ContextMenu("Test Player Death Cutscene")]
     public void TriggerPlayerDeathSequence()
     {
@@ -53,7 +91,15 @@ public class SunEaterDirector : MonoBehaviour
 
     private IEnumerator BossInboundRoutine()
     {
-        // 1. Fire Golden Shockwave outward from the core
+        // 0. Fire OnBossStarted immediately so Mob Spawners & Stage Timers stop!
+        OnBossStarted?.Invoke();
+
+        // Start Boss Music & Camera Zoom Out concurrently with the cutscene!
+        StartCoroutine(TransitionToBossMusicRoutine(1.5f));
+        StartCoroutine(ZoomOutCameraRoutine());
+
+        // 1. Fire Golden Shockwave outward from the core + Controller Rumble
+        GamepadFX.Pulse(0.6f, 0.35f);
         float t = 0f;
         while (t < 0.45f)
         {
@@ -75,7 +121,6 @@ public class SunEaterDirector : MonoBehaviour
             if (enemies[i].TryGetComponent<Collider2D>(out var col)) col.enabled = false;
             if (enemies[i].TryGetComponent<Rigidbody2D>(out var rb)) rb.simulated = false;
 
-            // Use your existing SpriteOutline shader to create the golden devour halo!
             if (enemies[i].TryGetComponent<SpriteRenderer>(out var sr))
             {
                 sr.material.SetColor(OutlineColorProp, devourHaloColor);
@@ -83,24 +128,23 @@ public class SunEaterDirector : MonoBehaviour
             }
         }
 
-        // Brief ominous pause while enemies float trapped in their golden halos
         yield return new WaitForSeconds(0.45f);
 
         // 3. Swirl and vacuum all haloed enemies into the black hole pupil
         t = 0f;
-        _eyeMat.SetFloat(SpeedProp, 4.5f); // Spin accretion rings violently
+        _eyeMat.SetFloat(SpeedProp, 4.5f);
+        GamepadFX.Pulse(0.4f, vacuumDuration);
 
         while (t < vacuumDuration)
         {
             t += Time.deltaTime;
             float progress = t / vacuumDuration;
-            float eased = progress * progress * progress; // Cubic acceleration inward
+            float eased = progress * progress * progress;
 
             for (int i = 0; i < enemies.Length; i++)
             {
                 if (enemies[i] == null) continue;
 
-                // Spiral trajectory into the center of the Eye
                 Vector3 currentPos = Vector3.Lerp(startPositions[i], transform.position, eased);
                 float angle = progress * 10f;
                 float offsetRadius = (1f - eased) * 0.6f;
@@ -112,12 +156,13 @@ public class SunEaterDirector : MonoBehaviour
             yield return null;
         }
 
-        // Destroy consumed enemies & smoothly fade the feeding flash instead of snapping
+        // Destroy consumed enemies & smoothly fade the feeding flash
         foreach (var enemy in enemies)
         {
             if (enemy != null) Destroy(enemy);
         }
 
+        GamepadFX.Pulse(0.95f, 0.2f);
         t = 0f;
         while (t < 0.35f)
         {
@@ -128,13 +173,15 @@ public class SunEaterDirector : MonoBehaviour
             yield return null;
         }
 
-        // 4. The Reveal: Heavy Double-Blink (The player realizes it's an Eye)
+        // 4. The Reveal: Heavy Double-Blink
         yield return new WaitForSeconds(0.3f);
-        yield return PerformBlink(0.14f, 0.12f, 0.22f); // First startled blink
+        GamepadFX.Pulse(0.5f, 0.15f);
+        yield return PerformBlink(0.14f, 0.12f, 0.22f);
         yield return new WaitForSeconds(0.25f);
-        yield return PerformBlink(0.20f, 0.35f, 0.45f); // Slow, menacing second blink
+        GamepadFX.Pulse(0.75f, 0.25f);
+        yield return PerformBlink(0.20f, 0.35f, 0.45f);
 
-        // 5. Slow, Menacing Awakening Growth (Replaces the instant snap!)
+        // 5. Slow, Menacing Awakening Growth
         float startPupil = _eyeMat.GetFloat(PupilProp);
         float startSpeed = _eyeMat.GetFloat(SpeedProp);
         Vector3 startScale = transform.localScale;
@@ -146,7 +193,6 @@ public class SunEaterDirector : MonoBehaviour
         {
             t += Time.deltaTime;
             float p = t / growthDuration;
-            // Smoothstep easing so it starts slow, swells smoothly, and settles gently
             float smooth = p * p * (3f - 2f * p);
 
             _eyeMat.SetFloat(PupilProp, Mathf.Lerp(startPupil, targetPupilRadius, smooth));
@@ -160,11 +206,80 @@ public class SunEaterDirector : MonoBehaviour
 
             yield return null;
         }
+
+        // 6. Activate Boss Attacks / Phase!
+        OnBossFightActive?.Invoke();
+    }
+
+    private IEnumerator ZoomOutCameraRoutine()
+    {
+        float t = 0f;
+        float startSize = cinemachineCam != null 
+            ? cinemachineCam.Lens.OrthographicSize 
+            : (Camera.main != null ? Camera.main.orthographicSize : 5f);
+
+        while (t < cameraZoomDuration)
+        {
+            t += Time.deltaTime;
+            float p = t / cameraZoomDuration;
+            float smooth = p * p * (3f - 2f * p);
+            float newSize = Mathf.Lerp(startSize, targetCameraOrthoSize, smooth);
+
+            if (cinemachineCam != null)
+            {
+                var lens = cinemachineCam.Lens;
+                lens.OrthographicSize = newSize;
+                cinemachineCam.Lens = lens;
+            }
+            else if (Camera.main != null)
+            {
+                Camera.main.orthographicSize = newSize;
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator TransitionToBossMusicRoutine(float fadeDuration)
+    {
+        if (bossMusicSource != null && bossThemeClip != null)
+        {
+            bossMusicSource.clip = bossThemeClip;
+            bossMusicSource.volume = 0f;
+            bossMusicSource.loop = true;
+            bossMusicSource.Play();
+        }
+
+        float t = 0f;
+        while (t < fadeDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = t / fadeDuration;
+
+            if (bossMusicSource != null)
+                bossMusicSource.volume = Mathf.Lerp(0f, 1f, p);
+
+            if (stageMusicSourcesToMute != null)
+            {
+                foreach (var src in stageMusicSourcesToMute)
+                {
+                    if (src != null) src.volume = Mathf.Lerp(src.volume, 0f, p);
+                }
+            }
+            yield return null;
+        }
+
+        if (stageMusicSourcesToMute != null)
+        {
+            foreach (var src in stageMusicSourcesToMute)
+            {
+                if (src != null) src.Stop();
+            }
+        }
     }
 
     private IEnumerator PlayerDeathRoutine()
     {
-        // Disable player movement & physics so the Eye has total control
         if (playerTransform != null)
         {
             if (playerTransform.TryGetComponent<Rigidbody2D>(out var rb)) rb.simulated = false;
@@ -176,10 +291,10 @@ public class SunEaterDirector : MonoBehaviour
         Vector3 eyeStartScale = transform.localScale;
         float startPupil = _eyeMat.GetFloat(PupilProp);
 
-        // Phase 1: Gravitational Pull & Abyssal Dilation (Eye expands to swallow the arena)
         float duration = 1.2f;
         float t = 0f;
         _eyeMat.SetFloat(SpeedProp, 7.0f);
+        GamepadFX.Pulse(0.9f, duration);
 
         while (t < duration)
         {
@@ -187,14 +302,12 @@ public class SunEaterDirector : MonoBehaviour
             float p = t / duration;
             float easeIn = p * p * p;
 
-            // Expand pupil from its current size and scale the Eye quad to cover the screen
             _eyeMat.SetFloat(PupilProp, Mathf.Lerp(startPupil, 0.44f, easeIn));
             transform.localScale = Vector3.Lerp(eyeStartScale, eyeStartScale * 2.5f, easeIn);
 
             if (eyeLight != null)
                 eyeLight.intensity = Mathf.Lerp(1.4f, 5.5f, easeIn);
 
-            // Drag player into the dead center and crush them into a singularity point
             if (playerTransform != null)
             {
                 playerTransform.position = Vector3.Lerp(playerStartPos, transform.position, easeIn);
@@ -205,7 +318,6 @@ public class SunEaterDirector : MonoBehaviour
             yield return null;
         }
 
-        // Phase 2: The Final Clamp (The Eye snaps shut into a razor slit, plunging screen to black)
         t = 0f;
         while (t < 0.12f)
         {
@@ -219,7 +331,6 @@ public class SunEaterDirector : MonoBehaviour
         _eyeMat.SetFloat(BlinkProp, 1f);
         if (eyeLight != null) eyeLight.intensity = 0f;
 
-        // Hold on the glowing horizontal slit for half a second before triggering Game Over UI
         yield return new WaitForSecondsRealtime(0.8f);
     }
 

@@ -20,4 +20,8 @@ public class ElementSO : ScriptableObject
     public float DashSpeed = 15f;
     public float DashDistance = 4.5f;
     public float DashCooldown = 0.5f;
+
+    [Header("Shoot")]
+
+    public AudioResource ShootSound;
 }

@@ -238,6 +238,8 @@ public class Player : MonoBehaviour
 	{
 		if (_orbs.Count >= _MaxOrbs) return;
 
+		Audio.Play(ElementManager.CurrentData.ShootSound, transform.position);
+
 		Vector2 aimDir = GetAimDirection();
 		Transform bestFloatingOrb = _floatingOrbs[Random.Range(0, _floatingOrbs.Count)];
 		float bestDotProduct = float.NegativeInfinity;
