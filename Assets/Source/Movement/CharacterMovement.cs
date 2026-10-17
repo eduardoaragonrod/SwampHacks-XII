@@ -38,8 +38,6 @@ public class CharacterMovement : Movement
 
             foreach (var contact in contacts)
             {
-                Debug.Log(Vector2.Dot(_knockback.normalized, contact.normal));
-
                 if (contact.collider.gameObject.layer == Layers.ObstacleLayer
                     && Vector2.Dot(_knockback.normalized, -contact.normal) > 0f)
                 {
@@ -63,8 +61,6 @@ public class CharacterMovement : Movement
                 }
 
                 _knockback = vel;
-
-                Debug.Log(_knockback);
             }
         }
     }
