@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     private Vector2 _lastMoveDir = Vector2.up;
     private readonly object _dashDamageImmunityBlocker = new();
 
+    private Vector2 _fallbackAimDir = Vector2.down;
+
     private void Awake()
     {
         Instance = this;
@@ -141,7 +143,18 @@ public class Player : MonoBehaviour
         // HACK: This would ideally use the aim input for mouse or gamepad.
         if (Gamepad.current != null)
         {
-            return _input.Player.Aim.ReadValue<Vector2>().normalized;
+            var gamepadAim = _input.Player.Aim.ReadValue<Vector2>();
+
+            if (gamepadAim.sqrMagnitude == 0)
+            {
+                return _fallbackAimDir;
+            }
+            else
+            {
+                _fallbackAimDir = gamepadAim.normalized;
+            }
+
+            return gamepadAim.normalized;
         }
 
         var mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
