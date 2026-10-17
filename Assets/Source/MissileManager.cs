@@ -36,8 +36,10 @@ public partial class MissileManager : MonoBehaviour
         _missiles.Add(missile);
         missile.Init(misileData, directon);
     }
-
-    // TODO: Spawner method with options for patterns.
+    public static void Spawn(MissileSO missileData, Vector2 origin, Vector2 direction, MissilePattern spawnPattern)
+    {
+        throw new System.NotImplementedException("Uh oh. Not implemented yet sry!");
+    }
 
     public static void Kill(Missile missile)
     {
