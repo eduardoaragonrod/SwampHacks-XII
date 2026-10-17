@@ -184,6 +184,7 @@ public class Player : MonoBehaviour
 				}
 				default:
 				{
+					_health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}
