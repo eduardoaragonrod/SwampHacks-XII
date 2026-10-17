@@ -15,9 +15,10 @@ public class Player : MonoBehaviour
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
 		_input.Player.Shoot.performed += OnShoot;
+        _input.Player.Recall.performed += OnRecall;
 	}
 
-	private void OnEnable()
+    private void OnEnable()
 	{
 		_input.Enable();
 	}
@@ -41,4 +42,9 @@ public class Player : MonoBehaviour
 	{
 		MissileManager.Spawn(TempMissile, transform.position, Random.onUnitCircle.normalized);
 	}
+
+    private void OnRecall(InputAction.CallbackContext context)
+    {
+        // TODO: Implement recall.
+    }
 }
