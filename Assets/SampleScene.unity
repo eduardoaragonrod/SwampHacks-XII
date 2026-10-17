@@ -172,54 +172,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5766067180084769719, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.b
-      value: 0.09019607
-      objectReference: {fileID: 0}
-    - target: {fileID: 5766067180084769719, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.g
-      value: 0.7692951
-      objectReference: {fileID: 0}
-    - target: {fileID: 5766067180084769719, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5766067180084769719, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Intensity
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 5766067180084769719, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_BlendStyleIndex
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6654178922778522645, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6654178922778522645, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6753340743487087944, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -3131772922192851117, guid: 2d58ebc925c93a440bcda5580ffcbdfe, type: 3}
-    - target: {fileID: 6753340743487087944, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6753340743487087944, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6753340743487087944, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6753340743487087944, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8465574187205225181, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -227,10 +179,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8465574187205225181, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1281480617}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
 --- !u!1 &231602897
 GameObject:
@@ -1218,33 +1167,6 @@ RectTransform:
   m_AnchoredPosition: {x: 26.199997, y: 14.4}
   m_SizeDelta: {x: 65, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1281480609 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8465574187205225181, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
-  m_PrefabInstance: {fileID: 221090789}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1281480617
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1281480609}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 44d7e67b7368d0d4b843543bc958e2dd, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1287182180
 GameObject:
   m_ObjectHideFlags: 0
