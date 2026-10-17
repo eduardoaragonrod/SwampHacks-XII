@@ -35,6 +35,26 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Aim",
+                    "type": "Value",
+                    "id": "357775ba-f938-4e39-90bb-5bfb64ecdd20",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "db2dde71-3054-4178-ba63-a094c1ed7ee5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -150,7 +170,7 @@
                 },
                 {
                     "name": "",
-                    "id": "ca37f3b0-95fa-4324-9045-b8640dc582d3",
+                    "id": "2545dbf6-2992-4966-b7cd-f47df799a807",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -161,11 +181,11 @@
                 },
                 {
                     "name": "",
-                    "id": "2545dbf6-2992-4966-b7cd-f47df799a807",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "ca37f3b0-95fa-4324-9045-b8640dc582d3",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -184,11 +204,55 @@
                 {
                     "name": "",
                     "id": "22f4bb6a-ee08-438f-8e6b-5a221452308f",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Pull",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e32b774b-d267-47ac-b616-772e8d5f0873",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "89482251-e547-47e2-8b01-30b9229ccb29",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ac5b688-a816-42a9-93e2-79f19e64ac9a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21d435ea-8865-4331-8387-c5c1ee9c7a2d",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Pull",
+                    "groups": ";Gamepad",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

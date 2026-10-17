@@ -84,3 +84,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea183991aac56d4aa5cb704e4823b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementManager
+  Fire: {fileID: 11400000, guid: 859efa3e193a5b341a3824e214364c99, type: 2}
+  Lightning: {fileID: 11400000, guid: 13d14663faa00884a920b74523c81f94, type: 2}
+  Ice: {fileID: 11400000, guid: e8506060bdf91894385bbe9cdd39bc2f, type: 2}
