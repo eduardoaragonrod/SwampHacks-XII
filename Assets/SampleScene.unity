@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 231602900}
   - component: {fileID: 231602899}
   - component: {fileID: 231602898}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Random Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
