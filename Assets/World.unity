@@ -2997,7 +2997,7 @@ MonoBehaviour:
     stageMusic: {fileID: 8300000, guid: bb3e9ebfb9fa67742b289baacbbb055e, type: 3}
     stageVolumeProfile: {fileID: 11400000, guid: a94734b1c800942408946950ec49a163, type: 2}
     elementIconObject: {fileID: 916576999}
-    elementDescription: FIRE
+    elementDescription: INFERNO
   - stageName: Electricity
     element: 1
     stageMusic: {fileID: 8300000, guid: 31660ab7c3d1ef04a987f55e0f66ddef, type: 3}
@@ -3009,7 +3009,7 @@ MonoBehaviour:
     stageMusic: {fileID: 8300000, guid: 0833b85ba22190a46928085ee884f557, type: 3}
     stageVolumeProfile: {fileID: 11400000, guid: 0508e48375308e24ea84495c12c1e4d6, type: 2}
     elementIconObject: {fileID: 714129997}
-    elementDescription: ICE
+    elementDescription: FROST
   globalVolume: {fileID: 1894900944}
   musicSourceA: {fileID: 1398920070}
   musicSourceB: {fileID: 669942067}
@@ -3178,7 +3178,3 @@ SceneRoots:
   - {fileID: 2007157806}
   - {fileID: 1398920071}
   - {fileID: 669942068}
-  - {fileID: 2014059320}
-  - {fileID: 892180869}
-  - {fileID: 20068611}
-  - {fileID: 983984461}
