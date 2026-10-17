@@ -67,7 +67,7 @@ public class WispOrb : MonoBehaviour
             DamageInfo info = new()
             {
                 Damage = _element.Damage,
-                TargetTeam = Team.Friendly  // Player orb is always friendly.
+                Team = Team.Friendly  // Player orb is always friendly.
             };
 
             target.TryTakeDamage(info);

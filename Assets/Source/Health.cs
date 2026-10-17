@@ -28,7 +28,7 @@ public class Health : MonoBehaviour, IDamageable
         if (_dmgBlockers.Count > 0) return false;
 
         // No friendly fire.
-        if (info.TargetTeam == Team)
+        if (info.Team == Team)
         {
             return false;
         }

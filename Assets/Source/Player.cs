@@ -21,6 +21,13 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject LightningPrefab;
 	[SerializeField] private GameObject LightningBetweenVFXPrefab;
 
+	[Space]
+
+	[SerializeField]
+	private float LightningDashDamageRadius = 0.5f;
+	[SerializeField]
+	private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
+
 	private PlayerInputMap _input;
 	private CharacterMovement _movement;
 	private Health _health;
@@ -139,6 +146,18 @@ public class Player : MonoBehaviour
 					vfx.SetVector2("Start", transform.position);
 
 					Vector3 newPos = _movement.Rigidbody.position + _lastMoveDir * data.DashDistance;
+
+					var hitEnemies = new List<Collider2D>();
+					hitEnemies.AddRange(Physics2D.OverlapCircleAll(transform.position, LightningDashDamageRadius, Layers.EnemyMask));
+					hitEnemies.AddRange(Physics2D.OverlapCircleAll(newPos, LightningDashDamageRadius, Layers.EnemyMask));
+
+					foreach (var enemy in hitEnemies)
+					{
+						if (enemy.TryGetComponent(out IDamageable dmg))
+						{
+							dmg.TryTakeDamage(new DamageInfo(LightningDashDamage, Team.Friendly, _lastMoveDir, LightningDashKnockback));
+						}
+					}
 
 					var hit = Physics2D.BoxCast(_hitbox.bounds.center, _hitbox.bounds.size, 0f, _lastMoveDir, data.DashDistance, Layers.ObstacleMask);
 					if (hit.collider != null)
