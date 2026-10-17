@@ -88,3 +88,5 @@ MonoBehaviour:
   Fire: {fileID: 11400000, guid: 859efa3e193a5b341a3824e214364c99, type: 2}
   Lightning: {fileID: 11400000, guid: 13d14663faa00884a920b74523c81f94, type: 2}
   Ice: {fileID: 11400000, guid: e8506060bdf91894385bbe9cdd39bc2f, type: 2}
+  Blood: {fileID: 11400000, guid: 4fc1a31a8e9abcb4d91fa1d1d485c6cd, type: 2}
+  Poison: {fileID: 11400000, guid: ebb88e0f1dfd6704dbe024ac7a469eaa, type: 2}
