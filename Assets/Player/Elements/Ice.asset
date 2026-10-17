@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Ice
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
   Color: {r: 0, g: 0.9086844, b: 1, a: 1}
-  EnergyFrame: {fileID: 0}
-  Damage: 10
-  MoveSpeedMultiplier: 1
-  LaunchSpeed: 18
+  EnergyFrame: {fileID: 7764677646188628283, guid: 884ca1eccbbfda845a190cde94a8465d, type: 3}
+  Damage: 16
+  MoveSpeedMultiplier: 0.75
+  LaunchSpeed: 12
   PullAcceleration: 45
-  KnockbackScale: 1.5
+  KnockbackScale: 0.75

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Fire
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
   Color: {r: 1, g: 0.28945038, b: 0, a: 1}
-  EnergyFrame: {fileID: 0}
-  Damage: 10
-  MoveSpeedMultiplier: 1
-  LaunchSpeed: 18
+  EnergyFrame: {fileID: -8164599884961822674, guid: bfe2c75a3d39d86469b5e790994dc6ae, type: 3}
+  Damage: 12
+  MoveSpeedMultiplier: 1.2
+  LaunchSpeed: 16
   PullAcceleration: 45
   KnockbackScale: 1.5
