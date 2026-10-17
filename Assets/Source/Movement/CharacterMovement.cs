@@ -82,6 +82,11 @@ public class CharacterMovement : Movement
         _dashDir = direction.normalized;
     }
 
+    public void StopDash()
+    {
+        IsDashing = false;
+    }
+
     public void ApplyKnockback(Vector2 velocity)
     {
         _knockback += velocity;
