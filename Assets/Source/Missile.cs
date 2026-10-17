@@ -24,8 +24,7 @@ public class Missile : MonoBehaviour
         Speed = Mathf.Clamp(Speed, MissileData.MinSpeed, MissileData.MaxSpeed);
 
         var deltaPos = transform.position - lastPos;
-
-        //Physics2D.CircleCastAll(lastPos, 0.3f, deltaPos.normalized, deltaPos.magnitude, int.Lay)
+        Physics2D.CircleCastAll(lastPos, MissileData.CollisionRadius, deltaPos.normalized, deltaPos.magnitude, Layers.CharacterMask);
     }
 
     public void Kill()

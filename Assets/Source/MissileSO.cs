@@ -9,4 +9,6 @@ public class MissileSO : ScriptableObject
     public float MaxSpeed = float.PositiveInfinity;
 
     public Team Team = Team.Hostile;
+    public DamageInfo Damage;
+    public float CollisionRadius = 0.2f;
 }
