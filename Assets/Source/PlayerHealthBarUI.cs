@@ -28,8 +28,8 @@ public class PlayerHealthBarUI : MonoBehaviour
     {
         if (playerHealth != null)
         {
-            float current = playerHealth.CurrentHealth;
-            float max = Mathf.Max(1f, playerHealth.MaxHealth);
+            float current = playerHealth.Current;
+            float max = Mathf.Max(1f, playerHealth.Max);
             _targetFill = Mathf.Clamp01(current / max);
         }
 

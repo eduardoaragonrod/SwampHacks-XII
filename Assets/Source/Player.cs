@@ -10,7 +10,6 @@ using UnityEngine.VFX;
 public class Player : MonoBehaviour
 {
 	private static readonly int HitHash = Animator.StringToHash("Hit");
-	private static readonly int SpawnRateProp = Shader.PropertyToID("SpawnRate");
 
 	public static Player Instance { get; private set; }
 
@@ -27,14 +26,14 @@ public class Player : MonoBehaviour
 	[SerializeField] private float LightningDashDamageRadius = 0.5f;
 	[SerializeField] private float LightningDashDamage = 5f, LightningDashKnockback = 10f;
 
-	[Header("Critical Speed & Dynamic Trail Settings")]
-	[SerializeField] private float criticalSpeedThreshold = 11f;
-	[SerializeField] private float maxExpectedSpeed = 24f;
-	[SerializeField] private float minTrailSpawnRate = 0f;
+	[Header("Critical Speed & GPU Trail Manager")]
+	[SerializeField] private float criticalSpeedBonusThreshold = 3.5f;
+	[SerializeField] private float maxExpectedSpeed = 22f;
 	[SerializeField] private float baseTrailSpawnRate = 32f;
-	[SerializeField] private float maxTrailSpawnRate = 250f;
-	[SerializeField] private float criticalRamDamage = 15f;
-	[SerializeField] private float criticalRamKnockback = 14f;
+	[SerializeField] private float maxTrailSpawnRate = 260f;
+	[SerializeField] private float criticalRamDamage = 12f;
+	[SerializeField] private float criticalRamKnockback = 16f;
+	[SerializeField] private float ramHitCooldownPerEnemy = 0.25f;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -52,6 +51,9 @@ public class Player : MonoBehaviour
 	private readonly object _dashDamageImmunityBlocker = new();
 
 	private Vector2 _fallbackAimDir = Vector2.down;
+	private Vector2 _lastFixedPosition;
+	private float _baseAuraLightIntensity = 1f;
+	private readonly Dictionary<GameObject, float> _recentlyRammedEnemies = new();
 
 	private void Awake()
 	{
@@ -60,6 +62,7 @@ public class Player : MonoBehaviour
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
 		_baseWalkSpeed = _movement.WalkSpeed;
+		if (AuraLight != null) _baseAuraLightIntensity = AuraLight.intensity;
 
 		_input.Player.Shoot.performed += OnShoot;
 		_input.Player.Pull.performed += OnPull;
@@ -74,6 +77,7 @@ public class Player : MonoBehaviour
 		_movement.OnDashEnd += OnDashEnd;
 
 		_hitbox = GetComponent<BoxCollider2D>();
+		_lastFixedPosition = transform.position;
 	}
 
 	private void OnEnable() => _input.Enable();
@@ -81,8 +85,6 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
-		UpdateSpeedAndTrail();
-
 		var dir = _input.Player.Move.ReadValue<Vector2>();
 		_movement.Walk(dir);
 		if (dir.sqrMagnitude > 0f)
@@ -106,62 +108,74 @@ public class Player : MonoBehaviour
 #endif
 	}
 
-	private void UpdateSpeedAndTrail()
+	private void FixedUpdate()
 	{
-		if (_movement != null && _movement.Rigidbody != null)
+		Vector2 currentPos = _movement.Rigidbody != null ? _movement.Rigidbody.position : (Vector2)transform.position;
+		float displacementSpeed = Vector2.Distance(currentPos, _lastFixedPosition) / Mathf.Max(0.0001f, Time.fixedDeltaTime);
+		_lastFixedPosition = currentPos;
+
+		float rbSpeed = _movement.Rigidbody != null ? _movement.Rigidbody.linearVelocity.magnitude : 0f;
+		CurrentSpeed = Mathf.Max(displacementSpeed, rbSpeed);
+
+		float criticalThreshold = _movement.WalkSpeed + criticalSpeedBonusThreshold;
+		IsCriticalSpeed = CurrentSpeed >= criticalThreshold;
+
+		if (IsCriticalSpeed)
 		{
-			CurrentSpeed = _movement.Rigidbody.linearVelocity.magnitude;
+			CheckCriticalSpeedRamming(criticalThreshold);
 		}
+	}
 
-		IsCriticalSpeed = CurrentSpeed >= criticalSpeedThreshold;
-
+	private void LateUpdate()
+	{
 		if (TrailVFX != null)
 		{
-			float spawnRate;
-			if (IsCriticalSpeed)
-			{
-				float critT = Mathf.InverseLerp(criticalSpeedThreshold, maxExpectedSpeed, CurrentSpeed);
-				spawnRate = Mathf.Lerp(baseTrailSpawnRate, maxTrailSpawnRate, critT);
-			}
-			else
-			{
-				float walkT = Mathf.InverseLerp(0.1f, criticalSpeedThreshold, CurrentSpeed);
-				spawnRate = Mathf.Lerp(minTrailSpawnRate, baseTrailSpawnRate, walkT);
-			}
+			float criticalThreshold = _movement.WalkSpeed + criticalSpeedBonusThreshold;
+			float speedRatio = Mathf.InverseLerp(_movement.WalkSpeed, maxExpectedSpeed, CurrentSpeed);
 
-			TrailVFX.SetFloat(SpawnRateProp, spawnRate);
+			float spawnRate = CurrentSpeed < 0.1f 
+				? 0f 
+				: Mathf.Lerp(baseTrailSpawnRate, maxTrailSpawnRate, speedRatio);
+
+			TrailVFX.SetFloat("SpawnRate", spawnRate);
+		}
+
+		if (AuraLight != null)
+		{
+			float targetIntensity = IsCriticalSpeed ? _baseAuraLightIntensity * 2.2f : _baseAuraLightIntensity;
+			AuraLight.intensity = Mathf.Lerp(AuraLight.intensity, targetIntensity, Time.deltaTime * 12f);
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision)
+	private void CheckCriticalSpeedRamming(float criticalThreshold)
 	{
-		TryRamEnemy(collision.gameObject);
-	}
+		Vector2 boxSize = _hitbox.bounds.size * 1.25f;
+		Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(_hitbox.bounds.center, boxSize, 0f, Layers.EnemyMask);
 
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		TryRamEnemy(other.gameObject);
-	}
-
-	private void TryRamEnemy(GameObject target)
-	{
-		if (!IsCriticalSpeed) return;
-
-		if (((1 << target.layer) & Layers.EnemyMask) == 0) return;
-
-		if (target.TryGetComponent(out IDamageable dmg))
+		foreach (var enemy in hitEnemies)
 		{
-			Vector2 hitDir = ((Vector2)(target.transform.position - transform.position)).normalized;
-			if (hitDir.sqrMagnitude == 0f) hitDir = _lastMoveDir;
+			GameObject enemyObj = enemy.gameObject;
+			if (_recentlyRammedEnemies.TryGetValue(enemyObj, out float lastHitTime) && Time.time - lastHitTime < ramHitCooldownPerEnemy)
+			{
+				continue;
+			}
 
-			float speedMultiplier = CurrentSpeed / Mathf.Max(1f, criticalSpeedThreshold);
+			if (enemy.TryGetComponent(out IDamageable dmg))
+			{
+				_recentlyRammedEnemies[enemyObj] = Time.time;
 
-			dmg.TryTakeDamage(new DamageInfo(
-				criticalRamDamage * speedMultiplier,
-				Team.Friendly,
-				hitDir,
-				criticalRamKnockback * speedMultiplier
-			));
+				Vector2 hitDir = ((Vector2)(enemy.transform.position - transform.position)).normalized;
+				if (hitDir.sqrMagnitude == 0f) hitDir = _lastMoveDir;
+
+				float speedMultiplier = CurrentSpeed / Mathf.Max(1f, criticalThreshold);
+
+				dmg.TryTakeDamage(new DamageInfo(
+					criticalRamDamage * speedMultiplier,
+					Team.Friendly,
+					hitDir,
+					criticalRamKnockback * speedMultiplier
+				));
+			}
 		}
 	}
 
@@ -253,7 +267,6 @@ public class Player : MonoBehaviour
 				}
 				default:
 				{
-					_health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}

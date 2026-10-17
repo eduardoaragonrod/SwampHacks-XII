@@ -5,30 +5,36 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 public class StageProgressionManager : MonoBehaviour
 {
     [Serializable]
     public class GameStage
     {
-        public string stageName = "Fire Stage";
+        public string stageName = "Fire";
         public Element element = Element.Fire;
         public AudioClip stageMusic;
-        [Tooltip("Optional Volume Profile to swap in, or leave null to automatically tint Bloom using ElementSO.Color")]
         public VolumeProfile stageVolumeProfile;
+
+        [Header("Stage UI (Top HUD)")]
+        public GameObject elementIconObject;
+        [TextArea(2, 3)]
+        public string elementDescription = "FIRE: Recall orbs to slingshot into a blazing Fireball and ram through enemies!";
     }
 
     [Header("Timing Settings")]
-    [SerializeField] private float stageIntervalSeconds = 25f;
+    [SerializeField] private float stageIntervalSeconds = 20f;
     [SerializeField] private bool loopStages = true;
 
     [Header("Stage Definitions")]
     [SerializeField] private List<GameStage> stages = new List<GameStage>();
 
-    [Header("Scene References")]
+    [Header("Scene & UI References")]
     [SerializeField] private Volume globalVolume;
     [SerializeField] private AudioSource musicSourceA;
     [SerializeField] private AudioSource musicSourceB;
+    [SerializeField] private TMP_Text elementTutorialText;
 
     [Header("Stage Transition Events (Hook Card Modifier UI Here!)")]
     public UnityEvent OnStageChanged;
@@ -41,10 +47,17 @@ public class StageProgressionManager : MonoBehaviour
 
     private void Start()
     {
+        ElementManager.OnChanged += SyncUIWithElement;
+
         if (stages.Count > 0)
         {
             AdvanceStage();
         }
+    }
+
+    private void OnDestroy()
+    {
+        ElementManager.OnChanged -= SyncUIWithElement;
     }
 
     private void Update()
@@ -72,18 +85,17 @@ public class StageProgressionManager : MonoBehaviour
         _currentStageIndex = nextIndex;
         ApplyStage(stages[_currentStageIndex]);
 
-        // Fire UnityEvents for your Card Modifier Roll UI
         OnStageChanged?.Invoke();
         OnElementStageChanged?.Invoke(stages[_currentStageIndex].element);
     }
 
     private void ApplyStage(GameStage stage)
     {
-        // 1. Switch Player Element via your teammate's ElementManager!
         ElementManager.SetElement(stage.element);
+        SyncUIWithElement(stage.element);
+
         ElementSO elementData = ElementManager.GetData(stage.element);
 
-        // 2. Shift Global Volume Profile or Bloom Tint to match the Element color
         if (globalVolume != null)
         {
             if (stage.stageVolumeProfile != null)
@@ -98,11 +110,33 @@ public class StageProgressionManager : MonoBehaviour
             }
         }
 
-        // 3. Crossfade Stage Music
         if (stage.stageMusic != null)
         {
             StopAllCoroutines();
             StartCoroutine(CrossfadeMusicRoutine(stage.stageMusic, 1.25f));
+        }
+    }
+
+    private void SyncUIWithElement(Element activeElement)
+    {
+        foreach (var s in stages)
+        {
+            bool isMatch = (s.element == activeElement);
+
+            if (s.elementIconObject != null)
+            {
+                s.elementIconObject.SetActive(isMatch);
+            }
+
+            if (isMatch && elementTutorialText != null)
+            {
+                elementTutorialText.text = s.elementDescription;
+                var data = ElementManager.GetData(activeElement);
+                if (data != null)
+                {
+                    elementTutorialText.color = Color.Lerp(Color.white, data.Color, 0.45f);
+                }
+            }
         }
     }
 
