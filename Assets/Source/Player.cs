@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.VFX;
-
 [RequireComponent(typeof(CharacterMovement))]
 
 [RequireComponent(typeof(Health))]
+
+[RequireComponent(typeof(BoxCollider2D))]
 public class Player : MonoBehaviour
 {
 	private static readonly int HitHash = Animator.StringToHash("Hit");
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private Animator Animator;
 	[SerializeField] private GameObject LightningPrefab;
 	[SerializeField] private GameObject LightningBetweenVFXPrefab;
+	[SerializeField] private VisualEffect TrailVFX;
 
 	[Space]
 
@@ -70,6 +72,8 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
+		TrailVFX.SetFloat("SpawnRate", 64f);
+
 		var dir = _input.Player.Move.ReadValue<Vector2>();
 		_movement.Walk(dir);
 		if (dir.sqrMagnitude > 0f)
