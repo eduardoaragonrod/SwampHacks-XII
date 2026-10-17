@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -370416246632179145}
   - component: {fileID: -3388949013924716684}
   - component: {fileID: -4175902396274032796}
-  - component: {fileID: 4458761714583226545}
   m_Layer: 0
   m_Name: Globals
   m_TagString: Untagged
@@ -61,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissileManager
   MissilePrefab: {fileID: 6181202216966061936, guid: 382b6fbfb80c7ab468cbd73ad8b0978c, type: 3}
+  Temp: {fileID: 11400000, guid: 7cf4d73abad89394692a097bc60e6e77, type: 2}
 --- !u!114 &-3388949013924716684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,15 +90,3 @@ MonoBehaviour:
   Ice: {fileID: 11400000, guid: e8506060bdf91894385bbe9cdd39bc2f, type: 2}
   Blood: {fileID: 11400000, guid: 4fc1a31a8e9abcb4d91fa1d1d485c6cd, type: 2}
   Poison: {fileID: 11400000, guid: ebb88e0f1dfd6704dbe024ac7a469eaa, type: 2}
---- !u!114 &4458761714583226545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7098616536516849948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd35aee34e9fe8e41b02401ecfabcef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GamepadFX
