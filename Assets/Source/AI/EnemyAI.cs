@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public abstract class EnemyAI : MonoBehaviour
 {
-    protected CharacterMovement Movement { get; private set; }
-    protected Health Health { get; private set; }
+    public CharacterMovement Movement { get; private set; }
+    public Health Health { get; private set; }
 
     protected State Running { get; private set; }
 
@@ -61,6 +61,7 @@ public abstract class EnemyAI : MonoBehaviour
 
     protected StateData Register(State state)
     {
+        state.SetOwner(this);
         var stateData = new StateData() { State = state };
         _stateData.Add(state, stateData);
         return stateData;

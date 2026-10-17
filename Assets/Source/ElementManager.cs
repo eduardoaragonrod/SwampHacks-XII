@@ -11,8 +11,8 @@ public partial class ElementManager : MonoBehaviour
     [AutoStaticsCleanup]
     public static event System.Action<Element> OnChanged;
 
-    // HACK: Avoid starting with current element, so player receives initial on element changed event.
-    public static Element Current { get; private set; } = (Element)10000;
+    [AutoStaticsCleanup]
+    public static Element? Current { get; private set; }
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public partial class ElementManager : MonoBehaviour
         if (Current != element)
         {
             Current = element;
-            OnChanged?.Invoke(Current);
+            OnChanged?.Invoke(Current.Value);
         }
     }
 
