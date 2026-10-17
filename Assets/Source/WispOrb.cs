@@ -55,7 +55,6 @@ public class WispOrb : MonoBehaviour
 
         if (distance <= _CatchRadius)
         {
-            _element.OnReturned(_owner, this, _distancePulled);
             _owner.CatchOrb(this, dir, _distancePulled * _element.KnockbackScale);
             Destroy(gameObject);
         }
@@ -63,17 +62,15 @@ public class WispOrb : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.TryGetComponent(out IDamageable target)) return;
-
-        DamageInfo info = new()
+        if (other.TryGetComponent(out IDamageable target))
         {
-            Damage = _element.Damage,
-            TargetTeam = Team.Friendly  // Player orb is always friendly.
-        };
+            DamageInfo info = new()
+            {
+                Damage = _element.Damage,
+                TargetTeam = Team.Friendly  // Player orb is always friendly.
+            };
 
-        if (target.TryTakeDamage(info))
-        {
-            _element.OnHitEnemy(_owner, this, target);
+            target.TryTakeDamage(info);
         }
     }
 }

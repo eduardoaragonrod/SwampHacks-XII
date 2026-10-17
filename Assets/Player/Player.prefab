@@ -308,8 +308,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   _OrbPrefab: {fileID: 4672429788736500885, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
-  _CurrentElement: {fileID: 11400000, guid: 859efa3e193a5b341a3824e214364c99, type: 2}
   _MaxOrbs: 6
+  AuraLight: {fileID: 5766067180084769719}
 --- !u!114 &-7870962844570920893
 MonoBehaviour:
   m_ObjectHideFlags: 0

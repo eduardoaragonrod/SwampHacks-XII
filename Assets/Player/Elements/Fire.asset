@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3fca5359d17f48b38131ada6433ad, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
-  <Color>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
-  <Damage>k__BackingField: 10
-  <MoveSpeedMultiplier>k__BackingField: 1
-  <LaunchSpeed>k__BackingField: 18
-  <PullAcceleration>k__BackingField: 45
-  <KnockbackScale>k__BackingField: 1.5
+  Color: {r: 1, g: 0.28945038, b: 0, a: 1}
+  EnergyFrame: {fileID: 0}
+  Damage: 10
+  MoveSpeedMultiplier: 1
+  LaunchSpeed: 18
+  PullAcceleration: 45
+  KnockbackScale: 1.5
