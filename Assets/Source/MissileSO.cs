@@ -15,7 +15,7 @@ public class MissileSO : ScriptableObject
 
     [Space]
 
-    public Sprite Sprite;
+    public Sprite OverrideSprite;
     public GameObject AttachedPrefab;
     public bool DetachPrefabOnDeath;
     [Tooltip("In seconds.")]
