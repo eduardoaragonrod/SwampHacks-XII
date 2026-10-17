@@ -19,3 +19,4 @@ MonoBehaviour:
   LaunchSpeed: 16
   PullAcceleration: 45
   KnockbackScale: 1.5
+  DashSound: {fileID: 6418180475301049370, guid: 71bc7d660db99774db819b419d978cdf, type: 2}

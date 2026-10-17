@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(menuName = "Element")]
 public class ElementSO : ScriptableObject
@@ -10,4 +11,5 @@ public class ElementSO : ScriptableObject
     public float LaunchSpeed = 18f;
     public float PullAcceleration = 45f;
     public float KnockbackScale = 1.5f;
+    public AudioResource DashSound;
 }

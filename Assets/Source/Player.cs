@@ -121,6 +121,7 @@ public class Player : MonoBehaviour
             _nextAllowedDashTime = Time.time + DashCooldown;
             _movement.Dash(_lastMoveDir);
             _health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
+            Audio.Play(ElementManager.CurrentData.DashSound, transform.position);
         }
     }
 
