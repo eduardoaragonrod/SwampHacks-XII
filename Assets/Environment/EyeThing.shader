@@ -3,7 +3,7 @@ Shader "Custom/URP_SunEaterEye"
     Properties
     {
         [Header(Colors)]
-        _MainColor ("Corona Iris Color", Color) = (1.0, 0.72, 0.22, 1.0)
+        [HDR] _MainColor ("Corona Iris Color", Color) = (1.0, 0.72, 0.22, 1.0)
         _OuterColor ("Outer Dust Color", Color) = (0.55, 0.32, 0.08, 1.0)
 
         [Header(Pixel Resolution)]
