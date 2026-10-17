@@ -18,8 +18,8 @@ MonoBehaviour:
   MaxSpeed: Infinity
   DamageInfo:
     Damage: 10
-    TargetTeam: 1
-    Direction: {x: 0, y: 0}
+    Team: 1
+    Direction: {x: 0.84035677, y: 0.5420336}
     Knockback: 10
   CollisionRadius: 0.2
   OverrideSprite: {fileID: 0}
