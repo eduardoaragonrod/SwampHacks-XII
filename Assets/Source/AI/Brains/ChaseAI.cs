@@ -1,4 +1,7 @@
-﻿public class ChaseAI : EnemyAI
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class ChaseAI : EnemyAI
 {
 
 }
