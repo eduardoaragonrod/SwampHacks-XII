@@ -1,63 +1,79 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Missile : MonoBehaviour
 {
-    public MissileSO MissileData { get; private set; }
-    public Vector2 BaseDirection { get; private set; }
+	public MissileSO MissileData { get; private set; }
+	public Vector2 BaseDirection { get; private set; }
 
-    public float Speed { get; private set; }
-    public bool IsDead { get; private set; }
+	public float Speed { get; private set; }
+	public bool IsDead { get; private set; }
 
-    public void Init(MissileSO missile, Vector2 direction)
-    {
-        MissileData = missile;
-        BaseDirection = direction.normalized;
+	private GameObject _attached;
 
-        Speed = missile.BaseSpeed;
-    }
+	public void Init(MissileSO missile, Vector2 direction)
+	{
+		MissileData = missile;
+		BaseDirection = direction.normalized;
 
-    public void Tick()
-    {
-        var lastPos = transform.position;
+		Speed = missile.BaseSpeed;
 
-        transform.Translate(Speed * Time.deltaTime * BaseDirection);
-        Speed += Time.deltaTime * MissileData.Acceleration;
-        Speed = Mathf.Clamp(Speed, MissileData.MinSpeed, MissileData.MaxSpeed);
+		GetComponent<SpriteRenderer>().sprite = MissileData.Sprite;
 
-        var deltaPos = transform.position - lastPos;
-        var hits = Physics2D.CircleCastAll(lastPos, MissileData.CollisionRadius, deltaPos.normalized, deltaPos.magnitude, Layers.CharacterMask | Layers.ObstacleMask);
+		if (MissileData.AttachedPrefab != null)
+		{
+			_attached = Instantiate(MissileData.AttachedPrefab, transform);
+		}
+	}
 
-        foreach (var hit in hits)
-        {
-            if (hit.collider.gameObject.layer == Layers.ObstacleLayer)
-            {
-                Kill();
-                return;
-            }
-            else if (hit.collider.TryGetComponent(out IDamageable dmg))
-            {
-                if (dmg.TryTakeDamage(new()))
-                {
-                    Kill();
-                    return;
-                }
-            }
-        }
-    }
+	public void Tick()
+	{
+		var lastPos = transform.position;
 
-    public void Kill()
-    {
-        MissileManager.Kill(this);
-    }
+		transform.Translate(Speed * Time.deltaTime * BaseDirection);
+		Speed += Time.deltaTime * MissileData.Acceleration;
+		Speed = Mathf.Clamp(Speed, MissileData.MinSpeed, MissileData.MaxSpeed);
 
-    public void OnDeath()
-    {
-        if (IsDead)
-        {
-            return;
-        }
+		var deltaPos = transform.position - lastPos;
+		var hits = Physics2D.CircleCastAll(lastPos, MissileData.CollisionRadius, deltaPos.normalized, deltaPos.magnitude, Layers.CharacterMask | Layers.ObstacleMask);
 
-        IsDead = true;
-        Destroy(gameObject);
-    }
+		foreach (var hit in hits)
+		{
+			if (hit.collider.gameObject.layer == Layers.ObstacleLayer)
+			{
+				Kill();
+				return;
+			}
+			else if (hit.collider.TryGetComponent(out IDamageable dmg))
+			{
+				if (dmg.TryTakeDamage(new()))
+				{
+					Kill();
+					return;
+				}
+			}
+		}
+	}
+
+	public void Kill()
+	{
+		MissileManager.Kill(this);
+	}
+
+	public void OnDeath()
+	{
+		if (IsDead)
+		{
+			return;
+		}
+
+		if (MissileData.DetachPrefabOnDeath && _attached != null)
+		{
+			_attached.transform.SetParent(null, true);
+			Destroy(_attached, MissileData.TimeToExpireAfterDetach);
+		}
+
+		IsDead = true;
+		Destroy(gameObject);
+	}
 }
