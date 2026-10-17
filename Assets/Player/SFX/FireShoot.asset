@@ -7,7 +7,7 @@ AudioContainerElement:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fire_shoot_{2231610825747224655}
-  m_AudioClip: {fileID: 8300000, guid: 84b0619d4a5b3cf4c8b0e101e8e184d0, type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 804317300e839f740bbfbc976abf01c9, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1307931743 &6418180475301049370
