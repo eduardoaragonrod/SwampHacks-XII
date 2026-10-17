@@ -11,6 +11,7 @@ public partial class ElementManager : MonoBehaviour
     [AutoStaticsCleanup]
     public static event System.Action<Element> OnChanged;
 
+    [AutoStaticsCleanup]
     public static Element? Current { get; private set; }
 
     private void Awake()
