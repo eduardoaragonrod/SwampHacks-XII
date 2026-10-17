@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Moth
       objectReference: {fileID: 0}
+    - target: {fileID: 1478125061830999304, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Size.x
       value: 12.8
@@ -75,6 +79,10 @@ PrefabInstance:
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170068598535578051, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9146191461419136913, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_LocalPosition.x
