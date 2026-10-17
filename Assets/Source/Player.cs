@@ -29,7 +29,8 @@ public class Player : MonoBehaviour
 	[Header("Critical Speed & GPU Trail Manager")]
 	[SerializeField] private float criticalSpeedBonusThreshold = 3.5f;
 	[SerializeField] private float maxExpectedSpeed = 22f;
-	[SerializeField] private float baseTrailSpawnRate = 32f;
+	[SerializeField] private float dashTrailSpawnRate = 64f;
+	[SerializeField] private float minSuperSpeedTrailRate = 60f;
 	[SerializeField] private float maxTrailSpawnRate = 260f;
 	[SerializeField] private float criticalRamDamage = 12f;
 	[SerializeField] private float criticalRamKnockback = 16f;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
 	private BoxCollider2D _hitbox;
 
 	private float _nextAllowedDashTime;
+	private bool _isDashing;
 	private Vector2 _lastMoveDir = Vector2.up;
 	private readonly object _dashDamageImmunityBlocker = new();
 
@@ -105,14 +107,6 @@ public class Player : MonoBehaviour
 		{
 			ElementManager.SetElement(Element.Ice);
 		}
-		else if (Keyboard.current.digit4Key.wasPressedThisFrame)
-		{
-			ElementManager.SetElement(Element.Blood);
-		}
-		else if (Keyboard.current.digit5Key.wasPressedThisFrame)
-		{
-			ElementManager.SetElement(Element.Poison);
-		}
 #endif
 	}
 
@@ -139,18 +133,25 @@ public class Player : MonoBehaviour
 		if (TrailVFX != null)
 		{
 			float criticalThreshold = _movement.WalkSpeed + criticalSpeedBonusThreshold;
-			float speedRatio = Mathf.InverseLerp(_movement.WalkSpeed, maxExpectedSpeed, CurrentSpeed);
+			float spawnRate = 0f;
 
-			float spawnRate = CurrentSpeed < 0.1f 
-				? 0f 
-				: Mathf.Lerp(baseTrailSpawnRate, maxTrailSpawnRate, speedRatio);
+			// Emit particles when either in Critical Speed OR actively Dashing
+			if (IsCriticalSpeed)
+			{
+				float speedRatio = Mathf.InverseLerp(criticalThreshold, maxExpectedSpeed, CurrentSpeed);
+				spawnRate = Mathf.Lerp(minSuperSpeedTrailRate, maxTrailSpawnRate, speedRatio);
+			}
+			else if (_isDashing)
+			{
+				spawnRate = dashTrailSpawnRate;
+			}
 
 			TrailVFX.SetFloat("SpawnRate", spawnRate);
 		}
 
 		if (AuraLight != null)
 		{
-			float targetIntensity = IsCriticalSpeed ? _baseAuraLightIntensity * 2.2f : _baseAuraLightIntensity;
+			float targetIntensity = (IsCriticalSpeed || _isDashing) ? _baseAuraLightIntensity * 2.2f : _baseAuraLightIntensity;
 			AuraLight.intensity = Mathf.Lerp(AuraLight.intensity, targetIntensity, Time.deltaTime * 12f);
 		}
 	}
@@ -275,6 +276,7 @@ public class Player : MonoBehaviour
 				}
 				default:
 				{
+					_isDashing = true;
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}
@@ -284,6 +286,7 @@ public class Player : MonoBehaviour
 
 	private void OnDashEnd()
 	{
+		_isDashing = false;
 		_health.UnregisterDamageBlocker(_dashDamageImmunityBlocker);
 	}
 
@@ -317,6 +320,7 @@ public class Player : MonoBehaviour
 
 	private void OnDamaged(DamageInfo info)
 	{
+		_isDashing = false;
 		Animator.SetTrigger(HitHash);
 		_movement.StopDash();
 	}
