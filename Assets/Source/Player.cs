@@ -109,6 +109,7 @@ public class Player : MonoBehaviour
 		_movement.WalkSpeed = _baseWalkSpeed * data.MoveSpeedMultiplier;
 		AuraLight.color = data.Color;
 		Animator.SetTrigger(element.ToString());
+		TrailVFX.SetGradient("Color", data.DashTrail);
 	}
 
 	private void OnShoot(InputAction.CallbackContext context)

@@ -5,6 +5,8 @@ using UnityEngine.Audio;
 public class ElementSO : ScriptableObject
 {
     public Color Color = Color.white;
+    [GradientUsage(true)]
+    public Gradient DashTrail;
     public Sprite EnergyFrame;
     public float Damage = 10f;
     public float MoveSpeedMultiplier = 1f;
