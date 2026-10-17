@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6753340743487087944}
   - component: {fileID: 2508108290153516974}
   - component: {fileID: 4432434742691340262}
+  - component: {fileID: 1182568196129405191}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -134,3 +135,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterMovement
   <WalkSpeed>k__BackingField: 5
+--- !u!114 &1182568196129405191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465574187205225181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08b5063cf3c1f745ade24fd7dc7a177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
