@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
-
 [RequireComponent(typeof(CharacterMovement))]
+
+[RequireComponent(typeof(Health))]
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
@@ -12,7 +14,13 @@ public class Player : MonoBehaviour
     [SerializeField] private int _MaxOrbs = 6;
     [SerializeField] private Light2D AuraLight;
     [SerializeField] private Element DefaultElement = Element.Fire;
-    [SerializeField] Animator Animator;
+    [SerializeField] private Animator Animator;
+
+    [Space]
+
+    [SerializeField] private float DashCooldown = 0.5f;
+    [SerializeField] private float DashDuration = 0.5f;
+    [SerializeField] private float DashDistance = 0.5f;
 
     private PlayerInputMap _input;
     private CharacterMovement _movement;
@@ -30,9 +38,12 @@ public class Player : MonoBehaviour
 
         _input.Player.Shoot.performed += OnShoot;
         _input.Player.Pull.performed += OnPull;
+        _input.Player.Dash.performed += OnDash;
 
         ElementManager.OnChanged += OnElementChanged;
         ElementManager.SetElement(DefaultElement);
+
+        GetComponent<Health>().OnDamaged += OnDamaged;
     }
 
     private void OnEnable() => _input.Enable();
@@ -56,6 +67,8 @@ public class Player : MonoBehaviour
             ElementManager.SetElement(Element.Ice);
         }
 #endif
+
+        
     }
 
     private void OnDestroy()
@@ -90,6 +103,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnDash(InputAction.CallbackContext context)
+    {
+        
+    }
+
     public void CatchOrb(WispOrb orb, Vector2 impactDir, float knockbackForce)
     {
         _orbs.Remove(orb);
@@ -106,5 +124,10 @@ public class Player : MonoBehaviour
 
         var mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         return ((Vector2)(mouseWorld - transform.position)).normalized;
+    }
+
+    private void OnDamaged(DamageInfo info)
+    {
+        Animator.SetTrigger("Hit");
     }
 }
