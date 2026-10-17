@@ -36,9 +36,8 @@ public class FacePlayer : MonoBehaviour
         }
         else
         {
-            var playerMove = FindFirstObjectByType<CharacterMovement>();
-            if (playerMove != null) _player = playerMove.transform;
-        }
+            _player = Player.Instance.transform;
+		}
     }
 
     private void LateUpdate()
