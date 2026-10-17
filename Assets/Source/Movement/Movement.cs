@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    private void LateUpdate()
+    protected virtual void LateUpdate()
     {
         _rb.linearVelocity = _overrideVelocity ??= _cumulativeVelocity;
         _overrideVelocity = null;

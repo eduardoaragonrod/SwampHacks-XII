@@ -25,6 +25,11 @@ public class Player : MonoBehaviour
 	private void Update()
 	{
 		_movement.Walk(_input.Player.Move.ReadValue<Vector2>());
+
+		if (Keyboard.current.hKey.wasPressedThisFrame)
+		{
+			_movement.ApplyKnockback(Random.onUnitCircle.normalized * Random.Range(10f, 20f));
+		}
 	}
 
 	private void OnDisable()
