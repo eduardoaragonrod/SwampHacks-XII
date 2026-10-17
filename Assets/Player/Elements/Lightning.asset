@@ -44,7 +44,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   EnergyFrame: {fileID: -4391686048232520986, guid: d29c18fe0c781b943a799ed76655c142, type: 3}
-  Damage: 6.92
+  Damage: 7
   MoveSpeedMultiplier: 2.3
   LaunchSpeed: 20
   PullAcceleration: 70
