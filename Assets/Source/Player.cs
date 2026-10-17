@@ -105,6 +105,14 @@ public class Player : MonoBehaviour
 		{
 			ElementManager.SetElement(Element.Ice);
 		}
+		else if (Keyboard.current.digit4Key.wasPressedThisFrame)
+		{
+			ElementManager.SetElement(Element.Blood);
+		}
+		else if (Keyboard.current.digit5Key.wasPressedThisFrame)
+		{
+			ElementManager.SetElement(Element.Poison);
+		}
 #endif
 	}
 

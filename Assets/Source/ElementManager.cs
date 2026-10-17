@@ -4,7 +4,7 @@ using UnityEngine;
 public partial class ElementManager : MonoBehaviour
 {
     [SerializeField]
-    private ElementSO Fire, Lightning, Ice;
+    private ElementSO Fire, Lightning, Ice, Blood, Poison;
 
     private static ElementManager _instance;
 
@@ -45,6 +45,8 @@ public partial class ElementManager : MonoBehaviour
         Element.Fire => _instance.Fire,
         Element.Lightning => _instance.Lightning,
         Element.Ice => _instance.Ice,
+        Element.Blood => _instance.Blood,
+        Element.Poison => _instance.Poison,
         _ => throw new System.NotImplementedException(),
     };
 }

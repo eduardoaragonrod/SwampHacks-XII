@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b763388c9cc7cac4ba6ce9740230b02d, type: 3}
-  m_Name: TempMissile
+  m_Name: BatMissile
   m_EditorClassIdentifier: Assembly-CSharp::MissileSO
-  BaseSpeed: 5
-  Acceleration: 0
+  BaseSpeed: 1
+  Acceleration: 1
   MinSpeed: 0
   MaxSpeed: Infinity
   DamageInfo:
-    Damage: 10
+    Damage: 5
     Team: 1
-    Direction: {x: 0.84035677, y: 0.5420336}
-    Knockback: 10
+    Direction: {x: 0.103971265, y: -0.99458027}
+    Knockback: 0
   CollisionRadius: 0.2
-  OverrideSprite: {fileID: 0}
+  OverrideSprite: {fileID: 8988004830913203849, guid: a1706b35d93702f488482101da3a5c36, type: 3}
   AttachedPrefab: {fileID: 0}
   DetachPrefabOnDeath: 0
   TimeToExpireAfterDetach: 3
-  LightIntensity: 0.5
-  LightRadius: 3
-  LightColor: {r: 1, g: 0, b: 0, a: 1}
-  LightFadeOnDeathDuration: 1
+  LightIntensity: 2
+  LightRadius: 2
+  LightColor: {r: 0.5267849, g: 0, b: 1, a: 1}
+  LightFadeOnDeathDuration: 0.5
