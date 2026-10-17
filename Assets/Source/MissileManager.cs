@@ -44,5 +44,6 @@ public partial class MissileManager : MonoBehaviour
     public static void Kill(Missile missile)
     {
         _missiles.Remove(missile);
+        missile.OnDeath();
     }
 }
