@@ -41,14 +41,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CoronaWidth: 0.038
-    - _DilationScale: 0.008
+    - _CoronaWidth: 0.042
+    - _DilationScale: 0
     - _DilationSpeed: 1.2
     - _EnableExternalAlpha: 0
-    - _PixelDensity: 140
-    - _PupilRadius: 0.165
-    - _RingDensity: 26
-    - _RotationSpeed: 0.75
+    - _PixelDensity: 1334
+    - _PupilRadius: 0.26
+    - _RingDensity: 40.4
+    - _RotationSpeed: 0.05
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
