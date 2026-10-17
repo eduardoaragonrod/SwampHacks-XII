@@ -194,6 +194,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FacePlayer
   mode: 0
-  angleOffset: -135
+  angleOffset: -125
   turnSpeed: 720
   spriteDrawnFacingLeft: 0
