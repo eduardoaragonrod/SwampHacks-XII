@@ -27,30 +27,18 @@ PrefabInstance:
     - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-    - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: -8608649053288649307, guid: 79bc8ea0f3ea3b441bcb473675d0c91d, type: 3}
     - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
-      value: 0.5
+      value: 0.53846157
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.y
-      value: 0.5
+      value: -0.15384616
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
@@ -62,11 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1
+      value: 0.40625
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1
+      value: 0.40625
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
@@ -119,6 +107,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1478125061830999304, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2999301692718914190}
+    - targetCorrespondingSourceObject: {fileID: 1478125061830999304, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5974351115646200592}
   m_SourcePrefab: {fileID: 100100000, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
 --- !u!1 &3185291783371023883 stripped
 GameObject:
@@ -137,3 +128,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ccbcfbc2ba0c74e974dbc561e246c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MothAI
+--- !u!95 &5974351115646200592
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3185291783371023883}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: -4262841043776537392, guid: 79bc8ea0f3ea3b441bcb473675d0c91d, type: 3}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
