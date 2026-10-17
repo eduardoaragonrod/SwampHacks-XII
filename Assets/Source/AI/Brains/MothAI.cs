@@ -2,11 +2,18 @@
 
 public class MothAI : EnemyAI
 {
-    protected override State OnConstruct()
-    {
-        var chase = new MoveToPlayer();
-        Register(chase);
+	protected override State OnConstruct()
+	{
+		Health.OnDeath += OnDeath;
 
-        return chase;
-    }
+		var chase = new MoveToPlayer();
+		Register(chase);
+
+		return chase;
+	}
+
+	private void OnDeath()
+	{
+		Destroy(gameObject);
+	}
 }
