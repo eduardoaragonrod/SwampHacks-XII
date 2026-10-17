@@ -5,8 +5,9 @@ public class WispOrb : MonoBehaviour
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private float _Drag = 6f;
     [SerializeField] private float _CatchRadius = 0.6f;
+    [SerializeField] private float Knockback = 5f;
 
-    private Player _owner;
+	private Player _owner;
     private ElementSO _element;
     private Vector2 _velocity;
     private bool _isPulling;
@@ -67,6 +68,8 @@ public class WispOrb : MonoBehaviour
             DamageInfo info = new()
             {
                 Damage = _element.Damage,
+                Direction = (other.transform.position - transform.position).normalized,
+                Knockback = Knockback,
                 Team = Team.Friendly  // Player orb is always friendly.
             };
 
