@@ -151,5 +151,6 @@ public class Player : MonoBehaviour
     private void OnDamaged(DamageInfo info)
     {
         Animator.SetTrigger(HitHash);
+        _movement.StopDash();
     }
 }
