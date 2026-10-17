@@ -10,8 +10,7 @@ public class MissileSO : ScriptableObject
 
     [Space]
 
-    public Team Team = Team.Hostile;
-    public DamageInfo Damage;
+    public DamageInfo DamageInfo;
     public float CollisionRadius = 0.2f;
 
     [Space]
@@ -21,4 +20,11 @@ public class MissileSO : ScriptableObject
     public bool DetachPrefabOnDeath;
     [Tooltip("In seconds.")]
     public float TimeToExpireAfterDetach = 3f;
+
+    [Space]
+
+    public float LightIntensity = 0f;
+    public float LightRadius = 2f;
+    public Color LightColor = Color.white;
+    public float LightFadeOnDeathDuration = 0.5f;
 }

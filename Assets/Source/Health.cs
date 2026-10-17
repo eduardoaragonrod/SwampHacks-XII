@@ -22,6 +22,7 @@ public class Health : MonoBehaviour, IDamageable
 
     public bool TryTakeDamage(DamageInfo info)
     {
+        // No friendly fire.
         if (info.TargetTeam == Team)
         {
             return false;
