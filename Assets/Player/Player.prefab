@@ -53,7 +53,7 @@ MonoBehaviour:
     rid: 3259753297090183261
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.7692951, b: 0.09019607, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 0.59
   m_LightVolumeIntensity: 0.38
   m_LightVolumeEnabled: 1
   m_ApplyToSortingLayers: 83480db805b111b4000000003514b8e6i
@@ -193,8 +193,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 36089085
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3131772922192851117, guid: 2d58ebc925c93a440bcda5580ffcbdfe, type: 3}
@@ -349,7 +349,7 @@ Animator:
   m_GameObject: {fileID: 8465574187205225181}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 44d7e67b7368d0d4b843543bc958e2dd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7234d7a31a4b9704391d569b30184696, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
