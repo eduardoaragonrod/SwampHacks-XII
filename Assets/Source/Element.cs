@@ -2,5 +2,7 @@
 {
     Fire,
     Lightning,
-    Ice
+    Ice,
+    Blood,
+    Poison
 }
