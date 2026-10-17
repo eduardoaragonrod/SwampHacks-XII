@@ -15,7 +15,7 @@ MonoBehaviour:
   Color: {r: 0, g: 0.9086844, b: 1, a: 1}
   DashTrail:
     serializedVersion: 2
-    key0: {r: 0, g: 0.7003899, b: 0.7490196, a: 1}
+    key0: {r: 0.85200167, g: 2.6678662, b: 2.778836, a: 1}
     key1: {r: 0, g: 0.42598197, b: 0.7490196, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
@@ -51,5 +51,5 @@ MonoBehaviour:
   KnockbackScale: 0.75
   DashSound: {fileID: 6418180475301049370, guid: 0947bd8379389744bac54e98b4f34a1d, type: 2}
   DashSpeed: 15
-  DashDistance: 4.5
-  DashCooldown: 0.5
+  DashDistance: 9
+  DashCooldown: 0.6

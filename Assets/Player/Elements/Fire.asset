@@ -50,6 +50,6 @@ MonoBehaviour:
   PullAcceleration: 45
   KnockbackScale: 1.5
   DashSound: {fileID: 6418180475301049370, guid: 71bc7d660db99774db819b419d978cdf, type: 2}
-  DashSpeed: 15
-  DashDistance: 4.5
-  DashCooldown: 0.5
+  DashSpeed: 25
+  DashDistance: 8
+  DashCooldown: 5
