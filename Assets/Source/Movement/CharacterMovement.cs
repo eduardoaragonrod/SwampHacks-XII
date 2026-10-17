@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -6,10 +5,12 @@ public class CharacterMovement : Movement
 {
     [field: SerializeField]
     public float WalkSpeed { get; set; } = 5f;
+
     [SerializeField, Tooltip("Rate at which current knockback velocity approaches 0.")]
     private float KnockbacDecayRate = 64f;
+
     [SerializeField]
-    private float BounceScale = 0f;
+    private float BounceScale = 0.8f;
 
     private Vector2 _knockback;
 
@@ -27,40 +28,17 @@ public class CharacterMovement : Movement
         base.LateUpdate();
     }
 
-    private void FixedUpdate()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (BounceScale > 0f)
+        if (BounceScale <= 0f) return;
+
+        if (collision.gameObject.layer == Layers.ObstacleLayer)
         {
-            var contacts = new List<ContactPoint2D>();
-            Rigidbody.GetContacts(contacts);
+            ContactPoint2D contact = collision.GetContact(0);
 
-            bool hitObstacle = false;
-
-            foreach (var contact in contacts)
+            if (Vector2.Dot(_knockback, -contact.normal) > 0f)
             {
-                if (contact.collider.gameObject.layer == Layers.ObstacleLayer
-                    && Vector2.Dot(_knockback.normalized, -contact.normal) > 0f)
-                {
-                    hitObstacle = true;
-                    break;
-                }
-            }
-
-            if (hitObstacle)
-            {
-                var vel = _knockback;
-                vel *= BounceScale;
-
-                if (Mathf.Abs(vel.x) > Mathf.Abs(vel.y))
-                {
-                    vel.x = -vel.x;
-                }
-                else
-                {
-                    vel.y = -vel.y;
-                }
-
-                _knockback = vel;
+                _knockback = Vector2.Reflect(_knockback, contact.normal) * BounceScale;
             }
         }
     }
