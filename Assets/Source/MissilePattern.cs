@@ -1,4 +1,5 @@
-﻿public record MissilePattern
+﻿[System.Serializable]
+public record MissilePattern
 {
     public bool RandomSpread;
     public float SpreadAngle = 45f;

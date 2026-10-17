@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Layer 1
+  - name: Missile_Red
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -139,7 +139,7 @@ ScriptedImporter:
       y: 4
       width: 16
       height: 16
-    spriteID: 975e983a258ac6f49a28060bd988d1c6
+    spriteID: e3f59710e4298ae4e96f46e40e2b8a9e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,22 +148,43 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Missile_Purple
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 28
+      width: 16
+      height: 16
+    spriteID: 48e3a750d77a95447b5876f03b2c6afd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 28}
   spriteSheetImportData: []
   tileSetImportData: []
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 4287466680
+      value0: 2410604142
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Layer 1
+    name: Missile_Red
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: Layer 1
+    - name: Missile_Red
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -171,7 +192,32 @@ ScriptedImporter:
         y: 0
         width: 16
         height: 16
-      spriteId: 975e983a258ac6f49a28060bd988d1c6
+      spriteId: e3f59710e4298ae4e96f46e40e2b8a9e
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 1
+    uuid:
+      value0: 2267571381
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Missile_Purple
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Missile_Purple
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      spriteId: 48e3a750d77a95447b5876f03b2c6afd
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -204,5 +250,5 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
-  previousTextureSize: {x: 32, y: 32}
+  previousTextureSize: {x: 32, y: 64}
   canvasSize: {x: 16, y: 16}

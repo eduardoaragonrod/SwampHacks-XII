@@ -1,4 +1,6 @@
-﻿public class MoveToPlayer : State
+﻿using UnityEngine;
+
+public class MoveToPlayer : State
 {
     private readonly float _minDst;
 
