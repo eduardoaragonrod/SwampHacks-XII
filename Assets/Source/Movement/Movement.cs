@@ -3,19 +3,19 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
-    private Rigidbody2D _rb;
+    protected Rigidbody2D Rigidbody { get; private set; }
 
     private Vector2? _overrideVelocity;
     private Vector2 _cumulativeVelocity;
 
     protected virtual void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        Rigidbody = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void LateUpdate()
     {
-        _rb.linearVelocity = _overrideVelocity ??= _cumulativeVelocity;
+        Rigidbody.linearVelocity = _overrideVelocity ??= _cumulativeVelocity;
         _overrideVelocity = null;
         _cumulativeVelocity = Vector2.zero;
     }
