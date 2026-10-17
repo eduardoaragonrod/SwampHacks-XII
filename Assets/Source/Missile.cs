@@ -21,7 +21,10 @@ public class Missile : MonoBehaviour
 
 		Speed = missile.BaseSpeed;
 
-		GetComponent<SpriteRenderer>().sprite = MissileData.Sprite;
+		if (MissileData.OverrideSprite != null)
+		{
+            GetComponent<SpriteRenderer>().sprite = MissileData.OverrideSprite;
+        }
 
 		if (MissileData.AttachedPrefab != null)
 		{
@@ -61,7 +64,10 @@ public class Missile : MonoBehaviour
 			}
 			else if (hit.collider.TryGetComponent(out IDamageable dmg))
 			{
-				if (dmg.TryTakeDamage(MissileData.DamageInfo))
+				var info = MissileData.DamageInfo;
+				info.Direction = deltaPos.normalized;
+
+                if (dmg.TryTakeDamage(info))
 				{
                     hitAny = true;
                 }
