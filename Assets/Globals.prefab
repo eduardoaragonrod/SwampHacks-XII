@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7975831045054490404}
   - component: {fileID: 4946268433071141334}
   - component: {fileID: -370416246632179145}
+  - component: {fileID: -3388949013924716684}
   m_Layer: 0
   m_Name: Globals
   m_TagString: Untagged
@@ -58,3 +59,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissileManager
   MissilePrefab: {fileID: 6181202216966061936, guid: 382b6fbfb80c7ab468cbd73ad8b0978c, type: 3}
+--- !u!114 &-3388949013924716684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098616536516849948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846fc9962270c944a87e5a282844a8ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Layers

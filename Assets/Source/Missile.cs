@@ -17,9 +17,15 @@ public class Missile : MonoBehaviour
 
     public void Tick()
     {
+        var lastPos = transform.position;
+
         transform.Translate(Speed * Time.deltaTime * BaseDirection);
         Speed += Time.deltaTime * MissileData.Acceleration;
         Speed = Mathf.Clamp(Speed, MissileData.MinSpeed, MissileData.MaxSpeed);
+
+        var deltaPos = transform.position - lastPos;
+
+        //Physics2D.CircleCastAll(lastPos, 0.3f, deltaPos.normalized, deltaPos.magnitude, int.Lay)
     }
 
     public void Kill()
