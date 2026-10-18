@@ -90,6 +90,8 @@ public class Player : MonoBehaviour
 	{
 		Instance = this;
 
+		Cursor.visible = false;
+
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
 		_baseWalkSpeed = _movement.WalkSpeed;

@@ -649,7 +649,6 @@ GameObject:
   - component: {fileID: -7870962844570920893}
   - component: {fileID: -4088034873723934146}
   - component: {fileID: 5423623463533910720}
-  - component: {fileID: -5273191217617167244}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -726,7 +725,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3131772922192851117, guid: 2d58ebc925c93a440bcda5580ffcbdfe, type: 3}
+  m_Sprite: {fileID: -12923206, guid: 0e5b7189dd7b84346b0c40269dfcd62c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -734,7 +733,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
 --- !u!61 &6654178922778522645
@@ -771,7 +770,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.009066135, y: 0.012013178}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -781,8 +780,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.06316608, y: 0.008919992}
+  m_EdgeRadius: 0.5
 --- !u!50 &2508108290153516974
 Rigidbody2D:
   serializedVersion: 5
@@ -867,6 +866,7 @@ MonoBehaviour:
   FloatingOrbDistance: 2
   ShootInterval: 0.2
   CatchOrbSound: {fileID: 0}
+  HitSoundFX: {fileID: 0}
   HurtAnimator: {fileID: 519388106830775675}
   Blackout: {fileID: 2560273455148834327}
 --- !u!114 &-7870962844570920893
@@ -921,15 +921,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-5273191217617167244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465574187205225181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd35aee34e9fe8e41b02401ecfabcef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GamepadFX
