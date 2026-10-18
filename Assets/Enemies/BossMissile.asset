@@ -19,7 +19,7 @@ MonoBehaviour:
   DamageInfo:
     Damage: 5
     Team: 1
-    Direction: {x: 0, y: 0}
+    Direction: {x: 0.9396916, y: -0.34202296}
     Knockback: 0
   CollisionRadius: 0.25
   OverrideSprite: {fileID: -6031928851335988984, guid: a1706b35d93702f488482101da3a5c36, type: 3}

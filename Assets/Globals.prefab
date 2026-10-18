@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -3388949013924716684}
   - component: {fileID: -4175902396274032796}
   - component: {fileID: 5936814247828396532}
+  - component: {fileID: 8204198497976506071}
   m_Layer: 0
   m_Name: Globals
   m_TagString: Untagged
@@ -102,3 +103,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd35aee34e9fe8e41b02401ecfabcef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamepadFX
+--- !u!114 &8204198497976506071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098616536516849948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c514597fd1f2b7a4dad05bc5e10456e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TimeManager

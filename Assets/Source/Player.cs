@@ -1,9 +1,11 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
 [RequireComponent(typeof(CharacterMovement))]
@@ -52,6 +54,10 @@ public class Player : MonoBehaviour
 	private float ShootInterval = 0.2f;
 	[SerializeField]
 	private AudioResource CatchOrbSound;
+	[SerializeField]
+	private Animator HurtAnimator;
+	[SerializeField]
+	private CanvasGroup Blackout;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -204,6 +210,13 @@ public class Player : MonoBehaviour
 		}
 
 		UpdateFloatingOrbs();
+
+#if UNITY_EDITOR
+		if (Keyboard.current.kKey.wasPressedThisFrame)
+		{
+			_health.TryTakeDamage(new(100000f, Team.Environment, default, 0f));
+		}
+#endif
 	}
 
 	private void OnDestroy()
@@ -427,6 +440,47 @@ public class Player : MonoBehaviour
 		_isDashing = false;
 		Animator.SetTrigger(HitHash);
 		_movement.StopDash();
+
+		var vcam = CinemachineBrain.GetActiveBrain(0).ActiveVirtualCamera as CinemachineCamera;
+		float camScale = vcam.Lens.OrthographicSize;
+
+		var timeScaler = new object();
+		float timeToSlowDown = 1f;
+
+		GamepadFX.Pulse(0.1f, timeToSlowDown * 2f);
+		//HurtAnimator.Play("Hurt");
+
+		for (float t = 0f; t < timeToSlowDown; t += Time.unscaledDeltaTime)
+		{
+			vcam.Lens.OrthographicSize = Mathf.Lerp(camScale, camScale * 0.8f, t / timeToSlowDown);
+			TimeManager.ApplyFactor(timeScaler, Mathf.Lerp(1f, 0.1f, t / timeToSlowDown));
+			await Awaitable.NextFrameAsync();
+		}
+
+		for (float t = 0f; t < 0.5f; t += Time.unscaledDeltaTime)
+		{
+			await Awaitable.NextFrameAsync();
+		}
+
+		if (_health.Current > 0f)
+		{
+			for (float t = 0f; t < timeToSlowDown; t += Time.unscaledDeltaTime)
+			{
+				vcam.Lens.OrthographicSize = Mathf.Lerp(camScale * 0.8f, camScale, t / timeToSlowDown);
+				TimeManager.ApplyFactor(timeScaler, Mathf.Lerp(0.1f, 1f, t / timeToSlowDown));
+				await Awaitable.NextFrameAsync();
+			}
+
+			_input.Enable();
+		}
+		else
+		{
+			_input.Disable();
+			GamepadFX.Pulse(0.2f, timeToSlowDown);
+			await Blackout.DOFade(1f, 1f).SetUpdate(isIndependentUpdate: true).AsyncWaitForCompletion();
+			TimeManager.RemoveFactor(timeScaler);
+			SceneManager.LoadScene(0);
+		}
 	}
 
 	private void UpdateFloatingOrbs()
