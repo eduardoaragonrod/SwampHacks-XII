@@ -4676,10 +4676,10 @@ MonoBehaviour:
   - {fileID: 3185291783371023883, guid: 910d3464fddab5048a0813fbd33bb7bd, type: 3}
   - {fileID: 1516526272143518673, guid: fbd302546fedaa3448ae33310565b204, type: 3}
   - {fileID: 1709604004874167103, guid: 2a2d3cfcc2f305d47967abd6c5145722, type: 3}
-  initialSpawnInterval: 2.38
+  initialSpawnInterval: 2
   minSpawnInterval: 0.9
   spawnAccelerationPerSecond: 0.02
-  maxActiveEnemies: 22
+  maxActiveEnemies: 45
   minLandingRadius: 5
   maxLandingRadius: 10
   ejectionDuration: 1
