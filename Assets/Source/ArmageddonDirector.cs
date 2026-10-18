@@ -148,6 +148,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 		foreach (var enemy in enemies)
 		{
+			if (enemy == null) continue;
+
 			puddles.Add(Instantiate(PoisonPuddle, enemy.transform.position, Quaternion.identity));
 			masks.Add(Instantiate(PoisonPuddleMask, enemy.transform.position, Quaternion.identity));
 
@@ -168,6 +170,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 		foreach (var enemy in enemies)
 		{
+			if (enemy == null) continue;
+
 			enemy.GetComponent<Health>().TryTakeDamage(new(1000f, Team.Environment, default, 0f));
 		}
 
