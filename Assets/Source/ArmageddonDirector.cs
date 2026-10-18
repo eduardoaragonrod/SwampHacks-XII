@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 
 public class ArmageddonDirector : MonoBehaviour
@@ -32,13 +31,13 @@ public class ArmageddonDirector : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_startingTime = Time.time;
+		_startingTime = Time.unscaledTime;
 	}
 
 	private void Update()
 	{
 		float armageddonStartTime = 20f * (StageManager.CurrentStageIndex + 1) - 5f;
-		float time = Time.time - _startingTime;
+		float time = Time.unscaledTime - _startingTime;
 
 		if (time >= armageddonStartTime)
 		{
@@ -66,14 +65,14 @@ public class ArmageddonDirector : MonoBehaviour
 		{
 			case Element.Fire:
 			{
-				Audio.Play(FireBoomSound, player.transform.position);
-
 				foreach (var enemy in enemies)
 				{
 					var vfx = Instantiate(FireVFX, enemy.transform.position, Quaternion.identity);
 					vfx.AddComponent<DestroyOnVFXFinish>();
 					enemy.GetComponent<Health>().TryTakeDamage(new(1000f, Team.Environment, default, 0f));
 				}
+
+				Audio.Play(FireBoomSound, player.transform.position);
 				break;
 			}
 			case Element.Lightning:
