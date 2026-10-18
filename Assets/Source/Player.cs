@@ -47,6 +47,8 @@ public class Player : MonoBehaviour
 	private float FloatingOrbRotationRate = 0.5f;
 	[SerializeField]
 	private float FloatingOrbDistance = 0.5f;
+	[SerializeField]
+	private float ShootInterval = 0.2f;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -59,6 +61,7 @@ public class Player : MonoBehaviour
 	private ElementSO _currentElement;
 	private BoxCollider2D _hitbox;
 
+	private bool _wantsToShoot;
 	private float _nextAllowedDashTime;
 	private bool _isDashing;
 	private Vector2 _lastMoveDir = Vector2.up;
@@ -70,6 +73,7 @@ public class Player : MonoBehaviour
 	private readonly Dictionary<GameObject, float> _recentlyRammedEnemies = new();
 
 	private readonly List<Transform> _floatingOrbs = new();
+	private float _nextShootAllowedTime;
 
 	private void Awake()
 	{
@@ -81,6 +85,8 @@ public class Player : MonoBehaviour
 		if (AuraLight != null) _baseAuraLightIntensity = AuraLight.intensity;
 
 		_input.Player.Shoot.performed += OnShoot;
+		_input.Player.Shoot.canceled += OnStopShoot;
+
 		_input.Player.Pull.performed += OnPull;
 		_input.Player.Dash.performed += OnDash;
 
@@ -117,6 +123,12 @@ public class Player : MonoBehaviour
 		if (dir.sqrMagnitude > 0f)
 		{
 			_lastMoveDir = dir.normalized;
+		}
+
+		if (_wantsToShoot && Time.time > _nextShootAllowedTime)
+		{
+			_nextShootAllowedTime = Time.time + ShootInterval;
+			Shoot();
 		}
 
 #if UNITY_EDITOR
@@ -254,6 +266,16 @@ public class Player : MonoBehaviour
 
 	private void OnShoot(InputAction.CallbackContext context)
 	{
+		_wantsToShoot = true;
+	}
+
+	private void OnStopShoot(InputAction.CallbackContext context)
+	{
+		_wantsToShoot = false;
+	}
+
+	private void Shoot()
+	{
 		if (_orbs.Count >= _MaxOrbs) return;
 
 		Audio.Play(ElementManager.CurrentData.ShootSound, transform.position);
@@ -283,6 +305,8 @@ public class Player : MonoBehaviour
 
 	private void OnPull(InputAction.CallbackContext context)
 	{
+		_wantsToShoot = false;
+
 		foreach (WispOrb orb in _orbs)
 		{
 			orb.Pull();

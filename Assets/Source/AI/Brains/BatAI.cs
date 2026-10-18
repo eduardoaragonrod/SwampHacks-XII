@@ -19,18 +19,19 @@ public class BatAI : EnemyAI
 		var playerPos = Player.Instance.transform.position;
 		var dirFromPlayer = (transform.position - playerPos).normalized;
 
-		var targetPos = playerPos + (dirFromPlayer * Mathf.Lerp(2f, 4f, (Mathf.Sin(Time.time * 0.2f) + 1f) / 2f));
+		var targetPos = playerPos + (dirFromPlayer * Mathf.Lerp(4f, 8f, (Mathf.Sin(Time.time * 0.2f) + 1f) / 2f));
 		var dirToDest = (targetPos - transform.position).normalized;
+		var dstToTarget = (transform.position - targetPos).magnitude;
 
-		if ((transform.position - targetPos).magnitude > 0.2f)
+		if (dstToTarget > 1f)
 		{
 			Movement.Walk(dirToDest);
 		}
 
-		if (Time.time > _nextShootTime)
+		if (Time.time > _nextShootTime && dstToTarget < 3f)
 		{
 			Shoot();
-			_nextShootTime = Time.time + 3f;
+			_nextShootTime = Time.time + Random.Range(2f, 5f);
 		}
 	}
 

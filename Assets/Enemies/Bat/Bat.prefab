@@ -39,6 +39,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 163242903868776060, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: <WalkSpeed>k__BackingField
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 1478125061830999304, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Name
       value: Bat
@@ -59,6 +63,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4320598922292949530, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 767cb77bcfb90ec458620359065f6328, type: 2}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Size.x
       value: 0.6825007
@@ -102,6 +110,14 @@ PrefabInstance:
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170068598535578051, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170068598535578051, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: <Default>k__BackingField
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 9146191461419136913, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_LocalPosition.x
@@ -176,9 +192,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BatAI
   Missile: {fileID: 11400000, guid: 6283eb7ca8e870049ad14ab6e7ced142, type: 2}
   MissileOrigin: {fileID: 2330885527191547319}
-  MissileCount: 6
+  MissileCount: 4
   MissileSpawnPattern:
-    RandomSpread: 0
+    RandomSpread: 1
     SpreadAngle: 90
 --- !u!95 &4148352895353533268
 Animator:
