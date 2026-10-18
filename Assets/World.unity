@@ -4821,6 +4821,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819312225}
   m_CullTransparentMesh: 1
+--- !u!4 &1821513640 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+  m_PrefabInstance: {fileID: 4774807760766052417}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1872946407
 GameObject:
   m_ObjectHideFlags: 0
@@ -5079,7 +5084,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1821513640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2007157807
@@ -5617,6 +5623,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4774807760766052417
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2007157806}
+    m_Modifications:
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752124985763528719, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: FireVFX
+      value: 
+      objectReference: {fileID: 2903988978243712688, guid: ea28964f6602f30468bd066d973cc798, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: BloodVFX
+      value: 
+      objectReference: {fileID: 1023589237540334431, guid: a776c298ee6e6034d9ab1649b4a025fe, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: BlizzardVFX
+      value: 
+      objectReference: {fileID: 4729547929969925999, guid: 733c7c0f8da2b164caa49223bd63e301, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: PoisonPuddle
+      value: 
+      objectReference: {fileID: 2117515592422288981, guid: c82ea7bf4f1e3bd48a7f1a2381d2845a, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: StageManager
+      value: 
+      objectReference: {fileID: 2007157807}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: FireBoomSound
+      value: 
+      objectReference: {fileID: 6418180475301049370, guid: 1d556f9de4e95ee42b00c3ebcbf04ff2, type: 2}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: LightningDown
+      value: 
+      objectReference: {fileID: 8914635547808661033, guid: 284fb2585908c2547acc31e08c5c4598, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: BlizzardDeathVFX
+      value: 
+      objectReference: {fileID: 6332875260501301159, guid: 58160683fd71a9741863ab4ceeb0f91b, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: PoisonPuddleMask
+      value: 
+      objectReference: {fileID: 3737608029687210731, guid: 05872fea684888343bbae5820c9e691f, type: 3}
+    - target: {fileID: 3378284519361167065, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: LightningStrikeSound
+      value: 
+      objectReference: {fileID: 6418180475301049370, guid: bc4a9ba07a1481a448687af2756c1dca, type: 2}
+    - target: {fileID: 6379523070784160657, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
+      propertyPath: m_Name
+      value: ArmageddonDirector
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8bdd5956bfb3e604b997b793c736b716, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

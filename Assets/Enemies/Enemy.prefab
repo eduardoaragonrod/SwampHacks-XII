@@ -211,7 +211,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -238,6 +238,7 @@ MonoBehaviour:
   ImmunityDurationAfterDamage: 0
   <Team>k__BackingField: 1
   <Default>k__BackingField: 100
+  DestroyOnDeath: 1
 --- !u!61 &4861924702249231135
 BoxCollider2D:
   m_ObjectHideFlags: 0

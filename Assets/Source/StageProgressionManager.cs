@@ -55,7 +55,7 @@ public class StageProgressionManager : MonoBehaviour
     public UnityEvent OnStageChanged;
     public UnityEvent<Element> OnElementStageChanged;
 
-    private int _currentStageIndex = -1;
+    public int CurrentStageIndex { get; private set; } = -1;
     private float _timer;
     private bool _usingSourceA = true;
     private Bloom _bloom;
@@ -102,7 +102,7 @@ public class StageProgressionManager : MonoBehaviour
             _hudRootFadeRoutine = StartCoroutine(FadeCanvasGroupRoutine(_hudRootCanvasGroup, 1f, initialHudFadeInDuration));
         }
 
-        if (_currentStageIndex == -1 && stages.Count > 0)
+        if (CurrentStageIndex == -1 && stages.Count > 0)
         {
             AdvanceStage(isFirstStage: true);
         }
@@ -144,18 +144,18 @@ public class StageProgressionManager : MonoBehaviour
 
     private void AdvanceStage(bool isFirstStage)
     {
-        int nextIndex = _currentStageIndex + 1;
+        int nextIndex = CurrentStageIndex + 1;
         if (nextIndex >= stages.Count)
         {
             if (loopStages) nextIndex = 0;
             else return;
         }
 
-        _currentStageIndex = nextIndex;
-        ApplyStage(stages[_currentStageIndex], isFirstStage);
+        CurrentStageIndex = nextIndex;
+        ApplyStage(stages[CurrentStageIndex], isFirstStage);
 
         OnStageChanged?.Invoke();
-        OnElementStageChanged?.Invoke(stages[_currentStageIndex].element);
+        OnElementStageChanged?.Invoke(stages[CurrentStageIndex].element);
     }
 
     public void FadeOutEntireHUD(float duration = 1.0f)
