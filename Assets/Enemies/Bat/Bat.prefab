@@ -41,7 +41,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 163242903868776060, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: <WalkSpeed>k__BackingField
-      value: 0.8
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1478125061830999304, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Name
