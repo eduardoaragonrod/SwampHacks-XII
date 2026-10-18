@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
 [RequireComponent(typeof(CharacterMovement))]
@@ -54,7 +55,11 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private AudioResource CatchOrbSound;
 	[SerializeField]
+	private AudioResource HitSoundFX;
+	[SerializeField]
 	private Animator HurtAnimator;
+	[SerializeField]
+	private CanvasGroup Blackout;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -84,6 +89,8 @@ public class Player : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+
+		Cursor.visible = false;
 
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
@@ -207,6 +214,13 @@ public class Player : MonoBehaviour
 		}
 
 		UpdateFloatingOrbs();
+
+#if UNITY_EDITOR
+		if (Keyboard.current.kKey.wasPressedThisFrame)
+		{
+			_health.TryTakeDamage(new(100000f, Team.Environment, default, 0f));
+		}
+#endif
 	}
 
 	private void OnDestroy()
@@ -215,6 +229,14 @@ public class Player : MonoBehaviour
 		Instance = null;
 
 		foreach (var orb in _floatingOrbs)
+		{
+			if (orb != null)
+			{
+				Destroy(orb.gameObject);
+			}
+		}
+
+		foreach (var orb in _orbs)
 		{
 			if (orb != null)
 			{
@@ -440,6 +462,8 @@ public class Player : MonoBehaviour
 		GamepadFX.Pulse(0.1f, timeToSlowDown * 2f);
 		//HurtAnimator.Play("Hurt");
 
+		Audio.Play(HitSoundFX, transform.position);
+
 		for (float t = 0f; t < timeToSlowDown; t += Time.unscaledDeltaTime)
 		{
 			vcam.Lens.OrthographicSize = Mathf.Lerp(camScale, camScale * 0.8f, t / timeToSlowDown);
@@ -460,17 +484,25 @@ public class Player : MonoBehaviour
 				TimeManager.ApplyFactor(timeScaler, Mathf.Lerp(0.1f, 1f, t / timeToSlowDown));
 				await Awaitable.NextFrameAsync();
 			}
+
+			_input.Enable();
 		}
 		else
 		{
+			_input.Disable();
 			GamepadFX.Pulse(0.2f, timeToSlowDown);
-			// TODO: Fade to black. Disable input. Reload scene.
+			await Blackout.DOFade(1f, 1f).SetUpdate(isIndependentUpdate: true).AsyncWaitForCompletion();
+			TimeManager.RemoveFactor(timeScaler);
+			ElementManager.ResetElement();
+			SceneManager.LoadScene(0);
 		}
 	}
 
 	private void UpdateFloatingOrbs()
 	{
 		var data = ElementManager.CurrentData;
+
+		if (data == null) return;
 
 		for (int i = 0; i < _floatingOrbs.Count; i++)
 		{
