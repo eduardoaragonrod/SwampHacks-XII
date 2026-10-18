@@ -10,6 +10,7 @@ public class BlackHoleEncounterController : MonoBehaviour
     [SerializeField] private Renderer eyeRenderer;
     [SerializeField] private SunEaterDirector sunEaterDirector;
     [SerializeField] private StageProgressionManager stageProgressionManager;
+    [SerializeField] private BossTimeBarUI bossTimeBarUI;
 
     [Header("Phase 1: Enemy Spawner Settings")]
     [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();
@@ -24,17 +25,32 @@ public class BlackHoleEncounterController : MonoBehaviour
     [SerializeField] private float ejectionDuration = 0.65f;
     [SerializeField] private float spiralArcRadians = 2.2f;
 
-    [Header("Phase 2: Boss Survival Timer & Ramp-Up")]
-    [SerializeField] private float bossSurvivalDuration = 30f;
+    [Header("Boss Survival Timer & Phase 2 Settings")]
+    [SerializeField] private float bossSurvivalDuration = 36f;
     [SerializeField] private TMP_Text bossCountdownText;
+    [SerializeField] private string phase2Announcement = "PHASE 2: THE ABYSS COLLAPSES — KEEP MOVING!";
     [SerializeField] private string victoryMessage = "THE SUN IS REBORN — YOU CONQUERED THE ABYSS!";
 
-    [Header("Phase 2: Boss Bullet Hell Finale (Uses MissileManager)")]
+    [Header("Shrinking Arena Ring (Anti-Outskirt Camping)")]
+    [SerializeField] private float startSafeRadius = 11.5f;
+    [SerializeField] private float minSafeRadius = 5.2f;
+    [SerializeField] private float outsideZoneDamage = 8f;
+    [SerializeField] private float outsideZonePushback = 14f;
+    [SerializeField] private float outsideDamageTickRate = 0.4f;
+
+    [Header("Phase 2: Red Telegraph Strike Zones (Keep Player Moving!)")]
+    [SerializeField] private float redZoneSpawnInterval = 1.65f;
+    [SerializeField] private float redZoneWarningDuration = 0.85f;
+    [SerializeField] private float redZoneRadius = 2.1f;
+    [SerializeField] private float redZoneExplosionDamage = 18f;
+    [SerializeField] private int redZoneShrapnelBullets = 8;
+
+    [Header("Boss Bullet Hell Finale (Uses MissileManager)")]
     [SerializeField] private MissileSO bossMissileData;
     [SerializeField] private bool spawnMinionsDuringBoss = true;
     [SerializeField] private float bossMinionInterval = 6.5f;
 
-    [Header("Bullet Hell Base Pattern Tuning (Ramps Up Automatically!)")]
+    [Header("Bullet Hell Base Pattern Tuning")]
     [SerializeField] private int spiralStreams = 3;
     [SerializeField] private float spiralFireRate = 0.12f;
     [SerializeField] private float spiralRotationSpeed = 110f;
@@ -46,8 +62,13 @@ public class BlackHoleEncounterController : MonoBehaviour
     private float _currentSpawnInterval;
     private bool _isSpawningMobs;
     private bool _isBossBulletHellActive;
-    private float _bossRampFactor; 
+    private bool _isPhase2;
+    private float _bossRampFactor;
+    private float _currentSafeRadius;
+    private float _nextOutsideDamageTime;
+    private LineRenderer _arenaBorderRing;
     private readonly List<GameObject> _activeEnemies = new List<GameObject>();
+    private readonly List<GameObject> _activeTelegraphs = new List<GameObject>();
 
     private static readonly int ShockwaveProp = Shader.PropertyToID("_ShockwaveRadius");
     private static readonly int SpeedProp = Shader.PropertyToID("_RotationSpeed");
@@ -59,6 +80,7 @@ public class BlackHoleEncounterController : MonoBehaviour
         if (blackHoleCenter == null) blackHoleCenter = transform;
         if (eyeRenderer != null) _eyeMat = eyeRenderer.material;
         _currentSpawnInterval = initialSpawnInterval;
+        _currentSafeRadius = startSafeRadius;
     }
 
     private void OnEnable()
@@ -107,7 +129,24 @@ public class BlackHoleEncounterController : MonoBehaviour
     {
         _isSpawningMobs = false;
         _isBossBulletHellActive = true;
+        _isPhase2 = false;
         _bossRampFactor = 0f;
+        _currentSafeRadius = startSafeRadius;
+
+        // Unlock all elements for the player during the Final Boss!
+        if (Player.Instance != null)
+        {
+            Player.Instance.UnlockAllElementsForBoss();
+        }
+
+        // Start the Boss Health/Time Bar UI!
+        if (bossTimeBarUI != null)
+        {
+            bossTimeBarUI.gameObject.SetActive(true);
+            bossTimeBarUI.StartBossBarCountdown(bossSurvivalDuration);
+        }
+
+        CreateShrinkingArenaRingVisual();
 
         StopAllCoroutines();
         StartCoroutine(BossSurvivalTimerRoutine());
@@ -119,7 +158,9 @@ public class BlackHoleEncounterController : MonoBehaviour
         }
     }
 
-   
+    // =========================================================================
+    // BOSS SURVIVAL COUNTDOWN, SHRINKING RING & PHASE 2 TRIGGER
+    // =========================================================================
     private IEnumerator BossSurvivalTimerRoutine()
     {
         float remaining = bossSurvivalDuration;
@@ -129,24 +170,35 @@ public class BlackHoleEncounterController : MonoBehaviour
             remaining -= Time.unscaledDeltaTime;
             _bossRampFactor = Mathf.Clamp01(1f - (remaining / Mathf.Max(1f, bossSurvivalDuration)));
 
-            if (bossCountdownText != null)
+            // Trigger Phase 2 at 50% time remaining!
+            if (!_isPhase2 && _bossRampFactor >= 0.5f)
             {
-                float displayTime = Mathf.Max(0f, remaining);
-                bossCountdownText.alpha = 1f;
-                bossCountdownText.text = $"SURVIVE THE ECLIPSE: {displayTime:F1}s";
+                _isPhase2 = true;
+                StartCoroutine(Phase2RedZoneSpawnerRoutine());
+                StartCoroutine(PulseEyeShockwaveRoutine(0.5f));
+                GamepadFX.Pulse(0.9f, 0.35f);
 
-                float pulseSpeed = Mathf.Lerp(2f, 12f, _bossRampFactor);
-                Color warnColor = Color.Lerp(new Color(1f, 0.85f, 0.3f), new Color(1f, 0.25f, 0.2f), _bossRampFactor);
-                bossCountdownText.color = Color.Lerp(Color.white, warnColor, 0.5f + 0.5f * Mathf.Sin(Time.time * pulseSpeed));
+                if (bossCountdownText != null)
+                {
+                    bossCountdownText.text = phase2Announcement;
+                    bossCountdownText.color = new Color(1f, 0.2f, 0.25f, 1f);
+                }
             }
+
+            // Update Shrinking Safe Zone Radius & Check Player Out-of-Bounds
+            UpdateShrinkingArenaZone();
 
             yield return null;
         }
 
+        // PLAYER SURVIVED! Clear all hazards and trigger Sun Rebirth!
         _isBossBulletHellActive = false;
         StopAllCoroutines();
 
         ClearAllActiveMissilesAndEnemies();
+
+        if (_arenaBorderRing != null)
+            Destroy(_arenaBorderRing.gameObject);
 
         if (bossCountdownText != null)
         {
@@ -158,6 +210,170 @@ public class BlackHoleEncounterController : MonoBehaviour
         {
             sunEaterDirector.TriggerBossWinSequence();
         }
+    }
+
+    // =========================================================================
+    // SHRINKING ARENA VOID RING (PREVENTS OUTSKIRT CAMPING)
+    // =========================================================================
+    private void CreateShrinkingArenaRingVisual()
+    {
+        if (_arenaBorderRing != null) Destroy(_arenaBorderRing.gameObject);
+
+        GameObject ringObj = new GameObject("ShrinkingVoidBorder");
+        ringObj.transform.SetParent(blackHoleCenter, false);
+        _arenaBorderRing = ringObj.AddComponent<LineRenderer>();
+        _arenaBorderRing.useWorldSpace = true;
+        _arenaBorderRing.loop = true;
+        _arenaBorderRing.positionCount = 64;
+        _arenaBorderRing.startWidth = 0.22f;
+        _arenaBorderRing.endWidth = 0.22f;
+        _arenaBorderRing.material = new Material(Shader.Find("Sprites/Default"));
+        _arenaBorderRing.sortingOrder = 5;
+    }
+
+    private void UpdateShrinkingArenaZone()
+    {
+        // Shrinks faster once Phase 2 begins
+        float shrinkCurve = _isPhase2 ? Mathf.Pow(_bossRampFactor, 0.85f) : _bossRampFactor * 0.7f;
+        _currentSafeRadius = Mathf.Lerp(startSafeRadius, minSafeRadius, shrinkCurve);
+
+        if (_arenaBorderRing != null)
+        {
+            float pulse = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * (_isPhase2 ? 12f : 5f));
+            Color ringColor = Color.Lerp(new Color(1f, 0.35f, 0.1f, 0.75f), new Color(1f, 0.08f, 0.2f, 0.95f), pulse);
+            _arenaBorderRing.startColor = ringColor;
+            _arenaBorderRing.endColor = ringColor;
+
+            Vector2 center = blackHoleCenter.position;
+            int segments = _arenaBorderRing.positionCount;
+            for (int i = 0; i < segments; i++)
+            {
+                float angle = (i / (float)segments) * Mathf.PI * 2f + Time.time * 0.4f;
+                Vector2 pos = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentSafeRadius;
+                _arenaBorderRing.SetPosition(i, pos);
+            }
+        }
+
+        // Check if Player is camping outside the shrinking safe ring!
+        if (Player.Instance != null && Time.time >= _nextOutsideDamageTime)
+        {
+            Vector2 playerPos = Player.Instance.transform.position;
+            Vector2 center = blackHoleCenter.position;
+            float distFromCenter = Vector2.Distance(playerPos, center);
+
+            if (distFromCenter > _currentSafeRadius)
+            {
+                _nextOutsideDamageTime = Time.time + outsideDamageTickRate;
+                Vector2 pushInwardDir = (center - playerPos).normalized;
+
+                if (Player.Instance.TryGetComponent<IDamageable>(out var dmg))
+                {
+                    dmg.TryTakeDamage(new DamageInfo(outsideZoneDamage, Team.Hostile, pushInwardDir, outsideZonePushback));
+                }
+                else if (Player.Instance.TryGetComponent<CharacterMovement>(out var move))
+                {
+                    move.ApplyKnockback(pushInwardDir * outsideZonePushback);
+                }
+
+                GamepadFX.Pulse(0.6f, 0.12f);
+            }
+        }
+    }
+
+    // =========================================================================
+    // PHASE 2: RED TELEGRAPH STRIKE ZONES ON PLAYER POSITION
+    // =========================================================================
+    private IEnumerator Phase2RedZoneSpawnerRoutine()
+    {
+        while (_isBossBulletHellActive && _isPhase2)
+        {
+            if (Player.Instance != null)
+            {
+                Vector2 targetSpot = Player.Instance.transform.position;
+                StartCoroutine(SpawnRedStrikeZoneRoutine(targetSpot));
+            }
+
+            float currentInterval = Mathf.Lerp(redZoneSpawnInterval, redZoneSpawnInterval * 0.65f, (_bossRampFactor - 0.5f) * 2f);
+            yield return new WaitForSeconds(currentInterval);
+        }
+    }
+
+    private IEnumerator SpawnRedStrikeZoneRoutine(Vector2 targetPos)
+    {
+        // Create procedural glowing red telegraph circle + inner fill ring
+        GameObject zoneObj = new GameObject("BossRedStrikeTelegraph");
+        zoneObj.transform.position = targetPos;
+        _activeTelegraphs.Add(zoneObj);
+
+        LineRenderer outerRing = zoneObj.AddComponent<LineRenderer>();
+        outerRing.useWorldSpace = true;
+        outerRing.loop = true;
+        outerRing.positionCount = 40;
+        outerRing.material = new Material(Shader.Find("Sprites/Default"));
+        outerRing.sortingOrder = 4;
+
+        float t = 0f;
+        while (t < redZoneWarningDuration && _isBossBulletHellActive)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / redZoneWarningDuration);
+
+            // Radius expands quickly then locks onto the target area while flashing faster
+            float currentRad = redZoneRadius * Mathf.Sin(p * Mathf.PI * 0.5f);
+            float flash = Mathf.PingPong(t * Mathf.Lerp(6f, 24f, p), 1f);
+            Color warnCol = Color.Lerp(new Color(1f, 0.05f, 0.15f, 0.85f), new Color(1f, 0.9f, 0.9f, 1f), flash * p);
+
+            outerRing.startColor = warnCol;
+            outerRing.endColor = warnCol;
+            outerRing.startWidth = Mathf.Lerp(0.08f, 0.28f, p);
+            outerRing.endWidth = outerRing.startWidth;
+
+            for (int i = 0; i < outerRing.positionCount; i++)
+            {
+                float a = (i / (float)outerRing.positionCount) * Mathf.PI * 2f;
+                outerRing.SetPosition(i, targetPos + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * currentRad);
+            }
+
+            yield return null;
+        }
+
+        if (!_isBossBulletHellActive)
+        {
+            if (zoneObj != null) Destroy(zoneObj);
+            yield break;
+        }
+
+        // DETONATE STRIKE ZONE!
+        GamepadFX.Pulse(0.75f, 0.15f);
+
+        // 1. Damage player if they failed to move out of the red zone
+        if (Player.Instance != null)
+        {
+            float dist = Vector2.Distance(Player.Instance.transform.position, targetPos);
+            if (dist <= redZoneRadius)
+            {
+                Vector2 knockDir = ((Vector2)Player.Instance.transform.position - targetPos).normalized;
+                if (knockDir.sqrMagnitude == 0f) knockDir = Vector2.up;
+
+                if (Player.Instance.TryGetComponent<IDamageable>(out var dmg))
+                {
+                    dmg.TryTakeDamage(new DamageInfo(redZoneExplosionDamage, Team.Hostile, knockDir, 16f));
+                }
+            }
+        }
+
+        // 2. Burst of shrapnel missiles from the strike point
+        if (bossMissileData != null)
+        {
+            for (int i = 0; i < redZoneShrapnelBullets; i++)
+            {
+                float rad = (i * (360f / redZoneShrapnelBullets)) * Mathf.Deg2Rad;
+                MissileManager.Spawn(bossMissileData, targetPos, new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)));
+            }
+        }
+
+        _activeTelegraphs.Remove(zoneObj);
+        if (zoneObj != null) Destroy(zoneObj);
     }
 
     private void ClearAllActiveMissilesAndEnemies()
@@ -173,9 +389,17 @@ public class BlackHoleEncounterController : MonoBehaviour
             if (e != null) Destroy(e);
         }
         _activeEnemies.Clear();
+
+        foreach (var z in _activeTelegraphs)
+        {
+            if (z != null) Destroy(z);
+        }
+        _activeTelegraphs.Clear();
     }
 
-   
+    // =========================================================================
+    // PHASE 1: BLACK HOLE SPIRAL EJECTION MOB SPAWNER
+    // =========================================================================
     private IEnumerator MobSpawnLoopRoutine()
     {
         yield return new WaitForSeconds(0.5f);
@@ -204,7 +428,7 @@ public class BlackHoleEncounterController : MonoBehaviour
         if (prefab == null) return;
 
         float randomAngle = Random.Range(0f, Mathf.PI * 2f);
-        float randomRadius = Random.Range(minLandingRadius, maxLandingRadius);
+        float randomRadius = Random.Range(minLandingRadius, Mathf.Min(maxLandingRadius, _currentSafeRadius - 0.8f));
         Vector2 origin = blackHoleCenter.position;
         Vector2 targetPos = origin + new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)) * randomRadius;
 
@@ -297,7 +521,9 @@ public class BlackHoleEncounterController : MonoBehaviour
         }
     }
 
-   
+    // =========================================================================
+    // PHASE 2: RAMPING BOSS BULLET HELL FINALE
+    // =========================================================================
     private IEnumerator BossBulletHellMasterRoutine()
     {
         if (bossMissileData == null) yield break;
@@ -306,7 +532,7 @@ public class BlackHoleEncounterController : MonoBehaviour
 
         while (_isBossBulletHellActive)
         {
-            float breather = Mathf.Lerp(0.75f, 0.25f, _bossRampFactor);
+            float breather = Mathf.Lerp(0.75f, 0.22f, _bossRampFactor);
 
             yield return StartCoroutine(PatternSpiralGalaxyRoutine(4.0f));
             yield return new WaitForSeconds(breather);
@@ -321,7 +547,7 @@ public class BlackHoleEncounterController : MonoBehaviour
 
     private IEnumerator PatternSpiralGalaxyRoutine(float duration)
     {
-        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(3.5f, 7.0f, _bossRampFactor));
+        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(3.5f, 7.5f, _bossRampFactor));
 
         float elapsed = 0f;
         float currentAngle = 0f;
@@ -329,7 +555,7 @@ public class BlackHoleEncounterController : MonoBehaviour
         while (elapsed < duration && _isBossBulletHellActive)
         {
             Vector2 origin = blackHoleCenter.position;
-            int activeStreams = spiralStreams + (_bossRampFactor > 0.55f ? 1 : 0);
+            int activeStreams = spiralStreams + (_isPhase2 ? 1 : 0);
             float angleStep = 360f / Mathf.Max(1, activeStreams);
 
             for (int i = 0; i < activeStreams; i++)
@@ -339,8 +565,8 @@ public class BlackHoleEncounterController : MonoBehaviour
                 MissileManager.Spawn(bossMissileData, origin, dir);
             }
 
-            float currentFireRate = Mathf.Lerp(spiralFireRate, spiralFireRate * 0.58f, _bossRampFactor);
-            float currentRotSpeed = Mathf.Lerp(spiralRotationSpeed, spiralRotationSpeed * 1.6f, _bossRampFactor);
+            float currentFireRate = Mathf.Lerp(spiralFireRate, spiralFireRate * 0.55f, _bossRampFactor);
+            float currentRotSpeed = Mathf.Lerp(spiralRotationSpeed, spiralRotationSpeed * 1.65f, _bossRampFactor);
 
             currentAngle += currentRotSpeed * currentFireRate;
             elapsed += currentFireRate;
@@ -375,7 +601,7 @@ public class BlackHoleEncounterController : MonoBehaviour
             if (Player.Instance != null)
             {
                 Vector2 toPlayer = ((Vector2)Player.Instance.transform.position - origin).normalized;
-                int burstBullets = aimedBurstCount + (_bossRampFactor > 0.5f ? 2 : 0);
+                int burstBullets = aimedBurstCount + (_isPhase2 ? 2 : 0);
                 FireSpreadAtDirection(origin, toPlayer, burstBullets, aimedBurstSpreadAngle);
             }
 
@@ -400,8 +626,8 @@ public class BlackHoleEncounterController : MonoBehaviour
                 MissileManager.Spawn(bossMissileData, origin, new Vector2(Mathf.Cos(a2), Mathf.Sin(a2)));
             }
 
-            float stepDelay = Mathf.Lerp(0.14f, 0.085f, _bossRampFactor);
-            spinAngle += Mathf.Lerp(22f, 32f, _bossRampFactor);
+            float stepDelay = Mathf.Lerp(0.14f, 0.08f, _bossRampFactor);
+            spinAngle += Mathf.Lerp(22f, 34f, _bossRampFactor);
             elapsed += stepDelay;
             yield return new WaitForSeconds(stepDelay);
         }

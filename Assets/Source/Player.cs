@@ -61,6 +61,12 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private CanvasGroup Blackout;
 
+	[Header("Boss Avatar Goat")]
+	[SerializeField] private bool allowElementCycling = false;
+	[SerializeField] private float scrollSwapCooldown = 0.18f;
+	private float _nextScrollSwapTime;
+	private static readonly Element[] AllElements = { Element.Fire, Element.Lightning, Element.Ice, Element.Poison, Element.Blood};
+
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
 
@@ -129,10 +135,55 @@ public class Player : MonoBehaviour
 	private void OnEnable() => _input.Enable();
 	private void OnDisable() => _input.Disable();
 
+
+	public void UnlockAllElementsForBoss()
+	{
+		allowElementCycling = true;
+		GamepadFX.Pulse(0.6f, 0.2f);
+	}
+
+	private void CycleElement(int direction)
+	{
+		Element current = ElementManager.Current ?? DefaultElement;
+		int index = System.Array.IndexOf(AllElements, current);
+		if (index < 0) index = 0;
+
+		int nextIndex = (index + direction + AllElements.Length) % AllElements.Length;
+		ElementManager.SetElement(AllElements[nextIndex]);
+		GamepadFX.Pulse(0.3f, 0.06f);
+	}
+
 	private void Update()
 	{
 		var dir = _input.Player.Move.ReadValue<Vector2>();
 		_movement.Walk(dir);
+		if (allowElementCycling)
+		{
+			// 1. Controller LB / RB Shoulder Bumpers
+			if (Gamepad.current != null)
+			{
+				if (Gamepad.current.leftShoulder.wasPressedThisFrame)
+					CycleElement(-1);
+				else if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+					CycleElement(1);
+			}
+
+			// 2. PC Mouse Scroll Wheel
+			if (Mouse.current != null && Time.unscaledTime >= _nextScrollSwapTime)
+			{
+				float scrollY = Mouse.current.scroll.ReadValue().y;
+				if (scrollY > 0.1f)
+				{
+					_nextScrollSwapTime = Time.unscaledTime + scrollSwapCooldown;
+					CycleElement(1);
+				}
+				else if (scrollY < -0.1f)
+				{
+					_nextScrollSwapTime = Time.unscaledTime + scrollSwapCooldown;
+					CycleElement(-1);
+				}
+			}
+		}
 		if (dir.sqrMagnitude > 0f)
 		{
 			_lastMoveDir = dir.normalized;
