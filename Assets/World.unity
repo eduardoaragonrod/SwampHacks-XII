@@ -2530,7 +2530,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 389, y: 50}
+  m_SizeDelta: {x: 700, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &816297959
 MonoBehaviour:
@@ -2552,7 +2552,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Dash upwards to start the game!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ec02c744fb47d445b0abf990868dec1, type: 2}
   m_sharedMaterial: {fileID: 8374579554898668301, guid: 0ec02c744fb47d445b0abf990868dec1, type: 2}
@@ -5002,6 +5002,7 @@ MonoBehaviour:
   globalVolume: {fileID: 1894900944}
   musicSourceA: {fileID: 1398920070}
   musicSourceB: {fileID: 669942067}
+  songSeperator: {fileID: 0}
   elementTutorialText: {fileID: 816297959}
   OnStageChanged:
     m_PersistentCalls:
