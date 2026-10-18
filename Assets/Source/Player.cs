@@ -231,6 +231,14 @@ public class Player : MonoBehaviour
 				Destroy(orb.gameObject);
 			}
 		}
+
+		foreach (var orb in _orbs)
+		{
+			if (orb != null)
+			{
+				Destroy(orb.gameObject);
+			}
+		}
 	}
 
 	private void CheckCriticalSpeedRamming(float criticalThreshold)
@@ -479,6 +487,7 @@ public class Player : MonoBehaviour
 			GamepadFX.Pulse(0.2f, timeToSlowDown);
 			await Blackout.DOFade(1f, 1f).SetUpdate(isIndependentUpdate: true).AsyncWaitForCompletion();
 			TimeManager.RemoveFactor(timeScaler);
+			ElementManager.ResetElement();
 			SceneManager.LoadScene(0);
 		}
 	}
@@ -486,6 +495,8 @@ public class Player : MonoBehaviour
 	private void UpdateFloatingOrbs()
 	{
 		var data = ElementManager.CurrentData;
+
+		if (data == null) return;
 
 		for (int i = 0; i < _floatingOrbs.Count; i++)
 		{
