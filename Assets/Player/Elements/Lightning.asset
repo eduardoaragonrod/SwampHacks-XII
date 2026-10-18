@@ -54,4 +54,4 @@ MonoBehaviour:
   DashSpeed: 15
   DashDistance: 7
   DashCooldown: 1
-  ShootSound: {fileID: 0}
+  ShootSound: {fileID: 6418180475301049370, guid: e92c7e8d9918a2348a6adf1103235e9d, type: 2}
