@@ -51,11 +51,13 @@ Material:
     - _RingDensity: 40.4
     - _RotationSpeed: 0.07
     - _ShockwaveRadius: 0
+    - _SunRebirth: 0
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 1, g: 0.72, b: 0.21999997, a: 1}
     - _OuterColor: {r: 0.54999995, g: 0.31999996, b: 0.079999976, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SunColor: {r: 5, g: 3.6, b: 1.4, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
