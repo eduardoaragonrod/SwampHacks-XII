@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3fca5359d17f48b38131ada6433ad, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
-  Color: {r: 0.41887572, g: 0.106532566, b: 0.5377358, a: 1}
+  Color: {r: 0.49580216, g: 0, b: 1, a: 1}
   DashTrail:
     serializedVersion: 2
     key0: {r: 0.90179455, g: 0, b: 1.4588236, a: 1}
@@ -50,6 +50,7 @@ MonoBehaviour:
   PullAcceleration: 20
   KnockbackScale: 0.05
   OrbPrefab: {fileID: 1101900972588753891, guid: edd434fc068dbc94bb829edc88f2c147, type: 3}
+  FloatingOrbsRotationFactor: 0.7
   DashSound: {fileID: 6418180475301049370, guid: 93d0d941415e2e845bacaabdb9cc6b9e, type: 2}
   DashSpeed: 15
   DashDistance: 7

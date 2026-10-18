@@ -397,9 +397,11 @@ public class Player : MonoBehaviour
 
 	private void UpdateFloatingOrbs()
 	{
+		var data = ElementManager.CurrentData;
+
 		for (int i = 0; i < _floatingOrbs.Count; i++)
 		{
-			float angle = Mathf.PI * 2f / _floatingOrbs.Count * i + (Time.time * FloatingOrbRotationRate);
+			float angle = Mathf.PI * 2f / _floatingOrbs.Count * i + (Time.time * FloatingOrbRotationRate * data.FloatingOrbsRotationFactor);
 			var dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle));
 
 			var desired = transform.position + (dir * FloatingOrbDistance);
