@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class WispOrb : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class WispOrb : MonoBehaviour
 	[SerializeField] private float _Drag = 6f;
 	[SerializeField] private float _CatchRadius = 0.6f;
 	[SerializeField] private float Knockback = 5f;
+	[SerializeField] private VisualEffect DetachOnDeath;
 
 	private Player _owner;
 	private ElementSO _element;
@@ -57,6 +59,7 @@ public class WispOrb : MonoBehaviour
 		if (distance <= _CatchRadius)
 		{
 			_owner.CatchOrb(this, dir, _distancePulled * _element.KnockbackScale);
+			OnDeath();
 			Destroy(gameObject);
 		}
 	}
@@ -74,6 +77,16 @@ public class WispOrb : MonoBehaviour
 			};
 
 			target.TryTakeDamage(info);
+		}
+	}
+
+	private void OnDeath()
+	{
+		if (DetachOnDeath != null)
+		{
+			DetachOnDeath.transform.SetParent(null, true);
+			DetachOnDeath.gameObject.AddComponent<DestroyOnVFXFinish>();
+			DetachOnDeath.Stop();
 		}
 	}
 }
