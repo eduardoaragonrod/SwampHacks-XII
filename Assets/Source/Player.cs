@@ -363,6 +363,7 @@ public class Player : MonoBehaviour
 		_orbs.Remove(orb);
 		_movement.ApplyKnockback(impactDir * knockbackForce);
 		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab, transform.position, Quaternion.identity).transform);
+		_floatingOrbs[^1].GetComponent<SpriteRenderer>().color = ElementManager.CurrentData.Color;
 	}
 
 	private Vector2 GetAimDirection()
