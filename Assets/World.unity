@@ -704,6 +704,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
+      propertyPath: CatchOrbSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4cea418f7ec773f4291386089463157d, type: 3}
+    - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
       propertyPath: criticalRamKnockback
       value: 8
       objectReference: {fileID: 0}
@@ -3018,7 +3022,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6446373240500665054, guid: d2076985203c09143b4355aeae4c1bc1, type: 3}
+  m_Sprite: {fileID: -3181523566747969945, guid: eef1793adeb012b40b211b883f9acd74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5002,8 +5006,8 @@ MonoBehaviour:
   shatterOpenDuration: 0.22
   timeBeforeReseal: 0.85
   resealSnapDuration: 0.35
-  breakthroughSpeedBoost: 16
-  requiredBreakSpeed: 20
+  breakthroughSpeedBoost: 30
+  requiredBreakSpeed: 14
   OnGateShattered:
     m_PersistentCalls:
       m_Calls:
