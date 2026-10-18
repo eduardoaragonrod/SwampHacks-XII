@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
@@ -83,6 +84,8 @@ public class Player : MonoBehaviour
 	private bool _isDashing;
 	private Vector2 _lastMoveDir = Vector2.up;
 	private readonly object _dashDamageImmunityBlocker = new();
+
+	private object _damageImmunityDebug;
 
 	private Vector2 _fallbackAimDir = Vector2.down;
 	private Vector2 _lastFixedPosition;
@@ -215,6 +218,20 @@ public class Player : MonoBehaviour
 		else if (Keyboard.current.digit5Key.wasPressedThisFrame)
 		{
 			ElementManager.SetElement(Element.Poison);
+		}
+
+		if (Keyboard.current.gKey.wasPressedThisFrame)
+		{
+			if (_damageImmunityDebug == null)
+			{
+				_damageImmunityDebug = new();
+				_health.RegisterDamageBlocker(_damageImmunityDebug);
+			}
+			else
+			{
+				_health.UnregisterDamageBlocker(_damageImmunityDebug);
+				_damageImmunityDebug = null;
+			}
 		}
 #endif
 	}

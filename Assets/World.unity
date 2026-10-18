@@ -4104,7 +4104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1508566552
 SpriteRenderer:
   serializedVersion: 3
@@ -4275,27 +4275,27 @@ MonoBehaviour:
   eyeRenderer: {fileID: 1508566552}
   sunEaterDirector: {fileID: 1508566554}
   stageProgressionManager: {fileID: 2007157807}
-  bossTimeBarUI: {fileID: 0}
+  bossTimeBarUI: {fileID: 92832189}
   enemyPrefabs:
   - {fileID: 3185291783371023883, guid: 910d3464fddab5048a0813fbd33bb7bd, type: 3}
   - {fileID: 1516526272143518673, guid: fbd302546fedaa3448ae33310565b204, type: 3}
   - {fileID: 1709604004874167103, guid: 2a2d3cfcc2f305d47967abd6c5145722, type: 3}
-  initialSpawnInterval: 2.8
+  initialSpawnInterval: 2.38
   minSpawnInterval: 0.9
   spawnAccelerationPerSecond: 0.02
   maxActiveEnemies: 22
-  minLandingRadius: 3.2
-  maxLandingRadius: 7.5
-  ejectionDuration: 0.65
+  minLandingRadius: 5
+  maxLandingRadius: 10
+  ejectionDuration: 1
   spiralArcRadians: 2.2
   bossSurvivalDuration: 30
   bossCountdownText: {fileID: 0}
   phase2Announcement: 'Phase 2: Abyssal Collapse'
-  victoryMessage: THE SUN IS REBORN, YOU CONQUERED THE ABYSS!
-  startSafeRadius: 11.5
+  victoryMessage: 
+  startSafeRadius: 27
   minSafeRadius: 5.2
   outsideZoneDamage: 8
-  outsideZonePushback: 14
+  outsideZonePushback: 27
   outsideDamageTickRate: 0.4
   redZoneSpawnInterval: 1.65
   redZoneWarningDuration: 0.85
@@ -4304,10 +4304,10 @@ MonoBehaviour:
   redZoneShrapnelBullets: 8
   bossMissileData: {fileID: 11400000, guid: 70249041051034c4e9b9a9b9aa64dd18, type: 2}
   spawnMinionsDuringBoss: 1
-  bossMinionInterval: 6.5
+  bossMinionInterval: 3.65
   spiralStreams: 3
-  spiralFireRate: 0.11
-  spiralRotationSpeed: 110
+  spiralFireRate: 0.08
+  spiralRotationSpeed: 90
   supernovaRingBulletCount: 18
   aimedBurstCount: 5
   aimedBurstSpreadAngle: 40
