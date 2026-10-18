@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.VFX;
@@ -50,6 +50,8 @@ public class Player : MonoBehaviour
 	private float FloatingOrbDistance = 0.5f;
 	[SerializeField]
 	private float ShootInterval = 0.2f;
+	[SerializeField]
+	private AudioResource CatchOrbSound;
 
 	public bool IsCriticalSpeed { get; private set; }
 	public float CurrentSpeed { get; private set; }
@@ -394,6 +396,8 @@ public class Player : MonoBehaviour
 		_movement.ApplyKnockback(impactDir * knockbackForce);
 		_floatingOrbs.Add(Instantiate(FloatingOrbPrefab, transform.position, Quaternion.identity).transform);
 		_floatingOrbs[^1].GetComponent<SpriteRenderer>().color = ElementManager.CurrentData.Color;
+
+		Audio.Play(CatchOrbSound, transform.position);
 	}
 
 	private Vector2 GetAimDirection()
@@ -418,7 +422,7 @@ public class Player : MonoBehaviour
 		return ((Vector2)(mouseWorld - transform.position)).normalized;
 	}
 
-	private void OnDamaged(DamageInfo info)
+	private async void OnDamaged(DamageInfo info)
 	{
 		_isDashing = false;
 		Animator.SetTrigger(HitHash);
