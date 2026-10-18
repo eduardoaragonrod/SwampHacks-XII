@@ -17,8 +17,8 @@ AudioRandomContainer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PoisonShoot
-  m_Volume: -17.1
-  m_Pitch: 0
+  m_Volume: 0
+  m_Pitch: 200
   m_AutomaticTriggerTime: 0
   m_LoopCount: 1
   m_VolumeRandomizationRange: {x: 0, y: 0}
