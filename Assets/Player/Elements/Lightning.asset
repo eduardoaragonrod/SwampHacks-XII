@@ -50,6 +50,7 @@ MonoBehaviour:
   PullAcceleration: 70
   KnockbackScale: 1.5
   OrbPrefab: {fileID: 1101900972588753891, guid: f140cfd2756f16240880e476b1c43907, type: 3}
+  FloatingOrbsRotationFactor: -2
   DashSound: {fileID: 6418180475301049370, guid: bc4a9ba07a1481a448687af2756c1dca, type: 2}
   DashSpeed: 15
   DashDistance: 7

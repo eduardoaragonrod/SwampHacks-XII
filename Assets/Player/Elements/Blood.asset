@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3fca5359d17f48b38131ada6433ad, type: 3}
   m_Name: Blood
   m_EditorClassIdentifier: Assembly-CSharp::ElementSO
-  Color: {r: 0.3726415, g: 0, b: 0.12849616, a: 1}
+  Color: {r: 1, g: 0, b: 0.099999905, a: 1}
   DashTrail:
     serializedVersion: 2
     key0: {r: 0.7300391, g: 0, b: 0.021013211, a: 1}
@@ -50,6 +50,7 @@ MonoBehaviour:
   PullAcceleration: 70
   KnockbackScale: 0.75
   OrbPrefab: {fileID: 1101900972588753891, guid: c0ecec47a7707174cb99a849c03efc6a, type: 3}
+  FloatingOrbsRotationFactor: -0.8
   DashSound: {fileID: 6418180475301049370, guid: 9808f2f778e1a7943934fbe41843b93c, type: 2}
   DashSpeed: 60
   DashDistance: 4
