@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BlackHoleEncounterController : MonoBehaviour
 {
     [Header("Core References")]
-    [Tooltip("Center of the Black Hole Eye where enemies and bullets are birthed from")]
     [SerializeField] private Transform blackHoleCenter;
     [SerializeField] private Renderer eyeRenderer;
     [SerializeField] private SunEaterDirector sunEaterDirector;
@@ -19,23 +19,26 @@ public class BlackHoleEncounterController : MonoBehaviour
     [SerializeField] private int maxActiveEnemies = 22;
 
     [Header("Black Hole Ejection Animation")]
-    [Tooltip("Min and Max distance from the Black Hole center where enemies land")]
     [SerializeField] private float minLandingRadius = 3.2f;
     [SerializeField] private float maxLandingRadius = 7.5f;
     [SerializeField] private float ejectionDuration = 0.65f;
     [SerializeField] private float spiralArcRadians = 2.2f;
 
-    [Header("Phase 2: Final Boss Fight")]
-    [Tooltip("Drag your MissileSO asset (e.g. TempMissile) here!")]
+    [Header("Phase 2: Boss Survival Timer & Ramp-Up")]
+    [SerializeField] private float bossSurvivalDuration = 30f;
+    [SerializeField] private TMP_Text bossCountdownText;
+    [SerializeField] private string victoryMessage = "THE SUN IS REBORN — YOU CONQUERED THE ABYSS!";
+
+    [Header("Phase 2: Boss Bullet Hell Finale (Uses MissileManager)")]
     [SerializeField] private MissileSO bossMissileData;
     [SerializeField] private bool spawnMinionsDuringBoss = true;
     [SerializeField] private float bossMinionInterval = 6.5f;
 
-    [Header("Bullet Hell Pattern Tuning")]
+    [Header("Bullet Hell Base Pattern Tuning (Ramps Up Automatically!)")]
     [SerializeField] private int spiralStreams = 3;
-    [SerializeField] private float spiralFireRate = 0.11f;
+    [SerializeField] private float spiralFireRate = 0.12f;
     [SerializeField] private float spiralRotationSpeed = 110f;
-    [SerializeField] private int supernovaRingBulletCount = 18;
+    [SerializeField] private int supernovaRingBulletCount = 16;
     [SerializeField] private int aimedBurstCount = 5;
     [SerializeField] private float aimedBurstSpreadAngle = 40f;
 
@@ -43,6 +46,7 @@ public class BlackHoleEncounterController : MonoBehaviour
     private float _currentSpawnInterval;
     private bool _isSpawningMobs;
     private bool _isBossBulletHellActive;
+    private float _bossRampFactor; 
     private readonly List<GameObject> _activeEnemies = new List<GameObject>();
 
     private static readonly int ShockwaveProp = Shader.PropertyToID("_ShockwaveRadius");
@@ -103,13 +107,72 @@ public class BlackHoleEncounterController : MonoBehaviour
     {
         _isSpawningMobs = false;
         _isBossBulletHellActive = true;
+        _bossRampFactor = 0f;
+
         StopAllCoroutines();
+        StartCoroutine(BossSurvivalTimerRoutine());
         StartCoroutine(BossBulletHellMasterRoutine());
 
         if (spawnMinionsDuringBoss)
         {
             StartCoroutine(BossSupportMinionRoutine());
         }
+    }
+
+   
+    private IEnumerator BossSurvivalTimerRoutine()
+    {
+        float remaining = bossSurvivalDuration;
+
+        while (remaining > 0f && _isBossBulletHellActive)
+        {
+            remaining -= Time.unscaledDeltaTime;
+            _bossRampFactor = Mathf.Clamp01(1f - (remaining / Mathf.Max(1f, bossSurvivalDuration)));
+
+            if (bossCountdownText != null)
+            {
+                float displayTime = Mathf.Max(0f, remaining);
+                bossCountdownText.alpha = 1f;
+                bossCountdownText.text = $"SURVIVE THE ECLIPSE: {displayTime:F1}s";
+
+                float pulseSpeed = Mathf.Lerp(2f, 12f, _bossRampFactor);
+                Color warnColor = Color.Lerp(new Color(1f, 0.85f, 0.3f), new Color(1f, 0.25f, 0.2f), _bossRampFactor);
+                bossCountdownText.color = Color.Lerp(Color.white, warnColor, 0.5f + 0.5f * Mathf.Sin(Time.time * pulseSpeed));
+            }
+
+            yield return null;
+        }
+
+        _isBossBulletHellActive = false;
+        StopAllCoroutines();
+
+        ClearAllActiveMissilesAndEnemies();
+
+        if (bossCountdownText != null)
+        {
+            bossCountdownText.color = new Color(1f, 0.9f, 0.4f, 1f);
+            bossCountdownText.text = victoryMessage;
+        }
+
+        if (sunEaterDirector != null)
+        {
+            sunEaterDirector.TriggerBossWinSequence();
+        }
+    }
+
+    private void ClearAllActiveMissilesAndEnemies()
+    {
+        Missile[] activeMissiles = FindObjectsByType<Missile>(FindObjectsSortMode.None);
+        foreach (var m in activeMissiles)
+        {
+            if (m != null) MissileManager.Kill(m);
+        }
+
+        foreach (var e in _activeEnemies)
+        {
+            if (e != null) Destroy(e);
+        }
+        _activeEnemies.Clear();
     }
 
    
@@ -154,10 +217,10 @@ public class BlackHoleEncounterController : MonoBehaviour
         GameObject instance = Instantiate(prefab, origin, Quaternion.identity);
         _activeEnemies.Add(instance);
 
-        StartCoroutine(EjectEnemyFromSingularirtyRoutine(instance, origin, targetPos, randomAngle, randomRadius));
+        StartCoroutine(EjectEnemyFromSingularityRoutine(instance, origin, targetPos, randomAngle, randomRadius));
     }
 
-    private IEnumerator EjectEnemyFromSingularirtyRoutine(GameObject enemy, Vector2 origin, Vector2 targetPos, float endAngle, float endRadius)
+    private IEnumerator EjectEnemyFromSingularityRoutine(GameObject enemy, Vector2 origin, Vector2 targetPos, float endAngle, float endRadius)
     {
         if (enemy == null) yield break;
 
@@ -234,83 +297,89 @@ public class BlackHoleEncounterController : MonoBehaviour
         }
     }
 
+   
     private IEnumerator BossBulletHellMasterRoutine()
     {
-        if (bossMissileData == null)
-        {
-            Debug.LogWarning("BlackHoleEncounterController: Please assign a MissileSO to 'Boss Missile Data' in the Inspector!");
-            yield break;
-        }
+        if (bossMissileData == null) yield break;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
 
         while (_isBossBulletHellActive)
         {
-            yield return StartCoroutine(PatternSpiralGalaxyRoutine(4.5f));
-            yield return new WaitForSeconds(0.8f);
+            float breather = Mathf.Lerp(0.75f, 0.25f, _bossRampFactor);
 
-            yield return StartCoroutine(PatternSupernovaRingsRoutine(4));
-            yield return new WaitForSeconds(0.8f);
+            yield return StartCoroutine(PatternSpiralGalaxyRoutine(4.0f));
+            yield return new WaitForSeconds(breather);
+
+            yield return StartCoroutine(PatternSupernovaRingsRoutine(3));
+            yield return new WaitForSeconds(breather);
 
             yield return StartCoroutine(PatternPredatorBarrageRoutine(3.5f));
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(breather);
         }
     }
 
     private IEnumerator PatternSpiralGalaxyRoutine(float duration)
     {
-        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, 3.8f);
+        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(3.5f, 7.0f, _bossRampFactor));
 
         float elapsed = 0f;
         float currentAngle = 0f;
 
-        while (elapsed < duration)
+        while (elapsed < duration && _isBossBulletHellActive)
         {
             Vector2 origin = blackHoleCenter.position;
-            float angleStep = 360f / Mathf.Max(1, spiralStreams);
+            int activeStreams = spiralStreams + (_bossRampFactor > 0.55f ? 1 : 0);
+            float angleStep = 360f / Mathf.Max(1, activeStreams);
 
-            for (int i = 0; i < spiralStreams; i++)
+            for (int i = 0; i < activeStreams; i++)
             {
                 float rad = (currentAngle + i * angleStep) * Mathf.Deg2Rad;
                 Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
                 MissileManager.Spawn(bossMissileData, origin, dir);
             }
 
-            currentAngle += spiralRotationSpeed * spiralFireRate;
-            elapsed += spiralFireRate;
-            yield return new WaitForSeconds(spiralFireRate);
+            float currentFireRate = Mathf.Lerp(spiralFireRate, spiralFireRate * 0.58f, _bossRampFactor);
+            float currentRotSpeed = Mathf.Lerp(spiralRotationSpeed, spiralRotationSpeed * 1.6f, _bossRampFactor);
+
+            currentAngle += currentRotSpeed * currentFireRate;
+            elapsed += currentFireRate;
+            yield return new WaitForSeconds(currentFireRate);
         }
 
-        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, 1.5f);
+        if (_eyeMat != null) _eyeMat.SetFloat(SpeedProp, Mathf.Lerp(1.5f, 4.0f, _bossRampFactor));
     }
 
     private IEnumerator PatternSupernovaRingsRoutine(int waveCount)
     {
-        for (int w = 0; w < waveCount; w++)
+        for (int w = 0; w < waveCount && _isBossBulletHellActive; w++)
         {
             StartCoroutine(PulseEyeShockwaveRoutine(0.35f));
-            GamepadFX.Pulse(0.45f, 0.12f);
+            GamepadFX.Pulse(0.45f + 0.3f * _bossRampFactor, 0.12f);
 
             Vector2 origin = blackHoleCenter.position;
-            float angleOffset = (w % 2 == 0) ? 0f : (180f / supernovaRingBulletCount);
+            int ringCount = Mathf.RoundToInt(Mathf.Lerp(supernovaRingBulletCount, supernovaRingBulletCount * 1.4f, _bossRampFactor));
+            float angleOffset = (w % 2 == 0) ? 0f : (180f / ringCount);
 
-            for (int i = 0; i < supernovaRingBulletCount; i++)
+            for (int i = 0; i < ringCount; i++)
             {
-                float deg = (i * (360f / supernovaRingBulletCount)) + angleOffset;
+                float deg = (i * (360f / ringCount)) + angleOffset;
                 float rad = deg * Mathf.Deg2Rad;
                 Vector2 dir = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
                 MissileManager.Spawn(bossMissileData, origin, dir);
             }
 
-            yield return new WaitForSeconds(0.45f);
+            float waitTime = Mathf.Lerp(0.45f, 0.25f, _bossRampFactor);
+            yield return new WaitForSeconds(waitTime);
 
             if (Player.Instance != null)
             {
                 Vector2 toPlayer = ((Vector2)Player.Instance.transform.position - origin).normalized;
-                FireSpreadAtDirection(origin, toPlayer, aimedBurstCount, aimedBurstSpreadAngle);
+                int burstBullets = aimedBurstCount + (_bossRampFactor > 0.5f ? 2 : 0);
+                FireSpreadAtDirection(origin, toPlayer, burstBullets, aimedBurstSpreadAngle);
             }
 
-            yield return new WaitForSeconds(0.55f);
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
@@ -319,7 +388,7 @@ public class BlackHoleEncounterController : MonoBehaviour
         float elapsed = 0f;
         float spinAngle = 0f;
 
-        while (elapsed < duration)
+        while (elapsed < duration && _isBossBulletHellActive)
         {
             Vector2 origin = blackHoleCenter.position;
 
@@ -331,9 +400,10 @@ public class BlackHoleEncounterController : MonoBehaviour
                 MissileManager.Spawn(bossMissileData, origin, new Vector2(Mathf.Cos(a2), Mathf.Sin(a2)));
             }
 
-            spinAngle += 22f;
-            elapsed += 0.14f;
-            yield return new WaitForSeconds(0.14f);
+            float stepDelay = Mathf.Lerp(0.14f, 0.085f, _bossRampFactor);
+            spinAngle += Mathf.Lerp(22f, 32f, _bossRampFactor);
+            elapsed += stepDelay;
+            yield return new WaitForSeconds(stepDelay);
         }
     }
 
