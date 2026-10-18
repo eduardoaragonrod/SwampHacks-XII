@@ -533,6 +533,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
+      propertyPath: HitSoundFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 25bf37ff064e58b49bfe5a2e5a56ca68, type: 3}
+    - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
+      propertyPath: CatchOrbSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4cea418f7ec773f4291386089463157d, type: 3}
+    - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
       propertyPath: criticalRamKnockback
       value: 8
       objectReference: {fileID: 0}
@@ -1563,7 +1571,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5109545480796311162, guid: a5fd7dc92599e5d449610f91c209122a, type: 3}
+  m_Sprite: {fileID: -5678279949902621502, guid: a6fc051b7be4c3b4b853e81f6a87ae88, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2289,7 +2297,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 389, y: 50}
+  m_SizeDelta: {x: 700, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &816297959
 MonoBehaviour:
@@ -2311,7 +2319,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Dash upwards to start the game!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ec02c744fb47d445b0abf990868dec1, type: 2}
   m_sharedMaterial: {fileID: 8374579554898668301, guid: 0ec02c744fb47d445b0abf990868dec1, type: 2}
@@ -2728,7 +2736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6446373240500665054, guid: d2076985203c09143b4355aeae4c1bc1, type: 3}
+  m_Sprite: {fileID: -3181523566747969945, guid: eef1793adeb012b40b211b883f9acd74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2803,7 +2811,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5109545480796311162, guid: a5fd7dc92599e5d449610f91c209122a, type: 3}
+  m_Sprite: {fileID: 7272358364692659333, guid: e2fc670f889ea064d823db92204a6446, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4533,7 +4541,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: def7fc7bdbdbf7140af839b9b0bef11c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 3eb134d8ed8e59243974a5f8f2b9102f, type: 2}
 --- !u!4 &1894900945
 Transform:
   m_ObjectHideFlags: 0
@@ -4782,6 +4790,7 @@ MonoBehaviour:
   globalVolume: {fileID: 1894900944}
   musicSourceA: {fileID: 1398920070}
   musicSourceB: {fileID: 669942067}
+  songSeperator: {fileID: 0}
   elementTutorialText: {fileID: 816297959}
   OnStageChanged:
     m_PersistentCalls:
@@ -4828,8 +4837,8 @@ MonoBehaviour:
   shatterOpenDuration: 0.22
   timeBeforeReseal: 0.85
   resealSnapDuration: 0.15
-  breakthroughSpeedBoost: 16
-  requiredBreakSpeed: 20
+  breakthroughSpeedBoost: 30
+  requiredBreakSpeed: 14
   OnGateShattered:
     m_PersistentCalls:
       m_Calls:

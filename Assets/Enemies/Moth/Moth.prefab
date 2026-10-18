@@ -42,19 +42,23 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 767cb77bcfb90ec458620359065f6328, type: 2}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Size.x
-      value: 0.55716574
+      value: 0.12103588
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Size.y
-      value: 0.49743795
+      value: 0.1588276
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Offset.x
-      value: -0.03165838
+      value: 0.0076203905
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_Offset.y
-      value: 0.5323297
+      value: 0.48492435
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
+      propertyPath: m_EdgeRadius
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4861924702249231135, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x

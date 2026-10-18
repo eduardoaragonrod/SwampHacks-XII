@@ -48,6 +48,7 @@ public class StageProgressionManager : MonoBehaviour
     [SerializeField] private Volume globalVolume;
     [SerializeField] private AudioSource musicSourceA;
     [SerializeField] private AudioSource musicSourceB;
+    [SerializeField] private AudioSource songSeperator;
     [SerializeField] private TMP_Text elementTutorialText;
 
     [Header("Stage Transition Events (Hook Card Modifier UI Here!)")]
@@ -362,5 +363,8 @@ public class StageProgressionManager : MonoBehaviour
 
         if (active != null) active.Stop();
         incoming.volume = 1f;
+        
+
+        
     }
 }

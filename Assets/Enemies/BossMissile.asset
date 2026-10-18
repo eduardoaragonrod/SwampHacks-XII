@@ -19,9 +19,9 @@ MonoBehaviour:
   DamageInfo:
     Damage: 5
     Team: 1
-    Direction: {x: 0.9396916, y: -0.34202296}
+    Direction: {x: 0.7202858, y: 0.6936774}
     Knockback: 0
-  CollisionRadius: 0.25
+  CollisionRadius: 0.45
   OverrideSprite: {fileID: -6031928851335988984, guid: a1706b35d93702f488482101da3a5c36, type: 3}
   AttachedPrefab: {fileID: 0}
   DetachPrefabOnDeath: 0

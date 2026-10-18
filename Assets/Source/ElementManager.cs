@@ -3,50 +3,55 @@ using UnityEngine;
 
 public partial class ElementManager : MonoBehaviour
 {
-    [SerializeField]
-    private ElementSO Fire, Lightning, Ice, Blood, Poison;
+	[SerializeField]
+	private ElementSO Fire, Lightning, Ice, Blood, Poison;
 
-    private static ElementManager _instance;
+	private static ElementManager _instance;
 
-    [AutoStaticsCleanup]
-    public static event System.Action<Element> OnChanged;
+	[AutoStaticsCleanup]
+	public static event System.Action<Element> OnChanged;
 
-    [AutoStaticsCleanup]
-    public static Element? Current { get; private set; }
-    public static ElementSO CurrentData
-    {
-        get
-        {
-            if (Current.HasValue)
-            {
-                return GetData(Current.Value);
-            }
+	[AutoStaticsCleanup]
+	public static Element? Current { get; private set; }
+	public static ElementSO CurrentData
+	{
+		get
+		{
+			if (Current.HasValue)
+			{
+				return GetData(Current.Value);
+			}
 
-            throw new System.NotImplementedException("Invalid current element type! Not implemented yet?");
-        }
-    }
+			return null;
+		}
+	}
 
-    private void Awake()
-    {
-        _instance = this;
-    }
+	private void Awake()
+	{
+		_instance = this;
+	}
 
-    public static void SetElement(Element element)
-    {
-        if (Current != element)
-        {
-            Current = element;
-            OnChanged?.Invoke(Current.Value);
-        }
-    }
+	public static void SetElement(Element element)
+	{
+		if (Current != element)
+		{
+			Current = element;
+			OnChanged?.Invoke(Current.Value);
+		}
+	}
 
-    public static ElementSO GetData(Element element) => element switch
-    {
-        Element.Fire => _instance.Fire,
-        Element.Lightning => _instance.Lightning,
-        Element.Ice => _instance.Ice,
-        Element.Blood => _instance.Blood,
-        Element.Poison => _instance.Poison,
-        _ => throw new System.NotImplementedException(),
-    };
+	public static void ResetElement()
+	{
+		Current = null;
+	}
+
+	public static ElementSO GetData(Element element) => element switch
+	{
+		Element.Fire => _instance.Fire,
+		Element.Lightning => _instance.Lightning,
+		Element.Ice => _instance.Ice,
+		Element.Blood => _instance.Blood,
+		Element.Poison => _instance.Poison,
+		_ => throw new System.NotImplementedException(),
+	};
 }
