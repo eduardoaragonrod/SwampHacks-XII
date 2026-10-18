@@ -21,7 +21,7 @@ MonoBehaviour:
     m_Value: 0.85
   intensity:
     m_OverrideState: 1
-    m_Value: 2.2
+    m_Value: 0.6
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -30,7 +30,7 @@ MonoBehaviour:
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.42352942, g: 0.14509808, b: 0.19154026, a: 1}
+    m_Value: {r: 1, g: 0, b: 0.099999905, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0
@@ -176,14 +176,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ColorAdjustments
   active: 1
   postExposure:
-    m_OverrideState: 0
-    m_Value: 1.64
+    m_OverrideState: 1
+    m_Value: -2
   contrast:
     m_OverrideState: 0
     m_Value: 0
   colorFilter:
-    m_OverrideState: 0
-    m_Value: {r: 8, g: 8, b: 0, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 6.2471585, g: 2.85837, b: 3.123298, a: 1}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
