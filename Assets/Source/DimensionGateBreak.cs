@@ -23,6 +23,10 @@ public class DimensionGateBreak : MonoBehaviour
     [SerializeField] private float resealSnapDuration = 0.35f;
     [SerializeField] private float breakthroughSpeedBoost = 16f;
 
+
+
+    [Header("Break Thresholds")]
+    [SerializeField] private float requiredBreakSpeed = 12f;
     [Header("Events (Start Main Arena Spawners & Stage Timer Here!)")]
     public UnityEvent OnGateShattered;
     public UnityEvent OnGateResealedAndArenaStarted;
@@ -55,22 +59,27 @@ public class DimensionGateBreak : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (_isBroken) return;
+{
+    if (_isBroken) return; //
 
-        if (collision.gameObject.TryGetComponent<Player>(out var player))
+    if (collision.gameObject.TryGetComponent<Player>(out var player)) //
+    {
+        bool meetsSpeed = player.IsCriticalSpeed || player.CurrentSpeed >= requiredBreakSpeed; //
+
+        float impactVelocity = collision.relativeVelocity.magnitude;
+        bool strongImpact = impactVelocity >= requiredBreakSpeed;
+
+        if (meetsSpeed && strongImpact)
         {
-            if (player.IsCriticalSpeed)
-            {
-                StartCoroutine(ShatterAndResealRoutine(player));
-            }
-            else
-            {
-                StopAllCoroutines();
-                StartCoroutine(WeakBumpTeaseRoutine());
-            }
+            StartCoroutine(ShatterAndResealRoutine(player)); //
+        }
+        else
+        {
+            StopAllCoroutines(); //
+            StartCoroutine(WeakBumpTeaseRoutine()); //
         }
     }
+}
 
     private IEnumerator WeakBumpTeaseRoutine()
     {
