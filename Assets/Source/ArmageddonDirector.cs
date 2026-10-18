@@ -55,12 +55,6 @@ public class ArmageddonDirector : MonoBehaviour
 			_executing = false;
 			BlackHoleEncounterController.PreventSpawning = false;
 		}
-
-		if (Keyboard.current.jKey.wasPressedThisFrame)
-		{
-			ElementManager.SetElement(Element.Poison);
-			DestroyAllEnemies();
-		}
 	}
 
 	private void DestroyAllEnemies()
@@ -112,6 +106,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 				foreach (var enemy in enemies)
 				{
+					if (enemy == null) continue;
+
 					var v = Instantiate(BlizzardDeathVFX, enemy.transform.position, Quaternion.identity);
 					v.AddComponent<DestroyOnVFXFinish>();
 					enemy.GetComponent<Health>().TryTakeDamage(new(1000f, Team.Environment, default, 0f));
@@ -125,6 +121,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 				foreach (var enemy in enemies)
 				{
+					if (enemy == null) continue;
+
 					var vfx = Instantiate(BloodVFX, enemy.transform.position, Quaternion.identity).GetComponent<VisualEffect>();
 					vfx.Play();
 					bloodVFX.Add((enemy.transform, vfx));
@@ -148,6 +146,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 		foreach (var enemy in enemies)
 		{
+			if (enemy == null) continue;
+
 			puddles.Add(Instantiate(PoisonPuddle, enemy.transform.position, Quaternion.identity));
 			masks.Add(Instantiate(PoisonPuddleMask, enemy.transform.position, Quaternion.identity));
 
@@ -168,6 +168,8 @@ public class ArmageddonDirector : MonoBehaviour
 
 		foreach (var enemy in enemies)
 		{
+			if (enemy == null) continue;
+
 			enemy.GetComponent<Health>().TryTakeDamage(new(1000f, Team.Environment, default, 0f));
 		}
 

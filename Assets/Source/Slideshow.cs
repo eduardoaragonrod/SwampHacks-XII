@@ -208,6 +208,7 @@ public class EndingCutsceneSlideshow : MonoBehaviour
             if (isLastSlide)
             {
                 OnFinalSlideReached?.Invoke();
+                TimeManager.ApplyFactor(this, 0f);
 
                 float holdTimer = 0f;
                 float currentScale = incomingImg.rectTransform.localScale.x;
