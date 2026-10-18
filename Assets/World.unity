@@ -3981,7 +3981,7 @@ MonoBehaviour:
   targetCameraOrthoSize: 9.5
   cameraZoomDuration: 2.5
   bossMusicSource: {fileID: 199209845}
-  bossThemeClip: {fileID: 0}
+  bossThemeClip: {fileID: 8300000, guid: 04ab664495d43824fb0207bfdeea170b, type: 3}
   stageMusicSourcesToMute:
   - {fileID: 1398920070}
   - {fileID: 669942067}
@@ -3994,6 +3994,31 @@ MonoBehaviour:
   awakenedRotationSpeed: 1.5
   OnBossStarted:
     m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1398920069}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 669942066}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       m_Calls: []
   OnBossFightActive:
     m_PersistentCalls:
@@ -4897,7 +4922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageProgressionManager
   stageIntervalSeconds: 20
-  loopStages: 1
+  loopStages: 0
   stages:
   - stageName: Fire
     element: 0
