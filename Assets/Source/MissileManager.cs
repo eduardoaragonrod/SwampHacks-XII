@@ -44,6 +44,12 @@ public partial class MissileManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Vector2 dir = Quaternion.AngleAxis(deltaAngle * i - (spawnPattern.SpreadAngle / 2f), Vector3.forward) * direction;
+
+            if (spawnPattern.RandomSpread)
+            {
+                dir = Quaternion.AngleAxis(Random.Range(-(spawnPattern.SpreadAngle / 2f), spawnPattern.SpreadAngle / 2f), Vector3.forward) * direction;
+            }
+
             Spawn(missileData, origin, dir);
         }
     }

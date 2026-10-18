@@ -39,10 +39,20 @@ public class WispOrb : MonoBehaviour
 
 	private void Update()
 	{
+		var hit = Physics2D.CircleCast(transform.position, _CatchRadius, _velocity.normalized, _velocity.magnitude * Time.deltaTime, Layers.ObstacleMask);
+
 		if (!_isPulling)
 		{
-			transform.position += (Vector3)(_velocity * Time.deltaTime);
-			_velocity = Vector2.MoveTowards(_velocity, Vector2.zero, _Drag * Time.deltaTime);
+			if (hit.collider == null)
+			{
+				transform.position += (Vector3)(_velocity * Time.deltaTime);
+				_velocity = Vector2.MoveTowards(_velocity, Vector2.zero, _Drag * Time.deltaTime);
+			}
+			else
+			{
+				_velocity = Vector2.zero;
+			}
+
 			return;
 		}
 

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 3848369870650364910}
   m_Layer: 6
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   ImmunityDurationAfterDamage: 0
-  <Team>k__BackingField: 0
+  <Team>k__BackingField: 1
   <Default>k__BackingField: 100
 --- !u!61 &4861924702249231135
 BoxCollider2D:
