@@ -13,6 +13,7 @@ public class ElementSO : ScriptableObject
     public float LaunchSpeed = 18f;
     public float PullAcceleration = 45f;
     public float KnockbackScale = 1.5f;
+    public GameObject OrbPrefab;
 
     [Header("Dashing")]
 
