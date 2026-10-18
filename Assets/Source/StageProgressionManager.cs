@@ -113,7 +113,7 @@ public class StageProgressionManager : MonoBehaviour
         if (stage.stageMusic != null)
         {
             StopAllCoroutines();
-            StartCoroutine(CrossfadeMusicRoutine(stage.stageMusic, 1.25f));
+            StartCoroutine(CrossfadeMusicRoutine(stage.stageMusic, 5f));
         }
     }
 
