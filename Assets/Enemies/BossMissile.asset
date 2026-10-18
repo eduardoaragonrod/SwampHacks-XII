@@ -22,7 +22,7 @@ MonoBehaviour:
     Direction: {x: 0, y: 0}
     Knockback: 0
   CollisionRadius: 0.25
-  OverrideSprite: {fileID: 0}
+  OverrideSprite: {fileID: -6031928851335988984, guid: a1706b35d93702f488482101da3a5c36, type: 3}
   AttachedPrefab: {fileID: 0}
   DetachPrefabOnDeath: 0
   TimeToExpireAfterDetach: 3
