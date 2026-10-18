@@ -99,6 +99,12 @@ public class Player : MonoBehaviour
 		{
 			_floatingOrbs.Add(Instantiate(FloatingOrbPrefab).transform);
 		}
+
+		var data = ElementManager.CurrentData;
+		foreach (var floatingOrb in _floatingOrbs)
+		{
+			floatingOrb.GetComponent<SpriteRenderer>().color = data.Color;
+		}
 	}
 
 	private void OnEnable() => _input.Enable();
