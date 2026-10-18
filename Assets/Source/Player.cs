@@ -90,6 +90,8 @@ public class Player : MonoBehaviour
 	{
 		Instance = this;
 
+		Cursor.visible = false;
+
 		_input = new();
 		_movement = GetComponent<CharacterMovement>();
 		_baseWalkSpeed = _movement.WalkSpeed;
@@ -227,6 +229,14 @@ public class Player : MonoBehaviour
 		Instance = null;
 
 		foreach (var orb in _floatingOrbs)
+		{
+			if (orb != null)
+			{
+				Destroy(orb.gameObject);
+			}
+		}
+
+		foreach (var orb in _orbs)
 		{
 			if (orb != null)
 			{
@@ -483,6 +493,7 @@ public class Player : MonoBehaviour
 			GamepadFX.Pulse(0.2f, timeToSlowDown);
 			await Blackout.DOFade(1f, 1f).SetUpdate(isIndependentUpdate: true).AsyncWaitForCompletion();
 			TimeManager.RemoveFactor(timeScaler);
+			ElementManager.ResetElement();
 			SceneManager.LoadScene(0);
 		}
 	}
@@ -490,6 +501,8 @@ public class Player : MonoBehaviour
 	private void UpdateFloatingOrbs()
 	{
 		var data = ElementManager.CurrentData;
+
+		if (data == null) return;
 
 		for (int i = 0; i < _floatingOrbs.Count; i++)
 		{
