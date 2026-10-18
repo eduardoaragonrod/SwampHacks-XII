@@ -139,8 +139,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2509325577078507756, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
+      propertyPath: m_ShadowIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2509325577078507756, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
       propertyPath: m_LightVolumeEnabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2509325577078507756, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
+      propertyPath: m_LightVolumeIntensity
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -2509325577078507756, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
       propertyPath: m_LocalBounds.m_Center.y
@@ -228,8 +236,31 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9019829512330627224, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7068039332671849427}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6181202216966061936, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3155699771140240900}
   m_SourcePrefab: {fileID: 100100000, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
+--- !u!1 &1101900972588753891 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6181202216966061936, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
+  m_PrefabInstance: {fileID: 6521977185716214931}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3155699771140240900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101900972588753891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25120a5d9c173f044941c25cc69819ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickerLight
+  Frequency: 2
+  Min: 0.5
+  Max: 2
 --- !u!4 &2859337802768471051 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9019829512330627224, guid: 15ec14799a2c07c4c891d91ca4287e48, type: 3}
