@@ -3866,11 +3866,11 @@ MonoBehaviour:
   cinemachineCam: {fileID: 1399178624}
   targetCameraOrthoSize: 9.5
   cameraZoomDuration: 2.5
-  bossMusicSource: {fileID: 0}
+  bossMusicSource: {fileID: 199209845}
   bossThemeClip: {fileID: 0}
   stageMusicSourcesToMute:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1398920070}
+  - {fileID: 669942067}
   enemyTag: Enemy
   devourHaloColor: {r: 2.5, g: 1.6, b: 0.3, a: 1}
   vacuumDuration: 1.35
@@ -4864,7 +4864,7 @@ MonoBehaviour:
   timeBeforeReseal: 0.85
   resealSnapDuration: 0.35
   breakthroughSpeedBoost: 16
-  requiredBreakSpeed: 26
+  requiredBreakSpeed: 20
   OnGateShattered:
     m_PersistentCalls:
       m_Calls:
