@@ -134,7 +134,14 @@ public class CharacterMovement : Movement
         AddVelocity(direction.normalized * WalkSpeed);
     }
 
-    public void Dash(Vector2 direction, float speed, float distance)
+	public void Walk(Vector2 direction, float speed)
+	{
+		if (_isDashing) return;
+		AddVelocity(direction.normalized * speed);
+	}
+
+
+	public void Dash(Vector2 direction, float speed, float distance)
     {
         if (direction.sqrMagnitude <= 0f || speed <= 0f || distance <= 0f) return;
 
