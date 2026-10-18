@@ -17,7 +17,7 @@ AudioRandomContainer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: IceDash
-  m_Volume: -4
+  m_Volume: 0
   m_Pitch: -800
   m_AutomaticTriggerTime: 0
   m_LoopCount: 1
