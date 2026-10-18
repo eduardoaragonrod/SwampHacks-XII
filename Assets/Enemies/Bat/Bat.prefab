@@ -116,10 +116,6 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5170068598535578051, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
-      propertyPath: <Team>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5170068598535578051, guid: c73b8edd60ebd3946a3ccc7b9a6fdb44, type: 3}
       propertyPath: <Default>k__BackingField
       value: 50
       objectReference: {fileID: 0}
