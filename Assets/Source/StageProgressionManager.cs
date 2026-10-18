@@ -22,6 +22,9 @@ public class StageProgressionManager : MonoBehaviour
         public GameObject elementIconObject;
         [TextArea(2, 3)]
         public string elementDescription = "FIRE: Recall orbs to slingshot into a blazing Fireball and ram through enemies!";
+        [Tooltip("Editable subtitle placed under the top element title to explain its status effects")]
+        [TextArea(2, 3)]
+        public string statusEffectDescription = "STATUS: Ignites enemies on impact, dealing scorching burn damage over time.";
     }
 
     [Header("Timing Settings (Real-Time Synced to Music)")]
@@ -33,6 +36,12 @@ public class StageProgressionManager : MonoBehaviour
     [SerializeField] private float musicCrossfadeDuration = 4.0f;
     [SerializeField] private float uiCrossfadeDuration = 0.85f;
     [SerializeField] private float initialHudFadeInDuration = 1.25f;
+
+    [Header("Element Effect Description Display")]
+    [Tooltip("How long an element's effect description stays visible before it starts fading out. Set to 0 to fade immediately.")]
+    [SerializeField, Min(0f)] private float elementEffectDescriptionDisplayDuration = 5f;
+    [Tooltip("How long the element effect description takes to fade out.")]
+    [SerializeField, Min(0f)] private float elementEffectDescriptionFadeOutDuration = 0.75f;
 
     [Header("Stage Transition SFX")]
     [SerializeField] private AudioSource sfxAudioSource;
@@ -50,6 +59,8 @@ public class StageProgressionManager : MonoBehaviour
     [SerializeField] private AudioSource musicSourceB;
     [SerializeField] private AudioSource songSeperator;
     [SerializeField] private TMP_Text elementTutorialText;
+    [Tooltip("Drag the TMP_Text located underneath the top 'Inferno' element header here!")]
+    [SerializeField] private TMP_Text elementStatusEffectText;
 
     [Header("Stage Transition Events (Hook Card Modifier UI Here!)")]
     public UnityEvent OnStageChanged;
@@ -64,6 +75,10 @@ public class StageProgressionManager : MonoBehaviour
     private Coroutine _musicFadeRoutine;
     private Coroutine _uiFadeRoutine;
     private Coroutine _hudRootFadeRoutine;
+    private Coroutine _elementEffectDescriptionFadeRoutine;
+
+    // Tracks elements whose effect description has already been shown during this manager's lifetime.
+    private readonly HashSet<Element> _elementsWithShownEffectDescriptions = new HashSet<Element>();
 
     private void Awake()
     {
@@ -86,6 +101,11 @@ public class StageProgressionManager : MonoBehaviour
         if (elementTutorialText != null)
         {
             elementTutorialText.alpha = 0f;
+        }
+
+        if (elementStatusEffectText != null)
+        {
+            elementStatusEffectText.alpha = 0f;
         }
     }
 
@@ -216,6 +236,12 @@ public class StageProgressionManager : MonoBehaviour
         if (!gameObject.activeInHierarchy) return;
 
         if (_uiFadeRoutine != null) StopCoroutine(_uiFadeRoutine);
+        if (_elementEffectDescriptionFadeRoutine != null)
+        {
+            StopCoroutine(_elementEffectDescriptionFadeRoutine);
+            _elementEffectDescriptionFadeRoutine = null;
+        }
+
         _uiFadeRoutine = StartCoroutine(CrossfadeStageUIRoutine(activeElement, uiCrossfadeDuration));
     }
 
@@ -245,8 +271,14 @@ public class StageProgressionManager : MonoBehaviour
             }
         }
 
+        // The effect description is shown only on the first encounter with each Element.
+        bool shouldShowEffectDescription = targetStage != null
+            && elementStatusEffectText != null
+            && !_elementsWithShownEffectDescriptions.Contains(activeElement);
+
         float halfDuration = Mathf.Max(0.05f, duration * 0.5f);
         float startTextAlpha = elementTutorialText != null ? elementTutorialText.alpha : 0f;
+        float startStatusAlpha = elementStatusEffectText != null ? elementStatusEffectText.alpha : 0f;
         bool swappedText = false;
 
         float t = 0f;
@@ -265,27 +297,45 @@ public class StageProgressionManager : MonoBehaviour
                 if (cg != null) cg.alpha = Mathf.Lerp(1f, 0f, smooth);
             }
 
-            if (elementTutorialText != null && targetStage != null)
+            if (targetStage != null)
             {
                 if (t < halfDuration)
                 {
-                    elementTutorialText.alpha = Mathf.Lerp(startTextAlpha, 0f, t / halfDuration);
+                    float outProgress = t / halfDuration;
+                    if (elementTutorialText != null)
+                        elementTutorialText.alpha = Mathf.Lerp(startTextAlpha, 0f, outProgress);
+                    if (elementStatusEffectText != null)
+                        elementStatusEffectText.alpha = Mathf.Lerp(startStatusAlpha, 0f, outProgress);
                 }
                 else
                 {
                     if (!swappedText)
                     {
                         swappedText = true;
-                        elementTutorialText.text = targetStage.elementDescription;
                         var data = ElementManager.GetData(activeElement);
-                        if (data != null)
+                        Color targetColor = data != null ? Color.Lerp(Color.white, data.Color, 0.45f) : Color.white;
+
+                        // The main element description should appear on every encounter.
+                        if (elementTutorialText != null)
                         {
-                            elementTutorialText.color = Color.Lerp(Color.white, data.Color, 0.45f);
+                            elementTutorialText.text = targetStage.elementDescription;
+                            elementTutorialText.color = targetColor;
+                        }
+
+                        // The effect description is only presented on the first encounter.
+                        if (shouldShowEffectDescription && elementStatusEffectText != null)
+                        {
+                            elementStatusEffectText.text = targetStage.statusEffectDescription;
+                            elementStatusEffectText.color = targetColor;
+                            _elementsWithShownEffectDescriptions.Add(activeElement);
                         }
                     }
 
                     float inProgress = (t - halfDuration) / halfDuration;
-                    elementTutorialText.alpha = Mathf.Lerp(0f, 1f, inProgress);
+                    if (elementTutorialText != null)
+                        elementTutorialText.alpha = Mathf.Lerp(0f, 1f, inProgress);
+                    if (elementStatusEffectText != null && shouldShowEffectDescription)
+                        elementStatusEffectText.alpha = Mathf.Lerp(0f, 1f, inProgress);
                 }
             }
 
@@ -305,11 +355,62 @@ public class StageProgressionManager : MonoBehaviour
             }
         }
 
-        if (elementTutorialText != null && targetStage != null)
+        if (targetStage != null)
         {
-            elementTutorialText.text = targetStage.elementDescription;
-            elementTutorialText.alpha = 1f;
+            if (elementTutorialText != null)
+            {
+                // Keep the main element description visible on every encounter.
+                elementTutorialText.text = targetStage.elementDescription;
+                elementTutorialText.alpha = 1f;
+            }
+
+            if (elementStatusEffectText != null)
+            {
+                if (shouldShowEffectDescription)
+                {
+                    elementStatusEffectText.text = targetStage.statusEffectDescription;
+                    elementStatusEffectText.alpha = 1f;
+
+                    // Start the timer after the effect description has finished fading in.
+                    _elementEffectDescriptionFadeRoutine = StartCoroutine(
+                        FadeElementEffectDescriptionAfterDelay(
+                            elementEffectDescriptionDisplayDuration,
+                            elementEffectDescriptionFadeOutDuration));
+                }
+                else
+                {
+                    // Keep the effect description hidden on later encounters with this element.
+                    elementStatusEffectText.alpha = 0f;
+                }
+            }
         }
+    }
+
+    private IEnumerator FadeElementEffectDescriptionAfterDelay(float delay, float fadeDuration)
+    {
+        if (elementStatusEffectText == null) yield break;
+
+        if (delay > 0f)
+            yield return new WaitForSecondsRealtime(delay);
+
+        float startAlpha = elementStatusEffectText.alpha;
+        if (fadeDuration <= 0f)
+        {
+            elementStatusEffectText.alpha = 0f;
+            yield break;
+        }
+
+        float t = 0f;
+        while (t < fadeDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / fadeDuration);
+            float smooth = p * p * (3f - 2f * p);
+            elementStatusEffectText.alpha = Mathf.Lerp(startAlpha, 0f, smooth);
+            yield return null;
+        }
+
+        elementStatusEffectText.alpha = 0f;
     }
 
     private IEnumerator FadeCanvasGroupRoutine(CanvasGroup cg, float targetAlpha, float duration)
@@ -363,8 +464,5 @@ public class StageProgressionManager : MonoBehaviour
 
         if (active != null) active.Stop();
         incoming.volume = 1f;
-        
-
-        
     }
 }
