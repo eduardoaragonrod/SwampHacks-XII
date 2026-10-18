@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
 
 	public static Player Instance { get; private set; }
 
-	[SerializeField] private WispOrb _OrbPrefab;
 	[SerializeField] private int _MaxOrbs = 6;
 	[SerializeField] private Light2D AuraLight;
 	[SerializeField] private Element DefaultElement = Element.Fire;
@@ -127,6 +126,14 @@ public class Player : MonoBehaviour
 		{
 			ElementManager.SetElement(Element.Ice);
 		}
+		else if (Keyboard.current.digit4Key.wasPressedThisFrame)
+		{
+			ElementManager.SetElement(Element.Blood);
+		}
+		else if (Keyboard.current.digit5Key.wasPressedThisFrame)
+		{
+			ElementManager.SetElement(Element.Poison);
+		}
 #endif
 	}
 
@@ -232,6 +239,11 @@ public class Player : MonoBehaviour
 		AuraLight.color = data.Color;
 		Animator.SetTrigger(element.ToString());
 		TrailVFX.SetGradient("Color", data.DashTrail);
+
+		foreach (var floatingOrb in _floatingOrbs)
+		{
+			floatingOrb.GetComponent<SpriteRenderer>().color = data.Color;
+		}
 	}
 
 	private void OnShoot(InputAction.CallbackContext context)
@@ -258,7 +270,7 @@ public class Player : MonoBehaviour
 
 		_floatingOrbs.Remove(bestFloatingOrb);
 		Destroy(bestFloatingOrb.gameObject);
-		WispOrb orb = Instantiate(_OrbPrefab, bestFloatingOrb.position, Quaternion.identity);
+		WispOrb orb = Instantiate(ElementManager.CurrentData.OrbPrefab, bestFloatingOrb.position, Quaternion.identity).GetComponent<WispOrb>();
 		orb.Init(this, _currentElement, aimDir);
 		_orbs.Add(orb);
 	}
@@ -326,6 +338,7 @@ public class Player : MonoBehaviour
 				default:
 				{
 					_isDashing = true;
+					_health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}
