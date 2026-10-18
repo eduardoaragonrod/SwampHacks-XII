@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -274,9 +275,12 @@ public class Player : MonoBehaviour
 		_wantsToShoot = false;
 	}
 
-	private void Shoot()
+	private async void Shoot()
 	{
-		if (_orbs.Count >= _MaxOrbs) return;
+		if (_orbs.Count >= _MaxOrbs)
+		{
+			return;
+		}
 
 		Audio.Play(ElementManager.CurrentData.ShootSound, transform.position);
 
@@ -297,6 +301,8 @@ public class Player : MonoBehaviour
 		}
 
 		_floatingOrbs.Remove(bestFloatingOrb);
+		await bestFloatingOrb.DOMove(transform.position, 0.2f).AsyncWaitForCompletion();
+
 		Destroy(bestFloatingOrb.gameObject);
 		WispOrb orb = Instantiate(ElementManager.CurrentData.OrbPrefab, bestFloatingOrb.position, Quaternion.identity).GetComponent<WispOrb>();
 		orb.Init(this, _currentElement, aimDir);
