@@ -146,9 +146,11 @@ Shader "Custom/URP_SunEaterEye"
                 float waveRing = smoothstep(0.025, 0.0, abs(dist - _ShockwaveRadius)) * step(0.01, _ShockwaveRadius);
 
                 float3 finalColor = (_MainColor.rgb * (coronaIntensity + lidRim + waveRing * 3.0)) + (_OuterColor.rgb * dustIntensity);
-                float finalAlpha = saturate(coronaIntensity + dustIntensity + waveRing + (dist < 0.48 ? 0.9 : 0.0));
 
-                return half4(finalColor, finalAlpha);
+                float innerVoidShadow = smoothstep(pupilEdge + 0.14, pupilEdge, dist) * 0.85;
+                float finalAlpha = saturate(coronaIntensity + (dustIntensity * 0.95) + waveRing + lidRim + innerVoidShadow);
+
+return half4(finalColor, finalAlpha);
             }
             ENDHLSL
         }
