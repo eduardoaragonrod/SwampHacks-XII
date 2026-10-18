@@ -326,6 +326,7 @@ public class Player : MonoBehaviour
 				default:
 				{
 					_isDashing = true;
+					_health.RegisterDamageBlocker(_dashDamageImmunityBlocker);
 					_movement.Dash(_lastMoveDir, data.DashSpeed, data.DashDistance);
 					break;
 				}
