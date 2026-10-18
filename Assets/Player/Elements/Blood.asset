@@ -49,7 +49,9 @@ MonoBehaviour:
   LaunchSpeed: 10
   PullAcceleration: 70
   KnockbackScale: 0.75
+  OrbPrefab: {fileID: 1101900972588753891, guid: c0ecec47a7707174cb99a849c03efc6a, type: 3}
   DashSound: {fileID: 6418180475301049370, guid: 9808f2f778e1a7943934fbe41843b93c, type: 2}
   DashSpeed: 60
   DashDistance: 4
   DashCooldown: 1
+  ShootSound: {fileID: 0}
