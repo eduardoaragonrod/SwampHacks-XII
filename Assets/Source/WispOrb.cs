@@ -87,6 +87,12 @@ public class WispOrb : MonoBehaviour
 			};
 
 			target.TryTakeDamage(info);
+
+			var data = ElementManager.CurrentData;
+			if (data.ApplyStatus && other.TryGetComponent(out StatusManager statusManager))
+			{
+				statusManager.Apply(data.StatusEffect, data.StatusDuration);
+			}
 		}
 	}
 

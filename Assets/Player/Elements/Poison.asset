@@ -56,3 +56,6 @@ MonoBehaviour:
   DashDistance: 7
   DashCooldown: 1
   ShootSound: {fileID: 6418180475301049370, guid: 913fe51aec32f7c409ca181ab03ba877, type: 2}
+  ApplyStatus: 1
+  StatusEffect: 1
+  StatusDuration: 10

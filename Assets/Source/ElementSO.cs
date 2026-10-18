@@ -26,4 +26,7 @@ public class ElementSO : ScriptableObject
     [Header("Shoot")]
 
     public AudioResource ShootSound;
+    public bool ApplyStatus;
+    public StatusEffectType StatusEffect;
+    public float StatusDuration = 5f;
 }
