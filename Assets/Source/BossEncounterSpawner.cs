@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.Scripting.LifecycleManagement;
 
-public class BlackHoleEncounterController : MonoBehaviour
+[AutoStaticsCleanup]
+public partial class BlackHoleEncounterController : MonoBehaviour
 {
+    private static BlackHoleEncounterController _instance;
+    public static IEnumerable<GameObject> ActiveEnemies => _instance._activeEnemies;
+    public static bool PreventSpawning { get; set; }
+
     [Header("Core References")]
     [SerializeField] private Transform blackHoleCenter;
     [SerializeField] private Renderer eyeRenderer;
@@ -77,6 +83,8 @@ public class BlackHoleEncounterController : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
+
         if (blackHoleCenter == null) blackHoleCenter = transform;
         if (eyeRenderer != null) _eyeMat = eyeRenderer.material;
         _currentSpawnInterval = initialSpawnInterval;
@@ -420,6 +428,8 @@ if (sr != null)
 
     private void SpawnEnemyFromBlackHole()
     {
+        if (PreventSpawning) return;
+
         GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
         if (prefab == null) return;
 
@@ -436,6 +446,12 @@ if (sr != null)
 
         GameObject instance = Instantiate(prefab, origin, Quaternion.identity);
         _activeEnemies.Add(instance);
+
+        instance.GetComponent<Health>().OnDeath += async () =>
+        {
+            await Awaitable.NextFrameAsync();
+            _activeEnemies.Remove(instance);
+        };
 
         StartCoroutine(EjectEnemyFromSingularityRoutine(instance, origin, targetPos, randomAngle, randomRadius));
     }

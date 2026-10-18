@@ -14,6 +14,6 @@ public class MothAI : EnemyAI
 
 	private void OnDeath()
 	{
-		Destroy(gameObject);
+		
 	}
 }

@@ -86,7 +86,10 @@ public class WispOrb : MonoBehaviour
 				Team = Team.Friendly
 			};
 
-			target.TryTakeDamage(info);
+			if (target.TryTakeDamage(info) && ElementManager.Current is Element.Blood && other.GetComponent<Health>().Current == 0f)
+			{
+				Player.Instance.GetComponent<Health>().Heal(5f);
+			}
 
 			var data = ElementManager.CurrentData;
 			if (data.ApplyStatus && other.TryGetComponent(out StatusManager statusManager))

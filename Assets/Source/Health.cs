@@ -9,6 +9,8 @@ public class Health : MonoBehaviour, IDamageable
 	public Team Team { get; private set; }
 	[field: SerializeField]
 	public float Default { get; private set; } = 100f;
+	[SerializeField]
+	private bool DestroyOnDeath;
 
 	public float Current { get; private set; }
 	public float Max { get; private set; }
@@ -55,9 +57,19 @@ public class Health : MonoBehaviour, IDamageable
 		{
 			IsDead = true;
 			OnDeath?.Invoke();
+
+			if (DestroyOnDeath)
+			{
+				Destroy(gameObject);
+			}
 		}
 
 		return true;
+	}
+
+	public void Heal(float amount)
+	{
+		Current = Mathf.Clamp(Current + amount, 0f, Max);
 	}
 
 	public void RegisterDamageBlocker(object key)
