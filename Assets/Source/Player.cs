@@ -55,6 +55,8 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private AudioResource CatchOrbSound;
 	[SerializeField]
+	private AudioResource HitSoundFX;
+	[SerializeField]
 	private Animator HurtAnimator;
 	[SerializeField]
 	private CanvasGroup Blackout;
@@ -457,6 +459,8 @@ public class Player : MonoBehaviour
 
 		GamepadFX.Pulse(0.1f, timeToSlowDown * 2f);
 		//HurtAnimator.Play("Hurt");
+
+		Audio.Play(HitSoundFX, transform.position);
 
 		for (float t = 0f; t < timeToSlowDown; t += Time.unscaledDeltaTime)
 		{

@@ -704,6 +704,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
+      propertyPath: HitSoundFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 25bf37ff064e58b49bfe5a2e5a56ca68, type: 3}
+    - target: {fileID: 1182568196129405191, guid: 6c2c00deef1cd7046965c48b850cbb8e, type: 3}
       propertyPath: CatchOrbSound
       value: 
       objectReference: {fileID: 8300000, guid: 4cea418f7ec773f4291386089463157d, type: 3}
