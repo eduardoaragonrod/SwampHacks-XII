@@ -107,3 +107,44 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+Assets/Player/SFX.meta
+Assets/Player/SFX/blood_dash.wav
+Assets/Player/SFX/blood_dash.wav.meta
+Assets/Player/SFX/blood_shoot.wav
+Assets/Player/SFX/blood_shoot.wav.meta
+Assets/Player/SFX/BloodDash.asset
+Assets/Player/SFX/BloodDash.asset.meta
+Assets/Player/SFX/BloodShot.asset
+Assets/Player/SFX/BloodShot.asset.meta
+Assets/Player/SFX/fire_dash.wav
+Assets/Player/SFX/fire_dash.wav.meta
+Assets/Player/SFX/fire_shoot.wav
+Assets/Player/SFX/fire_shoot.wav.meta
+Assets/Player/SFX/FireDash.asset
+Assets/Player/SFX/FireDash.asset.meta
+Assets/Player/SFX/FireShoot.asset
+Assets/Player/SFX/FireShoot.asset.meta
+Assets/Player/SFX/ice_dash.wav
+Assets/Player/SFX/ice_dash.wav.meta
+Assets/Player/SFX/ice_shoot.wav
+Assets/Player/SFX/ice_shoot.wav.meta
+Assets/Player/SFX/IceDash.asset
+Assets/Player/SFX/IceDash.asset.meta
+Assets/Player/SFX/IceShoot.asset
+Assets/Player/SFX/IceShoot.asset.meta
+Assets/Player/SFX/LightningDash.asset
+Assets/Player/SFX/LightningDash.asset.meta
+Assets/Player/SFX/LightningShoot.asset
+Assets/Player/SFX/LightningShoot.asset.meta
+Assets/Player/SFX/poison_dash.wav
+Assets/Player/SFX/poison_dash.wav.meta
+Assets/Player/SFX/poison_shoot.wav
+Assets/Player/SFX/poison_shoot.wav.meta
+Assets/Player/SFX/PoisonDash.asset
+Assets/Player/SFX/PoisonDash.asset.meta
+Assets/Player/SFX/PoisonShoot.asset
+Assets/Player/SFX/PoisonShoot.asset.meta
+Assets/Player/SFX/thunder_dash.wav
+Assets/Player/SFX/thunder_dash.wav.meta
+Assets/Player/SFX/thunder_shoot 1.wav
+Assets/Player/SFX/thunder_shoot 1.wav.meta
